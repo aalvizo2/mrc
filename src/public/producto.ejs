@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" integrity="sha384-b6lVK+yci+bfDmaY1u0zE8YYJt0TZxLEAFyYSLHId4xoVvsrQu3INevFKo+Xir8e" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100&family=Quicksand&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+    <script src="https://kit.fontawesome.com/5210f6d31f.js" crossorigin="anonymous"></script>
+    <title>Inicio</title>
+</head>
+<body>
+    <header class="red">
+        <section>
+            <img src="img/logo.png" alt="">
+            <ul>
+                <li><a href="inicio_usuario">INICIO</a></li>
+                <li><a href="">PRODUCTOS</a></li>
+                <li><a href="">DESCUENTOS</a></li>
+                <li><a href="">NOSOTROS</a></li>
+                <li><a href="">SUCURSALES</a></li>
+                <li><a href="search" class="bi bi-search"></a></li>
+                <li><a href="cart" class="bi bi-cart"></a></li>
+                
+                <li>
+                    <% if ( login ){ %>
+                        <a href=""><%= usuario %></a>
+                        <li><a href="/logout" class="bi bi-box-arrow-right"></a></li>
+                        <% }else{ %>
+                        <a href="login" class="bi bi-person-circle"></a></li>
+                        <% } %>
+                <li><a href=""></a></li>
+                <li><a href=""></a></li>
+                <li><a href=""></a></li>
+            </ul>
+
+        </section>
+    </header>
+
+   <div class="top"></div>
+
+       <% for(i=0; i<datos.length; i++){%>
+        <div class="gallery">
+            <a target="_blank" href="/product/<%= datos[i].nombre_prod %>">
+              <img src="productos/<%= datos[i].img_product %>"  width="600" height="400">
+            </a>
+            <div class="desc"><%= datos[i].nombre_prod %><br/>
+                <%= datos[i].precio %></div>
+          </div>
+       <% } %> 
+        
+        
+        
+    
+    
+   
+
+
+
+    
+       
