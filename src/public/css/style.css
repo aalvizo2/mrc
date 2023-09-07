@@ -216,17 +216,26 @@ div.gallery {
     text-align: center;
   }
   .section{
+    
     float: left;
-    left: 10%;
+    margin-left: 50px;
     width: 30%;
     height: 50%;
     padding: 5px;
     border: none;
     justify-content: center;
+    border: none;
   }
   .section img{
     padding: none;
     width: 100%;
+  }
+  .section1{
+    width: 50%;
+    float: right;
+    margin-right: 250px;
+    border: none;
+    padding: 5px;
   }
   .section1 h1{
     float: center;
@@ -245,4 +254,7 @@ div.gallery {
     background-color: #8E0A05;
     border-radius: 15px;
   }
-  
+  .section1 p{
+    padding: 3px;
+
+  }
