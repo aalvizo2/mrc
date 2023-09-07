@@ -114,6 +114,8 @@ Router.get('/upload', (req, res) =>{
     res.redirect('/login')
   }
 })
+
+
 var usuario= session.user
 var admin= session.admin
 module.exports= admin
