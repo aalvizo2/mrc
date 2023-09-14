@@ -14,7 +14,7 @@
     
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
     <script src="https://kit.fontawesome.com/5210f6d31f.js" crossorigin="anonymous"></script>
-    <title><%= fila[0].nombre_prod%></title>
+    <title>Producto</title>
 </head>
 <body>
     <header class="red">
@@ -50,5 +50,11 @@
        <h1><%= fila[0].nombre_prod%>:</h1>
        <p><%= fila[0].descripcion%></p>
        <p><b>$<%= fila[0].precio_publico%>.00</b></p>
-       <a href="cart" class="bi bi-cart"></a>
+       <form action="add-to-cart" method="post">
+         <input type="hidden" name="id"  value="<%= fila[0].img_product%>">
+         <input type="hidden" name="id"  value="<%= fila[0].nombre_prod%>">
+         <input type="hidden" name="id"  value="<%= fila[0].precio_publico%>">
+         <input type="number" name="cantidad" id="" placeholder="Cantidad">
+         <input type="submit" value="Agregar al Carrito" onclick="cartAdded()">
+       </form>
    </section>

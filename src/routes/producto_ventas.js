@@ -4,23 +4,10 @@ require('./login')
 const mysql= require('mysql')
 const path= require('path')
  Router.use(express(express.static('public')))
+ const connection= require('./db')
 
 //creating connection to db again 
-var connection= mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '123456789',
-    database: 'mrc'
-  })
-  
-  connection.connect((err) =>{
-     if(err){
-      console.log('there was a mistake')
-     }else{
-      console.log('connected to database correctly conectado')
-     }
-  })
-  
+
 // receiving information from  producto and we making a description page of each one 
 Router.get('/details', (req, res)=>{
   const getID= req.query.id

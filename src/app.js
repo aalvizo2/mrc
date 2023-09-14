@@ -11,10 +11,11 @@ const route= require('./routes/routes')
 const login= require('./routes/login')
 const upload= require('./routes/upload')
 const registro= require('../src/routes/registro')
-const conn= require('./routes/conn')
 const engine= require('ejs-mate')
 const uploads= require('./uploads')
 const producto_ventas= require('./routes/producto_ventas')
+const carrito= require('./routes/carrito')
+
 
 
 app.engine('ejs', engine)
@@ -40,11 +41,13 @@ app.use(session({
           //routes
           app.use('/', route)
           app.use('/', login)
-          app.use('/', conn)
+          
           app.use('/', registro)
           app.use('/', upload)
           app.use('/', uploads)
           app.use('/', producto_ventas)
+          app.use('/', carrito)
+          
           app.use(cookie())
           console.log('server running on port 3000')
       })

@@ -1,7 +1,8 @@
 const express= require('express')
 const Router= express.Router()
-var mysql= require('mysql')
+const mysql= require('mysql')
 const multer= require('multer')
+const connection= require('./db')
 var ruta= '../uploads/'
 const bcrypt= require ('bcrypt')
 const fileUpload= require('express-fileupload')
@@ -18,19 +19,7 @@ Router.use(session({
 Router.use(fileUpload())
 Router.use(express('public'))
 Router.use(express('upload'))
-const connection= mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '123456789',
-    database: 'mrc'
-  })
-  connection.connect((err) =>{
-     if(err){
-      console.log('there was a mistake')
-     }else{
-      console.log('connected to database correctly')
-     }
-  })
+
 
 Router.post('/auth', async(req, res)=>{
     var user= req.body.usuario
