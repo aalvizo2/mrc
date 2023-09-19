@@ -11,7 +11,7 @@ const path= require('path')
 // receiving information from  producto and we making a description page of each one 
 Router.get('/details', (req, res)=>{
   const getID= req.query.id
-  const usuario =req.session.user
+  const usuario =req.session.usuario
   console.log(getID)
   connection.query("SELECT * FROM producto WHERE id=?", [getID], (err, fila)=>{
     if(err) throw err

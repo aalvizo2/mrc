@@ -1,10 +1,8 @@
-function cartAdded(){
+document.getElementById('sweetalert').addEventListener('click', ()=>{
     Swal.fire({
-        position: 'top-end',
+        title: '¡Hola!',
+        text: 'Esto es un SweetAlert en EJS',
         icon: 'success',
-        title: 'Your work has been saved',
-        showConfirmButton: false,
-        timer: 1500
-      })
-      
-}
+        confirmButtonText: 'Aceptar'
+      });
+})

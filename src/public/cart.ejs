@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,7 +22,7 @@
             <img src="img/logo.png" alt="">
             <ul>
                 <li><a href="inicio_usuario">INICIO</a></li>
-                <li><a href="">PRODUCTOS</a></li>
+                <li><a href="/producto">PRODUCTOS</a></li>
                 <li><a href="">DESCUENTOS</a></li>
                 <li><a href="">NOSOTROS</a></li>
                 <li><a href="">SUCURSALES</a></li>
@@ -33,17 +33,32 @@
                     <% if ( login ){ %>
                         <a href=""><%= usuario %></a>
                         <li><a href="/logout" class="bi bi-box-arrow-right"></a></li>
-                        <% }else{ %>
-                        <a href="login" class="bi bi-person-circle"></a></li><br>
-                        <p>Inicia Sesión wey</p>
-                        <% } %>
+                        <% }%>
                 <li><a href=""></a></li>
                 <li><a href=""></a></li>
                 <li><a href=""></a></li>
             </ul>
-
+ 
         </section>
     </header>
    <div class="top"></div>
-   
+   <center><div class="carrito2">
+    <h1>Producto:</h1>
+    <h1>Cantidad:</h1>
+    <h1>Precio:</h1>
+    <h1>Total:</h1>
+   </div>
+    <% for(i=0; i<fila.length; i++){%>
+     <center><div class="carrito">
+        <img src="productos/<%= fila[i].img_prod%>" alt="">
+        <h1><%= fila[i].producto%></h1>
+        <h1><%= fila[i].cantidad%></h1>
+        <h1>$<%= fila[i].precio%>.00</h1>
+        <h1>$<%= fila[i].total%>.00</h1>
+        <a href="/delete/<%= fila[i].id%>" class="bi bi-x-lg"></a>
+     </div></center>
+      
+      
+    <%}%>
+  
    </section>

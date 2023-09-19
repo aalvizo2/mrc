@@ -258,3 +258,54 @@ div.gallery {
     padding: 3px;
 
   }
+ .carrito{
+    width: fit-content;
+    height:fit-content;
+    display: flex;
+    float: center;
+    justify-content: center;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    border-bottom: 1px solid #b1aaaa;
+ }
+ .carrito img{
+    padding: 15px;
+    width: 250px;
+ }
+ .carrito h1{
+    margin-right: 30px;
+    margin-top: 55px;
+    font-size: 20px;
+    font-weight: 400;
+    padding: 15px;
+    border:#000;
+    justify-items: center;
+ }
+ .carrito a{
+    margin-top: 55px;
+    padding: 15px;
+    font-weight: 500;
+    color:#8E0A05
+ }
+ .carrito2{
+    margin-left: 235px;
+    width: fit-content;
+    height:fit-content;
+    display: flex;
+    float: center;
+    justify-content: center;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    border-bottom: 1px solid #b1aaaa;
+ }
+ .carrito2 h1{
+    margin-right: 30px;
+    margin-top: 55px;
+    font-size: 20px;
+    font-weight: 600;
+    padding: 15px;
+    border:#000;
+    justify-items: center;
+ }
