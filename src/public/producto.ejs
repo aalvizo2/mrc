@@ -18,11 +18,11 @@
 </head>
 <body>
     <header class="red">
-        <section>
+        <nav>
             <img src="img/logo.png" alt="">
             <ul>
-                <li><a href="inicio_usuario">INICIO</a></li>
-                <li><a href="">PRODUCTOS</a></li>
+                <li><a href="/">INICIO</a></li>
+                <li><a href="producto">PRODUCTOS</a></li>
                 <li><a href="">DESCUENTOS</a></li>
                 <li><a href="">NOSOTROS</a></li>
                 <li><a href="">SUCURSALES</a></li>
@@ -30,19 +30,16 @@
                 <li><a href="cart" class="bi bi-cart"></a></li>
                 
                 <li>
-                    <% if ( login ){ %>
+                    <% if ( usuario ){ %>
                         <a href=""><%= usuario %></a>
                         <li><a href="/logout" class="bi bi-box-arrow-right"></a></li>
-                        <% }if(!login){ %>
+                    <% }else{%>
                         <a href="login" class="bi bi-person-circle"></a></li><br>
-                        <p>Inicia Sesión wey</p>
-                        <% } %>
-                <li><a href=""></a></li>
-                <li><a href=""></a></li>
-                <li><a href=""></a></li>
+                    <%}%>
+            
             </ul>
 
-        </section>
+        </nav>
     </header>
 
    <div class="top"></div>

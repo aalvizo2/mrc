@@ -4,15 +4,16 @@ var login= require('./login')
 
 
 Router.get("/", (req, res)=>{
-    res.render('inicio') 
+    usuario= req.session.usuario
+    res.render('inicio', {
+        login: true, 
+        usuario: usuario
+        
+    })
    
     
 })
-Router.get('/login', (req, res) =>{
-    res.render('login')
-})
-Router.get('/registro', (req, res) =>{
-    res.render('registro')
-})
+
+
 
 module.exports= Router

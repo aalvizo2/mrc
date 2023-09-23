@@ -17,26 +17,27 @@
 </head>
 <body>
     <header>
-        <section>
-            <img src="img/logo.png" alt="">
-            <ul>
-                <li><a href="/">INICIO</a></li>
-                <li><a href="">PRODUCTOS</a></li>
-                <li><a href="">DESCUENTOS</a></li>
-                <li><a href="">NOSOTROS</a></li>
-                <li><a href="">SUCURSALES</a></li>
-                <li><a href="search" class="bi bi-search"></a></li>
-                <li><a href="cart" class="bi bi-cart"></a></li>
-                <% if(login){%>
-                <li><a href=""><%= admin %></a></li>
-                <%}%>
-                
-                <li><a href=""></a></li>
-                <li><a href=""></a></li>
-                <li><a href=""></a></li>
-            </ul>
+      <nav>
+        <img src="img/logo.png" alt="">
+        <ul>
+            <li><a href="/inicio_admin">INICIO</a></li>
+            <li><a href="/producto">PRODUCTOS</a></li>
+            <li><a href="">MENSAJES</a></li>
+            <li><a href="/upload">SUBIR PRODUCTO</a></li>
+            <li><a href="">VENTAS</a></li>
+            <li><a href="search" class="bi bi-search"></a></li>
+            <li><a href="cart" class="bi bi-cart"></a></li>
+            <li>
+              <% if ( login ){ %>
+              <a href=""><%= admin %></a>
+              <% } %>
+            </li>
+            <li><a href="/logout" class="bi bi-box-arrow-right"></a></li>
+            
+        </ul>
 
-        </section>
+      </nav>
+</header>
     </header>
     <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">

@@ -3,6 +3,7 @@ const Router= express.Router()
 const mysql= require('mysql')
 const multer= require('multer')
 const connection= require('./db')
+const Swal= require('sweetalert2')
 var ruta= '../uploads/'
 const bcrypt= require ('bcrypt')
 const fileUpload= require('express-fileupload')
@@ -20,6 +21,10 @@ Router.use(fileUpload())
 Router.use(express('public'))
 Router.use(express('upload'))
 
+//we creating login view 
+Router.get('/login', (req, res)=>{
+  res.render('login')
+})
 
 Router.post('/auth', async(req, res)=>{
     var user= req.body.usuario
@@ -36,10 +41,16 @@ Router.post('/auth', async(req, res)=>{
           if(data.length >0){
             req.session.user= true
             req.session.usuario= user
-            res.redirect('/inicio_usuario')
+            res.redirect('/')
           }else{
-            res.send('Error de autenticacion')
-            
+            res.render('login', {
+              alert: true,
+              alertMessage: "Error de autenticación",
+              alertIcon:'error',
+              showConfirmButton: true,
+              timer: false,
+              ruta: 'login'    
+          });
           }
         })
       }
@@ -60,7 +71,7 @@ Router.get('/logout', (req, res)=>{
   req.session.destroy()
   res.redirect('login')
 })
-Router.get('/inicio_usuario', (req, res)=>{
+Router.get('/', (req, res)=>{
   if(req.session.user){
     const usuario= req.session.usuario
     res.render('inicio_usuario',{

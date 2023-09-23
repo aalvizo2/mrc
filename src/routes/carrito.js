@@ -21,6 +21,7 @@ Router.post('/add-to-cart', (req, res)=>{
         connection.query("INSERT INTO carrito (img_prod, usuario, producto, precio, cantidad, fecha, total) VALUES(?,?,?,?,?,?, ?)", [img_product, usuario, nombre_prod, precio_publico, cantidad, fecha, total], (err)=>{
             if(err) throw err 
             console.log('se han agregado correctamente los productos al carrito')
+            res.redirect('cart')
         })
     }
 })

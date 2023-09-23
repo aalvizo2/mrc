@@ -16,10 +16,14 @@ header{
     width: 100%;
     height: fit-content;
     border: none;
-    background-color: none;
+    background-color: transparent;
     position: fixed;
     z-index: 1;
 }
+header img{
+    width: 10%;
+}
+
 .red{
     margin: 0;
     width: 100%;
@@ -50,6 +54,24 @@ section ul, li{
     margin: 10px;
 }
 section a{
+    
+    padding: 5px 15px;
+    color: #fff;
+    font-weight: 400;
+    text-decoration: none;
+    justify-content: space-between;
+}
+section  a:hover{
+    background-color: #8E0A05;
+    border-radius: 50px;
+}
+section ul, li{
+    display: inline;
+    list-style: none;
+    margin: 10px;
+}
+section a{
+    
     padding: 5px 15px;
     color: #fff;
     font-weight: 400;
@@ -269,13 +291,10 @@ div.gallery {
     border-left: none;
     border-bottom: 1px solid #b1aaaa;
  }
- .carrito img{
-    padding: 15px;
-    width: 250px;
- }
+
  .carrito h1{
     margin-right: 30px;
-    margin-top: 55px;
+    margin-top: 25px;
     font-size: 20px;
     font-weight: 400;
     padding: 15px;
@@ -283,7 +302,7 @@ div.gallery {
     justify-items: center;
  }
  .carrito a{
-    margin-top: 55px;
+    margin-top: 25px;
     padding: 15px;
     font-weight: 500;
     color:#8E0A05
@@ -301,7 +320,7 @@ div.gallery {
     border-bottom: 1px solid #b1aaaa;
  }
  .carrito2 h1{
-    margin-right: 30px;
+    margin-right: 130px;
     margin-top: 55px;
     font-size: 20px;
     font-weight: 600;
@@ -309,3 +328,33 @@ div.gallery {
     border:#000;
     justify-items: center;
  }
+ .carrito img{
+    width: 100%;
+ }
+ul, li{
+    display: inline;
+    list-style: none;
+    margin: 10px;
+}
+li a{
+    
+    padding: 5px 15px;
+    color: #fff;
+    font-weight: 400;
+    text-decoration: none;
+    justify-content: space-between;
+}
+li  a:hover{
+    background-color: #8E0A05;
+    border-radius: 50px;
+}
+.row{
+    width: 30%;
+    
+    margin: none;
+}
+.row img{
+    padding: 5px;
+    height: 100%;
+    margin: none;
+}
