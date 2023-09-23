@@ -107,6 +107,7 @@ section  a:hover{
     align-items: center;
     padding: 25px;
     border: 1px;
+    border-radius: 25px;
 }
 .producto figure{
     position: relative;
@@ -119,7 +120,7 @@ section  a:hover{
 }
 .producto figure img{
     width: 100%;
-    height: 100%;
+    height:100%;
 }
 .producto figure .text{
     overflow-y: hidden;
@@ -152,11 +153,22 @@ section  a:hover{
      color: #FFF;
      margin: 0 15px;
 }
-footer{
+/*footer{
     width: 100%;
     height: fit-content;
     background-color: #8E0A05;
+    text-align: center;
+    color: #FFF;
+    justify-content: space-around;
 }
+footer img{
+    width: 10%;
+}
+.footerow{
+    width: 10%;
+    height: fit-content;
+    border: 1px solid #fff;
+}*/
 .form_login{
     width: 30%;
     position: absolute;
@@ -357,4 +369,83 @@ li  a:hover{
     padding: 5px;
     height: 100%;
     margin: none;
+}
+.pie-pagina{
+    width: 100%;
+    background-color: #f00000e8;
+    overflow-y: hidden;
+}
+.pie-pagina .grupo-1{
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap:50px;
+    padding: 45px 0px;
+}
+.pie-pagina .grupo-1 .box figure{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-y: hidden;
+}
+.pie-pagina .grupo-1 .box figure img{
+    width: 150px;
+    overflow-y: hidden;
+}
+.pie-pagina .grupo-1 .box h2{
+    color: #fff;
+    margin-bottom: 25px;
+    font-size: 20px;
+}
+.pie-pagina .grupo-1 .box p{
+    color: #efefef;
+    margin-bottom: 10px;
+}
+.pie-pagina .grupo-1 .red-social a{
+    display: inline-block;
+    text-decoration: none;
+    width: 45px;
+    height: 45px;
+    line-height: 45px;
+    color: #fff;
+    margin-right: 10px;
+    background-color: #8E0A05;
+    text-align: center;
+    transition: all 300ms ease;
+}
+.pie-pagina .grupo-1 .red-social a:hover{
+    color: aqua;
+}
+.pie-pagina .grupo-2{
+    background-color: #8E0A05;
+    padding: 15px 10px;
+    text-align: center;
+    color: #fff;
+}
+.pie-pagina .grupo-2 small{
+    font-size: 15px;
+}
+@media screen and (max-width:800px){
+    .pie-pagina .grupo-1{
+        width: 90%;
+        grid-template-columns: repeat(1, 1fr);
+        grid-gap:30px;
+        padding: 35px 0px;
+    }
+}
+.marcas{
+    width: 100%; 
+    display: flex;
+}
+.marcas figure{
+    width: 25%;
+
+}
+.marcas figure img{
+    width: 80%;
+
 }

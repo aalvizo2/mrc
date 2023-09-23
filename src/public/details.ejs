@@ -33,11 +33,11 @@
                 <li><a href="/cart" class="bi bi-cart"></a></li>
                 
                 <% if ( usuario ){ %>
-                    <li></li><a href=""><%= usuario %></a></li>
-                    <li><a href="/logout" class="bi bi-box-arrow-right"></a></li>
-                <% }else{%>
-                    <a href="/login" class="bi bi-person-circle"></a></li><br>
-                <%}%>
+                  <a href=""><%= usuario %></a>
+                  <li><a href="/logout" class="bi bi-box-arrow-right"></a></li>
+              <% }else{%>
+                  <a href="login" class="bi bi-person-circle"></a></li><br>
+              <%}%>
             </ul>
                
         </nav>
