@@ -15,7 +15,7 @@ const engine= require('ejs-mate')
 const uploads= require('./uploads')
 const producto_ventas= require('./routes/producto_ventas')
 const carrito= require('./routes/carrito')
-
+const accesorios= require('./routes/accesorios')
 
 
 app.engine('ejs', engine)
@@ -41,7 +41,7 @@ app.use(session({
           //routes
           app.use('/', route)
           app.use('/', login)
-          
+          app.use('/', accesorios)
           app.use('/', registro)
           app.use('/', upload)
           app.use('/', uploads)

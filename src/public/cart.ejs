@@ -42,7 +42,7 @@
         </nav>
     </header>
    <div class="top"></div>
-   <center><div class="carrito2">
+   <div class="carrito2">
             <h1>Producto:</h1>
             <h1>Cantidad:</h1>
             <h1>Precio:</h1>
@@ -50,14 +50,14 @@
            </div>
     <% for(i=0; i<fila.length; i++){%>
     
-     <center><div class="carrito">
-        <div class="row"><img src="productos/<%= fila[i].img_prod%>" alt=""></div>
-        <div class="row"><h1><%= fila[i].producto%></h1></div>
-        <div class="row"><h1><%= fila[i].cantidad%></h1></div>
-        <div class="row"><h1>$<%= fila[i].precio%>.00</h1></div>
-        <div class="row"><h1>$<%= fila[i].total%>.00</h1></div>
+     <div class="carrito">
+        <img src="productos/<%= fila[i].img_prod%>" alt="">
+        <h1><%= fila[i].producto%></h1>
+        <h1><%= fila[i].cantidad%></h1>
+        <h1>$<%= fila[i].precio%>.00</h1>
+        <h1>$<%= fila[i].total%>.00</h1>
         <a href="/delete/<%= fila[i].id%>" class="bi bi-x-lg"></a>
-     </div></center>
+     </div>
     
     <%}%>
 

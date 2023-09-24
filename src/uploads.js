@@ -12,10 +12,12 @@ const mysql= require('mysql')
 
 Router.get('/producto', (req, res)=>{
   const usuario= req.session.usuario
+  const administrador= req.session.admin
   connection.query('SELECT* FROM producto', (err, row)=>{
     console.log(row)
     res.render('producto', {
       login: true,
+      admin: administrador,
       usuario: usuario,
       datos: row
       

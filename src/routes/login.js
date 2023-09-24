@@ -101,13 +101,23 @@ Router.get('/upload', (req, res) =>{
       var descripcion= req.body.descripcion
       var precio= req.body.precio
       var precio_publico= req.body.precio_publico
+      var {categoria}= req.body
+      console.log(categoria)
       console.log(nombre_prod, descripcion, precio, precio_publico, imagen.name)
       //moving uploaded file 
       imagen.mv(uploadpath)
-      connection.query("INSERT INTO producto(img_product, nombre_prod, descripcion, precio, precio_publico) VALUES(?,?,?,?,?)", [img_prod, nombre_prod, descripcion, precio, precio_publico], (err, rows)=>{
+      connection.query("INSERT INTO producto(img_product, nombre_prod, descripcion, precio, precio_publico, categoria) VALUES(?,?,?,?,?, ?)", [img_prod, nombre_prod, descripcion, precio, precio_publico, categoria], (err, rows)=>{
         if(err) throw err
-      
+        
       })
+      res.render('upload', {
+        alert: true,
+        alertMessage: "Producto agregado correctamente",
+        alertIcon:'success',
+        showConfirmButton: true,
+        timer: false,
+        ruta: 'producto'    
+    })
     })
     
   }else{

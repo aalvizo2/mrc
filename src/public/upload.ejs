@@ -67,7 +67,27 @@
               <input type="text" name="nombre_prod" placeholder="Titulo" required>
               <textarea name="descripcion"  cols="30" rows="10" placeholder="Descripción"></textarea>
               <input type="number" name="precio" placeholder="Precio" required>
+              <select name="categoria" id="">
+                 <option value="aceite">Aceite</option>
+                 <option value="accesorios">Accesorios</option>
+                 <option value="refacciones">Refacciones</option>
+              </select>
               <input type="number" name="precio_publico" placeholder="Precio Publico" required>
               <input type="submit" value="Enviar">
+              <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+              <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
           </form>
+          <% if (typeof alert != "undefined")  { %>
+            <script>
+            Swal.fire({
+              
+              text:'<%= alertMessage %>',
+              icon:'<%= alertIcon %>',
+              showConfirmButton: <%= showConfirmButton %>,
+              timer: <%= timer %>
+            }).then(()=>{
+              window.location='/<%= ruta %>'
+            })
+            </script>
+          <% } %>
         </div>
