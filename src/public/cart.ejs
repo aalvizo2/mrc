@@ -42,12 +42,20 @@
         </nav>
     </header>
    <div class="top"></div>
+   <%if(usuario){%>
    <div class="carrito2">
             <h1>Producto:</h1>
             <h1>Cantidad:</h1>
             <h1>Precio:</h1>
             <h1>Total:</h1>
            </div>
+    <%}else{%>
+        <center><div class="emptycart">
+           <h1>Carrito Vacio</h1>
+           <p><a href="/login">Iniciar Sesión</a> <a href="/registro">Registrar</a></p>
+        </div></center>
+        
+    <%}%>
     <% for(i=0; i<fila.length; i++){%>
     
      <div class="carrito">
