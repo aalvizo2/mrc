@@ -107,17 +107,16 @@ Router.get('/upload', (req, res) =>{
       //moving uploaded file 
       imagen.mv(uploadpath)
       connection.query("INSERT INTO producto(img_product, nombre_prod, descripcion, precio, precio_publico, categoria) VALUES(?,?,?,?,?, ?)", [img_prod, nombre_prod, descripcion, precio, precio_publico, categoria], (err, rows)=>{
-        if(err) throw err
-        
+        res.render('upload', {
+          alert: true,
+          alertMessage: "Producto agregado correctamente",
+          alertIcon:'success',
+          showConfirmButton: true,
+          timer: false,
+          ruta: 'producto_admin'    
       })
-      res.render('upload', {
-        alert: true,
-        alertMessage: "Producto agregado correctamente",
-        alertIcon:'success',
-        showConfirmButton: true,
-        timer: false,
-        ruta: 'producto'    
-    })
+      })
+      
     })
     
   }else{
@@ -127,7 +126,7 @@ Router.get('/upload', (req, res) =>{
 
 
 var usuario= session.user
-var admin= session.admin
+var admin= session.name
 module.exports= admin
 module.exports= usuario
 module.exports=Router

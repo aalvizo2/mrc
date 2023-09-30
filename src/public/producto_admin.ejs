@@ -30,8 +30,8 @@
                 <li><a href="cart" class="bi bi-cart"></a></li>
                 
                 <li>
-                    <% if ( usuario){ %>
-                        <a href=""><%= usuario %></a>
+                    <% if ( admin){ %>
+                        <a href=""><%= admin %></a>
                         <li><a href="/logout" class="bi bi-box-arrow-right"></a></li>
                         
                     <% }else{%>
@@ -50,21 +50,15 @@
         <div class="gallery">
             
               <img src="productos/<%= datos[i].img_product %>"  width="600" height="400">
-            </a>
+        </a>
             <div class="desc"><%= datos[i].nombre_prod %><br/>
-                <b>$<%= datos[i].precio_publico %>.00</b></div>
+                <b>$<%= datos[i].precio_publico %>.00</b></div><br>
+                <center><a href="update?id= <%= datos[i].id%>" class="links">Modificar</a>
+                <a href="" class="links">Eliminar</a></center>
           </div>
-          </a>
+          
        <% } %> 
         
 </body>
 </html>   
         
-    
-    
-   
-
-
-
-    
-       

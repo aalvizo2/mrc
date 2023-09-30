@@ -33,10 +33,10 @@
                 <li><a href="/cart" class="bi bi-cart"></a></li>
                 
                 <% if ( usuario ){ %>
-                  <a href=""><%= usuario %></a>
+                  <li><a href=""><%= usuario %></a></li>
                   <li><a href="/logout" class="bi bi-box-arrow-right"></a></li>
               <% }else{%>
-                  <a href="login" class="bi bi-person-circle"></a></li><br>
+                  <li><a href="login" class="bi bi-person-circle"></a></li><br>
               <%}%>
             </ul>
                
@@ -47,6 +47,7 @@
    <section class="section1">
        <h1><%= fila[0].nombre_prod%>:</h1>
        <p><%= fila[0].descripcion%></p>
+       
        <p><b>$<%= fila[0].precio_publico%>.00</b></p>
        <form action="add-to-cart" method="post">
          <input type="hidden" name="img_product"  value="<%= fila[0].img_product%>">

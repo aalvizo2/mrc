@@ -11,8 +11,10 @@ const mysql= require('mysql')
 //uploading the following image
 
 Router.get('/producto', (req, res)=>{
-  const usuario= req.session.usuario
-  const administrador= req.session.admin
+  var usuario= req.session.usuario
+  var administrador= req.session.admin 
+  if(usuario) console.log(usuario)
+  if(administrador) console.log(administrador)
   connection.query('SELECT* FROM producto', (err, row)=>{
     console.log(row)
     res.render('producto', {

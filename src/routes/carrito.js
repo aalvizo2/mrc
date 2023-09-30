@@ -18,11 +18,23 @@ Router.post('/add-to-cart', (req, res)=>{
         const {cantidad}= req.body
         const fecha= Date.now()
         const total= precio_publico * cantidad
-        connection.query("INSERT INTO carrito (img_prod, usuario, producto, precio, cantidad, fecha, total) VALUES(?,?,?,?,?,?, ?)", [img_product, usuario, nombre_prod, precio_publico, cantidad, fecha, total], (err)=>{
-            if(err) throw err 
-            console.log('se han agregado correctamente los productos al carrito')
-            res.redirect('cart')
+        
+        connection.query('SELECT * FROM carrito WHERE usuario=? AND producto=?', [usuario, nombre_prod], (err, resultado)=>{
+            if(resultado.length === 0){
+                connection.query("INSERT INTO carrito (img_prod, usuario, producto, precio, cantidad, fecha, total) VALUES(?,?,?,?,?,?, ?)", [img_product, usuario, nombre_prod, precio_publico, cantidad, fecha, total], (err)=>{
+                    if(err) throw err 
+                    console.log('se han agregado correctamente los productos al carrito')
+                    res.redirect('cart')
+                })
+            }else{
+                
+                connection.query('UPDATE carrito SET cantidad= cantidad+ ?, total= precio*cantidad WHERE producto=? AND usuario=?', [cantidad, nombre_prod, usuario], (err)=>{
+                    if(err) throw err 
+                    res.redirect('cart')
+                })
+            }
         })
+      
     }
 })
 Router.get('/cart', (req, res)=>{

@@ -183,6 +183,10 @@ footer img{
     text-align: center;
     background-color: #bd0c0cc4;
 }
+.form_login img{
+    width: 50%;
+    height: 50%
+}
 .form_login input{
     width: 95%;
     height: fit-content;
@@ -239,9 +243,10 @@ div.gallery {
     border: 1px solid #ccc;
     float: left;
     width: 180px;
-    height: 330px;
-    box-shadow: 10px, 10px #777;
+    height: 380px;
+    
     border-radius: 15px;
+    
     
   }
   
@@ -252,9 +257,16 @@ div.gallery {
   div.gallery img {
     width: 180px;
     height: 180px;
-    ;
+    padding:5px;
   }
-  
+  .links{
+    background-color:#8E0A05;
+    color:#fff;
+    padding: auto;
+    padding-left: 5px;
+    padding-right: 5px;
+    text-decoration: none;
+  }
   div.desc {
     padding: 15px;
     text-align: center;
@@ -278,12 +290,13 @@ div.gallery {
     width: 50%;
     float: right;
     margin-right: 250px;
-    border: none;
+    border: 3px solid #f70f07;
+    border-radius: 10px;
     padding: 5px;
   }
   .section1 h1{
     float: center;
-    padding: 5px;
+    padding: 15px;
     font-size: 30px;
     font-style: normal;
     font-weight: 600;
@@ -299,15 +312,29 @@ div.gallery {
     border-radius: 15px;
   }
   .section1 p{
-    padding: 3px;
+    padding: 15px;
+    justify-content: flex-start;
+
+  }
+  .section1 input{
+    border-radius: 50px;
+    margin: 5px;
+    padding: 5px;
+    font-weight: 700;
+  }
+  .section1 input[type = submit]{
+    background-color: #f70f07;
+    border: none;
+    color:#fff;
+    border-radius: 50px;
 
   }
  .carrito{
-    width: fit-content;
+    width: 100%;
     height:fit-content;
     display: flex;
     float: left;
-    justify-content: center;
+    
     border-top: none;
     border-right: none;
     border-left: none;
@@ -315,12 +342,14 @@ div.gallery {
  }
 
  .carrito h1{
-    margin-left: 70px;
+    width: 20%;
+    padding-left:5px;
+    margin-left: 5px;
     margin-top: 25px;
     font-size: 20px;
     font-weight: 400;
     padding: 15px;
-    border:#000;
+    border:none;
     justify-items: center;
  }
  .carrito a{
@@ -330,8 +359,8 @@ div.gallery {
     color:#8E0A05
  }
  .carrito2{
-    margin-left: 230px;
-    width: fit-content;
+    margin-left: 130px;
+    width: 80%;
     height:fit-content;
     display: flex;
     float: left;
@@ -342,13 +371,13 @@ div.gallery {
     border-bottom: 1px solid #b1aaaa;
  }
  .carrito2 h1{
-    margin-left: 70px;
-    margin-top: 55px;
-    font-size: 20px;
-    font-weight: 600;
+    margin-left: 25px;
+    width: 30%;
     padding: 15px;
-    border:#000;
-    justify-items: center;
+    border: none;
+    font-size: 25px;
+    font-weight: 0;
+
  }
  .carrito img{
     width: 150px;
@@ -460,7 +489,7 @@ li  a:hover{
 
 }
 .emptycart{
-    width: 50%;
+    width: 80%;
     height: fit-content;
     float: center;
     border: 1px dotted #777 ;
@@ -468,12 +497,15 @@ li  a:hover{
 .emptycart h1{
     color: rgba(0,0,0,0.5);
     font-size: 20px;
-    padding: 15px
+    padding: 15px;
+    margin-bottom: 20px;
 }
 .emptycart a{
     background-color: #8E0A05;
     color:#fff;
-    padding: 15px 15px;
+    padding: 5px;
+    margin-bottom: 120px;
+    
     text-decoration: none;
     overflow: hidden;
 

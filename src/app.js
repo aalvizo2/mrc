@@ -16,7 +16,7 @@ const uploads= require('./uploads')
 const producto_ventas= require('./routes/producto_ventas')
 const carrito= require('./routes/carrito')
 const accesorios= require('./routes/accesorios')
-
+const producto_admin= require('./routes/producto_admin')
 
 app.engine('ejs', engine)
 app.use(express.urlencoded({extended: true}))
@@ -47,7 +47,7 @@ app.use(session({
           app.use('/', uploads)
           app.use('/', producto_ventas)
           app.use('/', carrito)
-          
+          app.use('/', producto_admin)
           app.use(cookie())
           console.log('server running on port 3000')
       })
