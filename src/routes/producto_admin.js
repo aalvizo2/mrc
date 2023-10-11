@@ -41,23 +41,24 @@ Router.get('/update', (req, res)=>{
 })
 //updating new products 
 Router.post('/actualizar', async(req, res)=>{
-    const admin= req.session.name
     const {id}= req.body
     const {nombre_prod}= req.body
-    const {descripcion}= req.body
+    const{descripcion}= req.body
     const {precio}= req.body
-    const {precio_publico}=req.body
-    console.log(nombre_prod, descripcion)
-    connection.query('UPDATE producto SET nombre_prod=?, descripcion=?, precio=?, precio_publico=? WHERE id=?', [nombre_prod, descripcion, precio, precio_publico, id], (err, results) => {
-        if (err) {
-            console.error('Error al actualizar el producto:', err);
-            // Puedes agregar un mensaje de error y redireccionar a una página de error si es necesario.
-        } else {
-            console.log('Producto actualizado');
-            res.redirect('producto_admin');
-        }
+    const{precio_publico}= req.body
+    console.log(id, nombre_prod, descripcion, precio, precio_publico)
+    connection.query('UPDATE producto SET nombre_prod=?, descripcion=?, precio=?, precio_publico=? WHERE id=?', [nombre_prod,descripcion, precio, precio_publico, id], (err)=>{
+        if(err) throw err 
+        res.redirect('producto_admin')
     })
 })
-
+Router.get('/eliminar/:id', (req, res)=>{
+    const {id}= req.params
+    connection.query('DELETE FROM producto WHERE id=?', [id], (err)=>{
+        if(err) throw err
+        console.log('producto eliminado')
+        res.redirect('producto_admin')
+    })
+})
 
 module.exports=Router

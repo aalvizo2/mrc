@@ -1,4 +1,5 @@
 *{
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
     font-family: 'Poppins', sans-serif;
@@ -6,15 +7,12 @@
     overflow-x: hidden;
     
 }
-.header-cont{
-    width: 100%;
-    height: 50%;
-    border: 1px;
-}
+
 header{
+    display: flex;
     margin: 0;
     width: 100%;
-    height: fit-content;
+    height: auto;
     border: none;
     background-color: transparent;
     position: fixed;
@@ -41,47 +39,7 @@ section img{
     height: auto;
     padding: 10px;
 }
-section ul{
-    float: right;
-    border: none;
-    padding: 20px 60px;
-    justify-content: space-around;
-    background: transparent;
-}
-section ul, li{
-    display: inline;
-    list-style: none;
-    margin: 10px;
-}
-section a{
-    
-    padding: 5px 15px;
-    color: #fff;
-    font-weight: 400;
-    text-decoration: none;
-    justify-content: space-between;
-}
-section  a:hover{
-    background-color: #8E0A05;
-    border-radius: 50px;
-}
-section ul, li{
-    display: inline;
-    list-style: none;
-    margin: 10px;
-}
-section a{
-    
-    padding: 5px 15px;
-    color: #fff;
-    font-weight: 400;
-    text-decoration: none;
-    justify-content: space-between;
-}
-section  a:hover{
-    background-color: #8E0A05;
-    border-radius: 50px;
-}
+
 .header_container{
     width:100%;
     height: fit-content;
@@ -121,6 +79,7 @@ section  a:hover{
 .producto figure img{
     width: 100%;
     height:100%;
+    object-fit: cover;
 }
 .producto figure .text{
     overflow-y: hidden;
@@ -154,22 +113,7 @@ section  a:hover{
      color: #FFF;
      margin: 0 15px;
 }
-/*footer{
-    width: 100%;
-    height: fit-content;
-    background-color: #8E0A05;
-    text-align: center;
-    color: #FFF;
-    justify-content: space-around;
-}
-footer img{
-    width: 10%;
-}
-.footerow{
-    width: 10%;
-    height: fit-content;
-    border: 1px solid #fff;
-}*/
+
 .form_login{
     width: 30%;
     position: absolute;
@@ -238,12 +182,12 @@ footer img{
     margin: 3%;
 }
 div.gallery {
-    
+    margin-bottom: 15px;
     margin-left: 15px;
     border: 1px solid #ccc;
     float: left;
     width: 180px;
-    height: 380px;
+    height: 310px;
     
     border-radius: 15px;
     
@@ -257,6 +201,8 @@ div.gallery {
   div.gallery img {
     width: 180px;
     height: 180px;
+    object-fit: contain;
+    object-position: 80% 80%;
     padding:5px;
   }
   .links{
@@ -275,7 +221,7 @@ div.gallery {
     
     float: left;
     margin-left: 50px;
-    width: 30%;
+    width: 350px;
     height: 50%;
     padding: 5px;
     border: none;
@@ -284,7 +230,9 @@ div.gallery {
   }
   .section img{
     padding: none;
-    width: 100%;
+    width: 350px;
+    height: 350px;
+    object-fit: contain;
   }
   .section1{
     width: 50%;
@@ -382,27 +330,12 @@ div.gallery {
  .carrito img{
     width: 150px;
     height: 150px;
+    object-fit: contain;
     padding: 15px;
     
     
  }
-ul, li{
-    display: inline;
-    list-style: none;
-    margin: 10px;
-}
-li a{
-    
-    padding: 5px 15px;
-    color: #fff;
-    font-weight: 400;
-    text-decoration: none;
-    justify-content: space-between;
-}
-li  a:hover{
-    background-color: #8E0A05;
-    border-radius: 50px;
-}
+
 
 .pie-pagina{
     width: 100%;
@@ -464,14 +397,7 @@ li  a:hover{
 .pie-pagina .grupo-2 small{
     font-size: 15px;
 }
-@media screen and (max-width:800px){
-    .pie-pagina .grupo-1{
-        width: 90%;
-        grid-template-columns: repeat(1, 1fr);
-        grid-gap:30px;
-        padding: 35px 0px;
-    }
-}
+
 .marcas{
     width: 100%; 
     display: flex;
@@ -484,8 +410,9 @@ li  a:hover{
     align-content: center;
 }
 .marcas figure img{
-    width: 350px;
-    height: auto;
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
 
 }
 .emptycart{
@@ -512,4 +439,99 @@ li  a:hover{
 }
 .emptycart a:hover{
     background-color: #f70f07;
+}
+.carousel .slide{
+    width: 100%;
+    height: 100%;
+}
+.carousel-item img{
+    width: 100%;
+    height: 100%;
+    object-fit:cover;
+}
+.menu_toggle {
+    color:#FFF;
+    font-size: 24px;
+    display: none;
+    cursor: pointer;
+    text-decoration: none;
+    float:right;
+    top: -50%;
+    padding: 20px;
+    
+}
+nav{
+    top: 60px;
+    width: 80%;
+    padding: 15px;
+}
+
+header ul, li{
+    display: inline;
+    list-style: none;
+    margin: 10px;
+}
+header li a{
+    
+    padding: 5px 15px;
+    color: #fff;
+    font-weight: 400;
+    text-decoration: none;
+    justify-content: space-between;
+    transition: transform  0.3s ease;
+}
+g li a:hover{
+    transform: translateX(-5px);
+}
+@media screen and (max-width:800px){
+    .pie-pagina .grupo-1{
+        width: 90%;
+        grid-template-columns: repeat(1, 1fr);
+        grid-gap:30px;
+        padding: 35px 0px;
+    }
+    
+    header {
+        width:100%;
+        justify-content: space-between;
+        align-items: flex-start;
+        height: max-content;
+        min-height: max-content;
+    }
+    header img{
+        width: 30%;
+    }
+    .red{
+        width:100%;
+        justify-content: space-between;
+        align-items: flex-start;
+        height: fit-content;
+        min-height: max-content;
+    }
+    .red img{
+        width: 40%;
+    }
+    header .menu_toggle{
+        display: block;
+        float: right;
+        
+    }
+    nav{
+        
+        width: 100%;
+        top:60px;
+        display: none;
+        background-color: #8E0A05;
+    }
+    nav ul{
+        width: 100%;
+        
+        flex-direction: column;
+        width: 20%;
+    } 
+    nav.active{
+        display: block;
+    }
+    
+    
 }

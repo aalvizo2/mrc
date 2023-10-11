@@ -43,7 +43,7 @@
         <div class="form_login">
           
           <form action="/actualizar" method="post" >
-              <input type="hidden" name="<%= fila[0].id%>">
+              <input type="hidden" name="id" value="<%= fila[0].id%>">
               <img src="productos/<%= fila[0].img_product%>" alt="">
               <input type="text" name="nombre_prod" placeholder="Titulo" value="<%= fila[0].nombre_prod%>" required>
               <textarea name="descripcion"  cols="30" rows="10"   placeholder="Descripción"><%= fila[0].descripcion%></textarea>
