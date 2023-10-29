@@ -17,6 +17,9 @@ const producto_ventas= require('./routes/producto_ventas')
 const carrito= require('./routes/carrito')
 const accesorios= require('./routes/accesorios')
 const producto_admin= require('./routes/producto_admin')
+const empty_cart= require('./routes/empty_cart')
+const cart_edit= require('./routes/cart_edit')
+const descuentos= require('./routes/descuentos')
 
 app.engine('ejs', engine)
 app.use(express.urlencoded({extended: true}))
@@ -48,10 +51,14 @@ app.use(session({
           app.use('/', producto_ventas)
           app.use('/', carrito)
           app.use('/', producto_admin)
+          app.use('/', empty_cart)
+          app.use('/', cart_edit)
+          app.use('/', descuentos)
           app.use(cookie())
           console.log('server running on port 3000')
       })
     }
+    
     // we shall open up a session on login if activated
 
 //middlewares

@@ -19,7 +19,9 @@ Router.post('/add-to-cart', (req, res)=>{
         const fecha= Date.now()
         const total= precio_publico * cantidad
         
+        
         connection.query('SELECT * FROM carrito WHERE usuario=? AND producto=?', [usuario, nombre_prod], (err, resultado)=>{
+            
             if(resultado.length === 0){
                 connection.query("INSERT INTO carrito (img_prod, usuario, producto, precio, cantidad, fecha, total) VALUES(?,?,?,?,?,?, ?)", [img_product, usuario, nombre_prod, precio_publico, cantidad, fecha, total], (err)=>{
                     if(err) throw err 
@@ -32,24 +34,49 @@ Router.post('/add-to-cart', (req, res)=>{
                     if(err) throw err 
                     res.redirect('cart')
                 })
+                
             }
         })
       
     }
 })
-Router.get('/cart', (req, res)=>{
+Router.get('/cart', async(req, res)=>{
     usuario= req.session.usuario
-    connection.query('SELECT * FROM CARRITO WHERE usuario=?', [usuario], (err, row)=>{
-        if(err) throw err
-        console.log(row)
-        res.render('cart', {
-            login: true, 
-            usuario: usuario, 
-            fila: row
-        })
+    
+    const consulta_prod= 'SELECT * FROM carrito WHERE usuario=?'
+    connection.query(consulta_prod, [usuario], (err, consulta)=>{
+        
+        if(err){
+            console.err(err)
+        }else{
+            const productos= consulta
+            console.log(consulta)
+            connection.query('SELECT SUM(total) AS suma FROM carrito WHERE usuario=?', [usuario], (err, suma)=>{
+                if(err){
+                    console.err(err)
+                }else  if (suma && suma[0] && suma[0].suma !== null){
+                    
+                   const total= suma[0].suma
+                   
+                   
+                   connection.query('SELECT SUM (cantidad) as objeto FROM carrito WHERE usuario=?', [usuario], (err, objeto)=>{
+                      const contador= objeto[0].objeto
+                      res.render('cart', {
+                        login: true, 
+                        usuario: usuario, 
+                        fila: productos, 
+                        total: total, 
+                        objeto: contador
+                       })
+                   })
+                   
+                }
+            })
+        }
     })
-   
+  
 })
+
 Router.get('/delete/:id', (req, res) =>{
     const {id}= req.params
     connection.query('DELETE FROM carrito WHERE id=?', [id], (res, err)=>{

@@ -18,16 +18,22 @@
 </head>
 <body>
     <header class="red">
+        <img src="img/logo.png" alt="">
+        <a class="menu_toggle">☰</a>
         <nav>
-            <img src="img/logo.png" alt="">
+          
+            
+            
             <ul>
                 <li><a href="/">INICIO</a></li>
-                <li><a href="/producto">PRODUCTOS</a></li>
+                <li><a href="producto">PRODUCTOS</a></li>
                 <li><a href="">DESCUENTOS</a></li>
                 <li><a href="">NOSOTROS</a></li>
                 <li><a href="">SUCURSALES</a></li>
                 <li><a href="search" class="bi bi-search"></a></li>
-                <li><a href="cart" class="bi bi-cart"></a></li>
+                <li><a href="cart" class="bi bi-cart"></a>
+                  <a class="objeto" href="cart"><%= objeto%></a>
+                </li>
                 
                 <li>
                     <% if ( usuario ){ %>
@@ -36,11 +42,13 @@
                     <% }else{%>
                         <a href="login" class="bi bi-person-circle"></a></li><br>
                     <%}%>
-            
+               
             </ul>
- 
-        </nav>
-    </header>
+            </nav>
+            
+          
+          
+        </header>
    <div class="top"></div>
    <%if(usuario){%>
    <div class="carrito2">
@@ -62,14 +70,27 @@
         <img src="productos/<%= fila[i].img_prod%>" alt="">
         <h1><%= fila[i].producto%></h1>
         <h1><%= fila[i].cantidad%></h1>
-        <h1>$<%= fila[i].precio%>.00</h1>
-        <h1>$<%= fila[i].total%>.00</h1>
+        <h1>$<%= parseFloat(fila[i].precio).toLocaleString() %>.00</h1>
+        <h1>$<%= parseFloat(fila[i].total).toLocaleString() %>.00</h1>
         <a href="/delete/<%= fila[i].id%>" class="bi bi-x-lg"></a>
-        <a href="" class="bi bi-pencil-square"></a>
+        <a href="/update_cart" class="bi bi-pencil-square"></a>
      </div>
-    
     <%}%>
+    <% if( usuario ){%>
+    <div class="total_cont">
+        <div class="total"><b>Total:</b> $<%= parseFloat(total).toLocaleString()%>.00</div>
+        <div class="vaciar_carrito"><a href="/empty_cart?total= <%= total%> ">Vaciar Carrito</a></div>
+    </div>
+    <%}%>
+  <script src="script/responsive.js"></script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
+  </body>
+  </html>
+</body>
+</html>
 
     
   
-   </section>
+   
+ 

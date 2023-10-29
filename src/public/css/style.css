@@ -25,7 +25,7 @@ header img{
 .red{
     margin: 0;
     width: 100%;
-    height: fit-content;
+    
     border: none;
     background-color: #f00000e8;
     position: fixed;
@@ -186,9 +186,10 @@ div.gallery {
     margin-left: 15px;
     border: 1px solid #ccc;
     float: left;
-    width: 180px;
-    height: 310px;
-    
+    width: 200px;
+    height: 350px;
+    overflow: hidden;
+    text-overflow: ellipsis;
     border-radius: 15px;
     
     
@@ -279,7 +280,7 @@ div.gallery {
   }
  .carrito{
     width: 100%;
-    height:fit-content;
+    clear: both;
     display: flex;
     float: left;
     
@@ -471,17 +472,112 @@ header ul, li{
     list-style: none;
     margin: 10px;
 }
-header li a{
+header nav li a{
     
     padding: 5px 15px;
     color: #fff;
     font-weight: 400;
     text-decoration: none;
     justify-content: space-between;
-    transition: transform  0.3s ease;
+    transition: all  0.3s ease;
 }
-g li a:hover{
-    transform: translateX(-5px);
+header nav ul li a{
+    transition: all 0.3s ease;
+}
+header nav ul li a:hover{
+    transform: translate(-5px);
+}
+.total_cont{
+    width: 100%;
+    display: flex;
+    
+    padding: 5px 15px;
+    font-size: 20px;
+}
+div .total{
+    position: relative;
+    left: 68%;
+    
+    padding: 5px 15px;
+}
+.vaciar_carrito{
+    position: relative;
+    left: 40%;
+    background-color: #8E0A05;
+    border-radius: 5px;
+    padding: 5px 15px;
+    margin-top: 5px;
+}
+.vaciar_carrito a{
+    color: #fff;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+.vaciar_carrito a:hover{
+    transform: translateY(5px);
+    text-decoration: underline;
+}
+.modify{
+    width: 50px;
+}
+.actualizar{
+    color:#FFF;
+    width: 150;
+    height: 150;
+    
+   
+}
+.actualizar a{
+    background-color: #f70f07;
+    position: relative;
+    top: 45px;
+    color:#fff;
+    border: none;
+    padding: 25px ;
+    margin-top: 15px;
+    text-decoration: none;
+}
+.objeto {
+    
+    font-size: 10px;
+    border-radius: 100%;
+    position: absolute;
+    right: 31%;
+   
+}
+.paginacion{
+    width: 100%;
+    height: fit-content;
+    
+    align-items: center;
+    padding: 5px;
+}
+.paginacion ul li {
+    width: auto;
+    height: auto;
+    position: relative;
+    left: 50%;
+    padding: 1px 15px;
+    
+    background-color: #8E0A05;
+    
+
+}
+.paginacion a{
+    color: #fff;
+    text-decoration: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.paginacion a.ul li{
+    background-color: #f70f07;
+    width: auto;
+    height: auto;
+    position: relative;
+    left: 50%;
+    padding: 1px 15px;
+    
+    
 }
 @media screen and (max-width:800px){
     .pie-pagina .grupo-1{

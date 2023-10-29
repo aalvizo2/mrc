@@ -1,0 +1,48 @@
+.pago_cont{
+    position: absolute;
+    width: 30%;
+    top: 25%;
+    left: 40%;
+    -webkit-box-shadow: 3px 4px 5px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 3px 4px 5px 0px rgba(0,0,0,0.75);
+     box-shadow: 3px 4px 5px 0px rgba(0,0,0,0.75);
+     display: table-column;
+     flex-direction: column;
+     align-items: center;
+     
+}
+.pago_cont form{
+    position: relative;
+    padding: 15px;
+    float: center;
+}
+.pago_cont input{
+    width: 100%;
+    padding: auto;
+    margin: 5px;
+}
+.pago_cont .cvv{
+    width: 50%;
+    display: flex;
+}
+.pago_cont .date{
+    width: 100%;
+}
+.pago_cont h1{
+    position: relative;
+    font-size: 24px;
+    width: 100%;
+    height: 40px;
+    padding: 5px;
+    left: 50%;
+    
+}
+.pago_cont input[type= submit]{
+    background-color: #f70f07;
+    width: fit-content;
+    position: relative;
+    
+    padding: 5px 15px;
+    border: none;
+    color: #fff;
+}

@@ -15,18 +15,39 @@ Router.get('/producto', (req, res)=>{
   var administrador= req.session.admin 
   if(usuario) console.log(usuario)
   if(administrador) console.log(administrador)
-  connection.query('SELECT* FROM producto', (err, row)=>{
+  const perPage= 14
+  const pagina= req.query.pagina || 1
+  const offset= (pagina -1)* perPage
+  connection.query('SELECT* FROM producto LIMIT ? OFFSET ? ',[perPage, offset], (err, row)=>{
     console.log(row)
-    res.render('producto', {
-      login: true,
-      admin: administrador,
-      usuario: usuario,
-      datos: row
+    connection.query('SELECT SUM (cantidad) as objeto FROM carrito WHERE usuario=?', [usuario], (err, objeto)=>{
+      const contador= objeto[0].objeto
       
+      connection.query('SELECT CEIL(COUNT (*)) AS count FROM producto', (err, conteo)=>{
+        const TotalProducts= conteo[0].count
+        console.log(conteo)
+        const totalPages= Math.ceil(TotalProducts/perPage)
+        console.log(totalPages)
+        res.render('producto', {
+          login: true,
+          admin: administrador,
+          usuario: usuario,
+          datos: row,
+          objeto: contador, 
+          currentPage: pagina,
+          totalPages: totalPages
+          
+
+        })
+      })    
     })
   })
+})
     
-  })
+
+  
+    
+  
 
 
  

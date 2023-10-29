@@ -42,6 +42,7 @@ Router.post('/auth', async(req, res)=>{
             req.session.user= true
             req.session.usuario= user
             res.redirect('/')
+            
           }else{
             res.render('login', {
               alert: true,
@@ -107,14 +108,7 @@ Router.get('/upload', (req, res) =>{
       //moving uploaded file 
       imagen.mv(uploadpath)
       connection.query("INSERT INTO producto(img_product, nombre_prod, descripcion, precio, precio_publico, categoria) VALUES(?,?,?,?,?, ?)", [img_prod, nombre_prod, descripcion, precio, precio_publico, categoria], (err, rows)=>{
-        res.render('upload', {
-          alert: true,
-          alertMessage: "Producto agregado correctamente",
-          alertIcon:'success',
-          showConfirmButton: true,
-          timer: false,
-          ruta: 'producto_admin'    
-      })
+       res.redirect('/producto_admin')
       })
       
     })

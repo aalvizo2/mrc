@@ -44,6 +44,7 @@ Router.get('/upload', (req, res)=>{
           timer: false,
           ruta: 'producto_admin'    
       })
+      res.redirect('producto_admin')
       })
       
     })

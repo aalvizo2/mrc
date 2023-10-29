@@ -20,33 +20,29 @@
     <header class="red">
         <img src="img/logo.png" alt="">
         <a class="menu_toggle">☰</a>
-        <nav>
-          
-            
-            
-            <ul>
-                <li><a href="/">INICIO</a></li>
-                <li><a href="producto">PRODUCTOS</a></li>
-                <li><a href="">DESCUENTOS</a></li>
-                <li><a href="">NOSOTROS</a></li>
-                <li><a href="">SUCURSALES</a></li>
-                <li><a href="search" class="bi bi-search"></a></li>
-                <li><a href="cart" class="bi bi-cart"></a></li>
-                
-                <li>
+          <nav>
+              
+              <ul>
+                  <li><a href="/">INICIO</a></li>
+                  <li><a href="/producto_admin">PRODUCTOS</a></li>
+                  <li><a href="">MENSAJES</a></li>
+                  <li><a href="/upload">SUBIR PRODUCTO</a></li>
+                  <li><a href="">VENTAS</a></li>
+                  <li><a href="search" class="bi bi-search"></a></li>
+                  <li><a href="cart" class="bi bi-cart"></a></li>
+                  <li>
                     <% if ( admin ){ %>
-                        <a href=""><%= admin %></a>
-                        <li><a href="/logout" class="bi bi-box-arrow-right"></a></li>
+                    <a href=""><%= admin %></a>
+                    <li><a href="/logout" class="bi bi-box-arrow-right"></a></li>
                     <% }else{%>
-                        <a href="login" class="bi bi-person-circle"></a></li><br>
+                    <li><a href="login" class="bi bi-person-circle"></a></li>
                     <%}%>
-               
-            </ul>
+                  
+                  
+              </ul>
+  
             </nav>
-            
-          
-          
-        </header>
+      </header>
    <div class="top"></div>
 
        <% for(i=0; i<datos.length; i++){%>

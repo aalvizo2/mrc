@@ -31,11 +31,13 @@
         <ul>
             <li><a href="/">INICIO</a></li>
             <li><a href="producto">PRODUCTOS</a></li>
-            <li><a href="">DESCUENTOS</a></li>
+            <li><a href="/descuentos">DESCUENTOS</a></li>
             <li><a href="">NOSOTROS</a></li>
             <li><a href="">SUCURSALES</a></li>
             <li><a href="search" class="bi bi-search"></a></li>
-            <li><a href="cart" class="bi bi-cart"></a></li>
+            <li><a href="cart" class="bi bi-cart"></a>
+              <a class="objeto"><%= objeto%></a>
+            </li>
             
             <li>
                 <% if ( usuario ){ %>
