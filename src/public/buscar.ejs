@@ -51,10 +51,29 @@
            
         </ul>
     </header>
+    
     <section class="form_container">
         <form action="/buscar" method="post">
             <input type="search" name="buscar" placeholder="Inserta un producto:">
             <input type="submit" value="Buscar">
         </form>
     </section>
-    
+    <section class="limpiar">
+       <a href="/limpiar">X</a>
+    </section>
+    <section class="resultados_busq">
+      <%if(busqueda.length>0){%>
+        <%for(i=0; i<busqueda.length; i++){%>
+        
+        <div class="busq_container">
+        <a href="details?id=<%= busqueda[i].id %>">
+          <img src="productos/<%=busqueda[i].img_product%>"></a>
+          <p><%=busqueda[i].nombre_prod%></p>
+          <p><b>$<%=parseFloat(busqueda[i].precio_publico).toLocaleString()%>.00</b></p>
+        </div>
+        
+        <%}%>
+      <%}else{%>
+        <h1>No se encontrarón resultados en la busqueda</h1>
+      <%}%>
+    </section>    

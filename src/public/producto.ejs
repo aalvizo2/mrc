@@ -21,7 +21,7 @@
         <header class="red">
             <img src="img/logo.png" alt="">
             <a class="menu_toggle">☰</a>
-            <nav>
+            
               
                 
                 
@@ -45,39 +45,37 @@
                         <%}%>
                    
                 </ul>
-                </nav>
+                
                 
               
               
             </header>
    <div class="top"></div>
 
-       <% for(i=0; i<datos.length; i++){%>
-        <a href="details?id=<%= datos[i].id%>">
-        <div class="gallery">
-            
-              <img src="productos/<%= datos[i].img_product %>"  width="600" height="400">
-            </a>
-            <div class="desc"><%= datos[i].nombre_prod %><br/>
-                <b>$<%=parseFloat (datos[i].precio_publico).toLocaleString() %>.00</b></div>
-          </div>
-          </a>
-       
-       <% } %> 
-       <div class="paginacion">
-         <ul>
-            <%if(currentPage > 1){%>
-          <li><a href="producto">Inicio</a></li>
-          <%}%>
-          <% for(i= 1; i <totalPages; i++){%>
-            
-            
-            <li><a href="?pagina=<%= i + 1%>" class="<%= i === currentPage ? 'activo': '' %>"><%=i%></a></li>
-            
-          <%}%>
-         </ul>
-         
-       </div>
+   <% for(i = 0; i < datos.length; i++) { %>
+    <a href="details?id=<%= datos[i].id %>">
+      <div class="gallery">
+        <img src="productos/<%= datos[i].img_product %>" width="600" height="400">
+    </a>
+        <div class="desc"><%= datos[i].nombre_prod %><br/>
+            <b>$<%=parseFloat (datos[i].precio_publico).toLocaleString() %>.00</b>
+        </div>
+    </div>
+    
+      <% } %>
+    
+  
+  
+  <div class="paginacion">
+    <ul>
+      <% if (currentPage > 1) { %>
+        <li><a href="producto">Inicio</a></li>
+      <% } %>
+      <% for (i = 1; i < totalPages; i++) { %>
+        <li><a href="?pagina=<%= i + 1 %>" class="<%= i === currentPage ? 'activo' : '' %>"><%= i %></a></li>
+      <% } %>
+    </ul>
+  </div>
     
        <footer class="pie-pagina">
         <div class="grupo-1">
@@ -112,11 +110,3 @@
 </body>
 </html>   
         
-    
-    
-   
-
-
-
-    
-       

@@ -18,8 +18,9 @@
 </head>
 <body>
     <header class="red">
-        <nav>
+        
             <img src="img/logo.png" alt="">
+            <a class="menu_toggle">☰</a>
             <ul>
                 <li><a href="/">INICIO</a></li>
                 <li><a href="/producto">PRODUCTOS</a></li>
@@ -39,7 +40,7 @@
             
             </ul>
  
-        </nav>
+        
     </header>
    <div class="top"></div>
    <%if(usuario){%>
@@ -62,14 +63,16 @@
         <img src="productos/<%= fila[i].img_prod%>" alt="">
         <h1><%= fila[i].producto%></h1>
         <h1><form action="/cart_edit" method="post">
-            <input type="number" name="cantidad" value="<%= fila[i].cantidad%>" class="modify">
-        
+              <input type="number" name="cantidad" value="<%= fila[i].cantidad%>" class="modify">
+              <input type="hidden" name="id" value="<%=fila[i].id%>">
+              <input type="submit" value="Editar">
+            </form>
             
         </h1>
         <h1>$<%= parseFloat(fila[i].precio).toLocaleString() %>.00</h1>
         <h1>$<%= parseFloat(fila[i].total).toLocaleString() %>.00</h1>
         <a href="/delete/<%= fila[i].id%>" class="bi bi-x-lg"></a>
-        <div class="actualizar"><a href="cart_edit/<%= fila[i].id %>">Modificar</a></div>
+        
     
      </div>
     

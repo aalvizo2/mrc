@@ -41,7 +41,7 @@ nav li a:hover{
     color:#fff;
     text-decoration: none;
     display: none;
-    padding: 20px;
+    
     font-size: 20px;
     cursor: pointer;
 }
@@ -92,6 +92,7 @@ nav li a:hover{
     height: 450px;
     float: left;
     margin-left: 25px;
+    
 }
 .gallery:hover{
     opacity: 0.5;
@@ -105,12 +106,13 @@ nav li a:hover{
     color:#f70f07;
 
 }
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 800px) {
     nav img{
         width: 35%;
     }
     .menu_toggle{
         display: block;
+        padding: 60px;
     }
     nav ul{
         width: 100%;

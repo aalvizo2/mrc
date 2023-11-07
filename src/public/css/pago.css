@@ -46,3 +46,18 @@
     border: none;
     color: #fff;
 }
+.productos{
+    position: absolute;
+    top: 25%;
+    left: 135px;
+    width: 30%;
+    height: fit-content;
+    box-shadow: 8px 3px 10px -6px rgba(0,0,0,0.67);
+    -webkit-box-shadow: 8px 3px 10px -6px rgba(0,0,0,0.67);
+    -moz-box-shadow: 8px 3px 10px -6px rgba(0,0,0,0.67);
+}
+.productos h1{
+    color:#f70f07;
+    font-size: 24px;
+    font-weight: 600;
+}

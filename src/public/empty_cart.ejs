@@ -21,16 +21,22 @@
 </head>
 <body>
     <header class="red">
-        <nav>
-            <img src="img/logo.png" alt="">
+        <img src="img/logo.png" alt="">
+        <a class="menu_toggle">☰</a>
+        
+          
+            
+            
             <ul>
                 <li><a href="/">INICIO</a></li>
-                <li><a href="/producto">PRODUCTOS</a></li>
-                <li><a href="/descuentos">DESCUENTOS</a></li>
-                <li><a href="/nosotros">NOSOTROS</a></li>
-                <li><a href="/sucursales">SUCURSALES</a></li>
+                <li><a href="producto">PRODUCTOS</a></li>
+                <li><a href="">DESCUENTOS</a></li>
+                <li><a href="">NOSOTROS</a></li>
+                <li><a href="">SUCURSALES</a></li>
                 <li><a href="search" class="bi bi-search"></a></li>
-                <li><a href="cart" class="bi bi-cart"></a></li>
+                <li><a href="cart" class="bi bi-cart"></a>
+                  
+                </li>
                 
                 <li>
                     <% if ( usuario ){ %>
@@ -39,10 +45,22 @@
                     <% }else{%>
                         <a href="login" class="bi bi-person-circle"></a></li><br>
                     <%}%>
-            
+               
             </ul>
-        </nav>
-    </header>
+            
+            
+          
+          
+        </header>
+    <section class="productos">
+        <h1>Productos:</h1>
+        <%for(i=1; i<datos.length; i++){%>
+            <%= datos[i].producto%>
+            <%= datos[i].cantidad%>
+            <%= datos[i].precio_publico%>
+        <%}%>
+        <p><b>Total: $<%= parseFloat(total).toLocaleString()%>.00</b></p>
+    </section>
     <div class="pago_cont">
         <body>
             <form id="payment-form" action="/procesar-pago" method="POST">
@@ -50,6 +68,11 @@
                 <label for="card-element">Información de la tarjeta</label>
                 <div id="card-element"></div>
               </div><br>
+              <input type="text" name="nombre" id="" placeholder="Nombre Completo:" required>
+              <input type="number" name="telefono" id="" placeholder="Télefono:" required>
+              <input type="text" name="direccion" id="" placeholder="Dirección:" required>
+              <input type="number" name="cp" id="" placeholder="Código Postal:" required>
+              <input type="email" name="email" id="" placeholder="Email:" required>
               <b>Total:<%= parseFloat(total).toLocaleString()%></b><br>
               <input type="hidden" name="total" value="<%= total %>">
               <input type="submit" value="Pagar">
@@ -57,10 +80,14 @@
         
         <script>
             var stripe = Stripe('pk_test_51NoFuDHlv4JdPCt0xijsXecru1jraLhq0NXilVHg0UOHitccFi6DWlR9MXV8IUHEB5fDHZMIN5nc3CNYdV3lZ5Tz00ZHK2ve0r');
+            stripe.elements({
+                locale:'es',
+            })
             var elements = stripe.elements();
             var cardElement = elements.create('card');
 
             cardElement.mount('#card-element');
+            
 
             var form = document.getElementById('payment-form');
             var errorElement = document.getElementById('error-message');
@@ -96,7 +123,7 @@
         </script>
         
     </div>
-    
+<script src="script/responsive.js"></script>   
    
     
     

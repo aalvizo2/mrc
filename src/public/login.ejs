@@ -19,48 +19,38 @@
     <title>Inicia Sesión</title>
 </head>
 <body>
-    <header>
-      <img src="img/logo.png" alt="">
-      <a class="menu_toggle">☰</a>
-        <nav>
-            
-            <ul>
-                <li><a href="/">INICIO</a></li>
-                <li><a href="/producto">PRODUCTOS</a></li>
-                <li><a href="">DESCUENTOS</a></li>
-                <li><a href="">NOSOTROS</a></li>
-                <li><a href="">SUCURSALES</a></li>
-                <li><a href="search" class="bi bi-search"></a></li>
-                <li><a href="cart" class="bi bi-cart"></a></li>
-                <li><a href="login" class="bi bi-person-circle"></a></li>
-                <li><a href=""></a></li>
-                <li><a href=""></a></li>
-                <li><a href=""></a></li>
-            </ul>
-
-          </nav>
-    </header>
-    <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-            <img src="carousel/1.jpg" class="d-block w-100 h-100" alt="...">
+  <header>
+    <img src="img/logo.png" alt="">
+    <a class="menu_toggle">☰</a>
+    
+      
         
-          </div>
-          <div class="carousel-item">
-            <img src="carousel/2.jpg" class="d-block w-100 h-100" alt="...">
-          </div>
-          <div class="carousel-item">
-            <img src="carousel/3.jpg" class="d-block w-100 h-100" alt="...">
-          </div>
+        
+        <ul>
+            <li><a href="/">INICIO</a></li>
+            <li><a href="producto">PRODUCTOS</a></li>
+            <li><a href="/descuentos">DESCUENTOS</a></li>
+            <li><a href="">NOSOTROS</a></li>
+            <li><a href="">SUCURSALES</a></li>
+            <li><a href="search" class="bi bi-search"></a></li>
+            
+
+           
+        </ul>
+    </header>
+    <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <img src="carousel/1.jpg" class="d-block w-100" alt="...">
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Next</span>
-        </button>
+        <div class="carousel-item">
+          <img src="carousel/2.jpg" class="d-block w-100" alt="...">
+        </div>
+        <div class="carousel-item">
+          <img src="carousel/3.jpg" class="d-block w-100" alt="...">
+        </div>
+      </div>
+    </div>
         <div class="form_login">
             Inicia Sesión:
             <form action="/auth" method="post">

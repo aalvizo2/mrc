@@ -15,10 +15,14 @@ Router.get('/update_cart', (req, res)=>{
         })
     })
 })
-Router.get('/cart_edit/:id', (req, res)=>{
-    const {id}= req.params
-    const {cantidad}= req.body
+Router.post('/cart_edit', (req, res)=>{
+    const {id, cantidad}= req.body
     console.log(id, cantidad)
+    connection.query('UPDATE carrito SET cantidad= cantidad +? WHERE id=?', [cantidad, id], (err)=>{
+      if(err) throw err 
+      console.log('carrito actualizado correctamente')
+      res.redirect('cart')
+    })
    
   })
 

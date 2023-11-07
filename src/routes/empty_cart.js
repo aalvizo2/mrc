@@ -5,6 +5,7 @@ const { error } = require('console');
 const { totalmem } = require('os');
 const stripe= require('stripe')('sk_test_51NoFuDHlv4JdPCt0OFDjsSoxcmHQkZCAjSk7vsFUBVFycfeCxy5HpKHUaofJogoYwzNFxBzonIvZlETbvejjIRtF00HGQq2xrn')
 process.env.LANG = 'es_ES.UTF-8';
+connection= require('./db')
 //empty cart coding 
 
 Router.get('/empty_cart', (req, res)=>{
@@ -12,16 +13,23 @@ Router.get('/empty_cart', (req, res)=>{
     
     const usuario= req.session.usuario
     if(!usuario) res.redirect('/cart')
-   res.render('empty_cart', {
-     login: true,
-     usuario: usuario,
-     total: total
-   })
+   connection.query('SELECT * FROM carrito WHERE usuario=?',[usuario], (err, datos)=>{
+     if(err) throw err 
+     console.log(datos)
+     res.render('empty_cart', {
+      login: true,
+      usuario: usuario,
+      total: total, 
+      datos: datos
+    })
+  })
+   
 })
 
 
 Router.post('/procesar-pago', async (req, res) => {
-  const total = req.body.total;
+  const total = req.body.total
+  const{nombre, telefono, direccion, cp, email}= req.body
   console.log(total)
   try {
     // Crea un cargo en Stripe
@@ -31,7 +39,7 @@ Router.post('/procesar-pago', async (req, res) => {
       source: req.body.stripeToken, // Token de tarjeta enviado desde el formulario
       description: 'Pago de ejemplo',
     });
-    
+    connection.query()
     // Aquí puedes realizar acciones adicionales después de que el pago sea exitoso
     
     res.redirect('/')
