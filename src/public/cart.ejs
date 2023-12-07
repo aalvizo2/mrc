@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="shortcut icon" href="img/favicon.png" sizes="150x150" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -29,10 +30,10 @@
                 <li><a href="producto">PRODUCTOS</a></li>
                 <li><a href="">DESCUENTOS</a></li>
                 <li><a href="">NOSOTROS</a></li>
-                <li><a href="">SUCURSALES</a></li>
+                
                 <li><a href="search" class="bi bi-search"></a></li>
                 <li><a href="cart" class="bi bi-cart"></a>
-                  <a class="objeto" href="cart"><%= objeto%></a>
+                  
                 </li>
                 
                 <li>
@@ -50,14 +51,15 @@
           
         </header>
    <div class="top"></div>
-   <%if(usuario){%>
+   <%if(usuario && fila.length>0){%>
    <div class="carrito2">
             <h1>Producto:</h1>
             <h1>Cantidad:</h1>
             <h1>Precio:</h1>
             <h1>Total:</h1>
            </div>
-    <%}else{%>
+    <%}%>
+    <%if(!usuario){%>
         <center><div class="emptycart">
            <h1>Carrito Vacio</h1>
            <p><a href="/login">Iniciar Sesión</a> <a href="/registro">Registrar</a></p>
@@ -76,11 +78,23 @@
         <a href="/update_cart" class="bi bi-pencil-square"></a>
      </div>
     <%}%>
-    <% if( usuario ){%>
+    <% if(fila.length>0 && usuario){%>
     <div class="total_cont">
         <div class="total"><b>Total:</b> $<%= parseFloat(total).toLocaleString()%>.00</div>
         <div class="vaciar_carrito"><a href="/empty_cart?total= <%= total%> ">Vaciar Carrito</a></div>
     </div>
+    <%}%>
+    <%if(fila.length ===0 , venta.length===0 && usuario){%>
+        <div class="carro_vacio">
+            <h1>Carrito Vacio:</h1>
+        </div>
+    <%}%>
+    <%if(venta.length>0){%> 
+        <div class="estatus">
+            <h1><%=venta[0].estatus%></h1>
+        </div>
+        
+    <%}else{%>
     <%}%>
   <script src="script/responsive.js"></script>
   

@@ -15,7 +15,7 @@ Router.get('/producto', (req, res)=>{
   var administrador= req.session.admin 
   if(usuario) console.log(usuario)
   if(administrador) console.log(administrador)
-  const perPage= 28
+  const perPage= 15
   const pagina= req.query.pagina || 1
   const offset= (pagina -1)* perPage
   connection.query('SELECT* FROM producto LIMIT ? OFFSET ? ',[perPage, offset], (err, row)=>{

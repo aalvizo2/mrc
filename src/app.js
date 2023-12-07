@@ -22,7 +22,7 @@ const cart_edit= require('./routes/cart_edit')
 const descuentos= require('./routes/descuentos')
 const nosotros= require('./routes/nosotros')
 const search= require('./routes/search')
-
+const ventas= require('./routes/ventas')
 app.engine('ejs', engine)
 app.use(express.urlencoded({extended: true}))
 app.use(express.json())
@@ -58,12 +58,10 @@ app.use(session({
           app.use('/', descuentos)
           app.use('/', nosotros)
           app.use('/', search)
+          app.use('/', ventas)
           app.use(cookie())
           console.log('server running on port 3000')
       })
     }
-    
-    // we shall open up a session on login if activated
-
-//middlewares
+    // Importar el módulo de fecha
 

@@ -1,6 +1,8 @@
 const express= require('express')
 require('./login')
 const connection= require('./db')
+const { format } = require('date-fns')
+const es = require('date-fns/locale/es')
 
 const Router= express.Router()
 //we requiring login so we can use its session 
@@ -16,14 +18,17 @@ Router.post('/add-to-cart', (req, res)=>{
         const {nombre_prod}= req.body
         const{precio_publico}= req.body
         const {cantidad}= req.body
-        const fecha= Date.now()
+        const fecha_actual= new Date() 
+        const Formato_letra= "EEEE, d 'de' MMMM 'de' yyyy"
+        const FechaConLetra= format(fecha_actual, Formato_letra,{locale: es})
+        console.log(FechaConLetra)
         const total= precio_publico * cantidad
         
         
         connection.query('SELECT * FROM carrito WHERE usuario=? AND producto=?', [usuario, nombre_prod], (err, resultado)=>{
             
             if(resultado.length === 0){
-                connection.query("INSERT INTO carrito (img_prod, usuario, producto, precio, cantidad, fecha, total) VALUES(?,?,?,?,?,?, ?)", [img_product, usuario, nombre_prod, precio_publico, cantidad, fecha, total], (err)=>{
+                connection.query("INSERT INTO carrito (img_prod, usuario, producto, precio, cantidad, fecha, total) VALUES(?,?,?,?,?,?, ?)", [img_product, usuario, nombre_prod, precio_publico, cantidad, FechaConLetra, total], (err)=>{
                     if(err) throw err 
                     console.log('se han agregado correctamente los productos al carrito')
                     res.redirect('cart')
@@ -40,39 +45,25 @@ Router.post('/add-to-cart', (req, res)=>{
       
     }
 })
-Router.get('/cart', async(req, res)=>{
-    usuario= req.session.usuario
-    
-    const consulta_prod= 'SELECT * FROM carrito WHERE usuario=?'
-    connection.query(consulta_prod, [usuario], (err, consulta)=>{
-        
-        if(err){
-            console.err(err)
-        }else{
-            const productos= consulta
-            console.log(consulta)
+Router.get('/cart', (req, res)=>{
+    const usuario= req.session.usuario
+    connection.query('SELECT * FROM carrito WHERE usuario=?', [usuario], (err, fila)=>{
+        connection.query('SELECT * FROM ventas WHERE usuario=?', [usuario], (err, venta)=>{
             connection.query('SELECT SUM(total) AS suma FROM carrito WHERE usuario=?', [usuario], (err, suma)=>{
-                if(err){
-                    console.err(err)
-                }else  if (suma && suma[0] && suma[0].suma !== null){
-                    
                    const total= suma[0].suma
-                   
-                   
-                   connection.query('SELECT SUM (cantidad) as objeto FROM carrito WHERE usuario=?', [usuario], (err, objeto)=>{
-                      const contador= objeto[0].objeto
-                      res.render('cart', {
-                        login: true, 
-                        usuario: usuario, 
-                        fila: productos, 
-                        total: total, 
-                        objeto: contador
-                       })
-                   })
-                   
-                }
+                   res.render('cart', {
+                    login: true, 
+                    usuario: usuario, 
+                    fila: fila, 
+                    venta: venta, 
+                    total:total
+                })
+                
+                
+            
             })
-        }
+           
+        })
     })
   
 })

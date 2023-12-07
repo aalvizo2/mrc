@@ -495,15 +495,8 @@ div .total{
     align-items: center;
     padding: 5px;
 }
-.paginacion ul li {
-    width: auto;
-    height: auto;
-    position: relative;
-    left: 50%;
-    padding: 1px 15px;
-    
-    background-color: #8E0A05;
-    
+.paginacion ul{
+   width: 15px;
 
 }
 .paginacion a{

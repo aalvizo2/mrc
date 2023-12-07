@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    
+    <link rel="shortcut icon" href="img/favicon.png" sizes="150x150" />
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,7 +30,7 @@
                     <li><a href="/producto">PRODUCTOS</a></li>
                     <li><a href="/descuentos">DESCUENTOS</a></li>
                     <li><a href="/nosotros">NOSOTROS</a></li>
-                    <li><a href="/sucursales">SUCURSALES</a></li>
+                    
                     <li><a href="search" class="bi bi-search"></a></li>
                     <li><a href="cart" class="bi bi-cart"></a>
                       <a class="objeto" href="cart"><%= objeto%></a>
@@ -51,31 +51,36 @@
               
             </header>
    <div class="top"></div>
-
-   <% for(i = 0; i < datos.length; i++) { %>
-    <a href="details?id=<%= datos[i].id %>">
-      <div class="gallery">
-        <img src="productos/<%= datos[i].img_product %>" width="600" height="400">
-    </a>
-        <div class="desc"><%= datos[i].nombre_prod %><br/>
-            <b>$<%=parseFloat (datos[i].precio_publico).toLocaleString() %>.00</b>
+   <div class="galeria_cont">
+     <%for(let i=0; i<datos.length; i++){%>
+        <a href="details?id=<%=datos[i].id%>"> 
+        <div class="galeria">
+            <img src="productos/<%=datos[i].img_product%>" alt="">
+        </a>
+            <p><%=datos[i].nombre_prod%><br></p>
+            <p><b>$<%=parseFloat(datos[i].precio_publico).toLocaleString()%>.00</b></p>
         </div>
-    </div>
-    
-      <% } %>
+        
+     <%}%>
+   </div>
+
+
+
+    <div class="paginacion">
+        <ul>
+          <% if (currentPage > 1) { %>
+            <li><a href="producto">Inicio</a></li>
+          <% } %>
+          <% for (i = 1; i < totalPages; i++) { %>
+            <li><a href="?pagina=<%= i + 1 %>" class="<%= i === currentPage ? 'activo' : '' %>"><%= i %></a></li>
+          <% } %>
+        </ul>
+      </div>
+            
     
   
   
-  <div class="paginacion">
-    <ul>
-      <% if (currentPage > 1) { %>
-        <li><a href="producto">Inicio</a></li>
-      <% } %>
-      <% for (i = 1; i < totalPages; i++) { %>
-        <li><a href="?pagina=<%= i + 1 %>" class="<%= i === currentPage ? 'activo' : '' %>"><%= i %></a></li>
-      <% } %>
-    </ul>
-  </div>
+  
     
        <footer class="pie-pagina">
         <div class="grupo-1">

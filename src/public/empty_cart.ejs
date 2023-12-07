@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="shortcut icon" href="img/favicon.png" sizes="150x150" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -32,7 +33,7 @@
                 <li><a href="producto">PRODUCTOS</a></li>
                 <li><a href="">DESCUENTOS</a></li>
                 <li><a href="">NOSOTROS</a></li>
-                <li><a href="">SUCURSALES</a></li>
+                
                 <li><a href="search" class="bi bi-search"></a></li>
                 <li><a href="cart" class="bi bi-cart"></a>
                   
@@ -54,10 +55,10 @@
         </header>
     <section class="productos">
         <h1>Productos:</h1>
-        <%for(i=1; i<datos.length; i++){%>
-            <%= datos[i].producto%>
+        <%for(i=0; i<datos.length; i++){%>
+            <p>-<%= datos[i].producto%>
             <%= datos[i].cantidad%>
-            <%= datos[i].precio_publico%>
+            <%= datos[i].precio_publico%></p>
         <%}%>
         <p><b>Total: $<%= parseFloat(total).toLocaleString()%>.00</b></p>
     </section>
@@ -73,8 +74,9 @@
               <input type="text" name="direccion" id="" placeholder="Dirección:" required>
               <input type="number" name="cp" id="" placeholder="Código Postal:" required>
               <input type="email" name="email" id="" placeholder="Email:" required>
-              <b>Total:<%= parseFloat(total).toLocaleString()%></b><br>
+              <b>Total: $<%= parseFloat(total).toLocaleString()%>.00</b><br>
               <input type="hidden" name="total" value="<%= total %>">
+              
               <input type="submit" value="Pagar">
               <div id="error-message" role="alert"></div>
         

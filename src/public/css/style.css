@@ -19,18 +19,21 @@ header{
     z-index: 1;
 }
 header img{
-    width: 10%;
+    width: 8%;
 }
 header ul{
     display: flex;
-    
+    flex-grow: 1;
     list-style: none;
+    
 }
 header li{
-    margin-right: 50px;
+    margin-left: 50px;
+    
+    font-size: 15px;
 }
 header a{
-    margin-right: 15px;
+    margin: 15px;
     color:#FFF;
     text-decoration: none;
     transition:all 0.3s ease;
@@ -206,32 +209,35 @@ section img{
     height: 100px;
     
 }
-div.gallery {
-    margin-bottom: 15px;
-    margin-left: 15px;
-    border: 1px solid #ccc;
-    float: left;
-    width: 200px;
-    height: 350px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    border-radius: 15px;
-    margin-top: 3%;
-    
-    
-  }
-  
-  div.gallery:hover {
+.galeria_cont{
+    width: 100%;
+    height: fit-content;
+    align-items: center;
+    padding: 0 55px;
+    display: flex;
+    flex-wrap: wrap;
+}
+.galeria{
+    width: 250px;
+    height: 450px;
     border: 1px solid #777;
-  }
-  
-  div.gallery img {
-    width: 180px;
-    height: 180px;
+    margin: 15px;
+    border-radius: 15px;
+}
+.galeria img{
+    width: 100%;
+    height: 350px;
     object-fit: contain;
-    object-position: 80% 80%;
-    padding:5px;
-  }
+}
+.galeria p{
+    text-decoration: none;
+    padding: 2px 15px;
+    font-size: 15px;
+    cursor: pointer;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
   .links{
     background-color:#8E0A05;
     color:#fff;
@@ -539,8 +545,10 @@ div .total{
     
     font-size: 10px;
     border-radius: 100%;
-    position: absolute;
+    position:absolute;
     
+    left: 56.5%;
+    top: 15px;
    
 }
 .paginacion{
@@ -550,16 +558,22 @@ div .total{
     align-items: center;
     padding: 5px;
 }
-.paginacion ul li {
-    width: auto;
-    height: auto;
-    position: relative;
-    left: 50%;
-    padding: 1px 15px;
+.paginacion ul {
+    display: flex;
+    list-style: none;
+    margin: 50px;
     
-    background-color: #8E0A05;
+    
     
 
+}
+.paginacion li{
+    
+    background-color: #8E0A05;
+    position: relative;
+    left: 50%;
+    padding: 5px 15px;
+    margin: 5px;
 }
 .paginacion a{
     color: #fff;
@@ -665,12 +679,39 @@ section img{
     text-overflow: ellipsis;
     max-width: 100%;
 }
+.carro_vacio{
+    width: 80%;
+    height: 150px;
+    margin-left: 150px;
+    border: 1px solid #b1aaaa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.carro_vacio h1{
+    font-size: 24px;
+    color:#b1aaaa;
+}
+.estatus{
+    width: 80%;
+    height: 150px;
+    margin-left: 150px;
+    border: 1px solid #b1aaaa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.estatus h1{
+    font-size: 24px;
+    color:#b1aaaa;
+}
 
-@media screen and (max-width: 500px) {
-    /* Estilos para pantalla pequeña */
-    
+@media screen and(max-width: 400) {
+    header{
+        
+    }
     header img {
-        width: 20%;
+        width: 10%;
     }
     
     header ul {
@@ -679,7 +720,7 @@ section img{
         background-color: #8E0A05;
         top: 60px;
         width: 100%;
-        display: none; /* Inicialmente ocultar el menú */
+        display: none;
     }
 
     .menu_toggle {
@@ -688,6 +729,6 @@ section img{
     }
     
     .active{
-        display: flex;
+        display: block;
     }
 }
