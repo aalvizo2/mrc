@@ -8,11 +8,16 @@ Router.get('/accesorios', (req, res)=>{
    usuario= req.session.usuario
    connection.query('SELECT * FROM producto WHERE categoria="accesorios"', (err, rows)=>{
      console.log(rows)
-     res.render('accesorios', {
-        login: true, 
-        usuario: usuario, 
-        datos: rows
+     connection.query('SELECT SUM (cantidad) as objeto FROM carrito WHERE usuario=?', [usuario], (err, objeto)=>{
+      const contador= objeto[0].objeto
+      res.render('refacciones', {
+          login: true, 
+          usuario: usuario, 
+          datos: rows,
+          objeto: contador
+       })
      })
+    
    })
 })
 

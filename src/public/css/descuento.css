@@ -18,6 +18,7 @@ nav{
     background-color: #f70f07;
     align-items: center;
     width: 100%;
+    height: max-content;
     position: fixed;
 }
 nav img{
@@ -112,6 +113,10 @@ nav li a:hover{
 
 }
 @media screen and (max-width: 800px) {
+    nav{
+        height: max-content;
+        overflow: hidden;
+    }
     nav img{
         width: 35%;
     }
@@ -123,10 +128,14 @@ nav li a:hover{
         width: 100%;
         display: none;
         position: absolute;
-        top: 70px;
+        top: 100px;
         background-color: #8E0A05;
     }
     nav ul.active{
         display: block;
+    }
+    .producto_mostrar{
+        width: 100px;
+        height: 100px;
     }
 }
