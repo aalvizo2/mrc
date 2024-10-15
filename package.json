@@ -21,6 +21,7 @@
     "express-fileupload": "^1.4.0",
     "html": "^1.0.0",
     "mysql": "^2.18.1",
+    "node": "^21.6.1",
     "path": "^0.12.7",
     "python": "^0.0.4",
     "stripe": "^13.10.0",

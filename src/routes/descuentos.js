@@ -57,7 +57,7 @@ Router.post('/insertar_oferta', (req, res)=>{
     res.redirect('producto_admin')
 })
 Router.get('/descuentos', (req, res)=>{
-    const perPage= 3
+    const perPage= 18
     const pagina= req.query.pagina || 1
     const offset= (pagina -1)* perPage
     connection.query('SELECT* FROM descuentos LIMIT ? OFFSET ? ',[perPage, offset], (err, row)=>{

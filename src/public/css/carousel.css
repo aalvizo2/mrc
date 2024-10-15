@@ -1,0 +1,38 @@
+.carousel-inner img {
+    height: 800px; /* Ajusta el tamaño de las imágenes */
+    object-fit: cover; /* Ajuste para que todas las imágenes mantengan el mismo tamaño */
+}
+
+.carousel-caption {
+    position: absolute;
+    bottom: 100px; /* Ajusta esta distancia según lo que mencionaste */
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: #fff;
+}
+
+.carousel-caption h5 {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.carousel-caption p {
+    font-size: 16px;
+}
+
+.carousel-caption .btn {
+    margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+    .carousel-caption {
+        bottom: 50px;
+    }
+    .carousel-caption h5 {
+        font-size: 18px;
+    }
+    .carousel-caption p {
+        font-size: 14px;
+    }
+}

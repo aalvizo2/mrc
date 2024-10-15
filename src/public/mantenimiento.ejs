@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mantenimiento</title>
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/4.16.13/antd.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        /*body, html {
+            
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f2f5;
+        }*/
+        .container {
+            text-align: center;
+        }
+        .container .ant-card {
+            max-width: 500px;
+            margin: auto;
+            border: 1px solid #bbbaba;
+            padding: 10px;
+            border-radius: 15px;
+        }
+        .container .ant-input {
+            width: 400px;
+            margin-top: 10px;
+        }
+        .ant-card-body {
+            font-size: 18px;
+        }
+        .top {
+            height: 150px;
+        }
+        .ant-btn-primary {
+            border: 0;
+            padding: 5px 15px;
+        }
+    </style>
+</head>
+<body>
+    <header class="red">
+        <img src="img/logo.png" alt="">
+        <a class="menu_toggle">☰</a>
+        <ul>
+          <li><a href="/">INICIO</a></li>
+          <li><a href="producto">PRODUCTOS</a></li>
+          <li><a href="/descuentos">DESCUENTOS</a></li>
+          <li><a href="">NOSOTROS</a></li>
+          
+          <li><a href="search" class="bi bi-search"></a></li>
+          <li><a href="cart" class="bi bi-cart"></a></li>
+          
+          <li>
+              <% if (usuario) { %>
+                  <a href=""><%= usuario %></a>
+                  <li><a href="/logout" class="bi bi-box-arrow-right"></a></li>
+              <% } else { %>
+                  <a href="login" class="bi bi-person-circle"></a>
+              <% } %>
+          </li>
+      </ul>
+    </header>
+    <div class="top"></div>
+    <div class="container">
+        <section class="ant-card">
+            <form id="mantenimientoForm" class="ant-form">
+                <h1>Agenda tu cita</h1>
+                <input type="text" class="ant-input" placeholder="Ingresa tu nombre completo" name="nombre" required>
+                <input type="text" class="ant-input" placeholder="Ingresa el modelo de tu motocicleta" name="modelo" required>
+                <input type="text" id="datepicker" placeholder="Ingresa la fecha en la que deseas ingresar tu motocicleta" class="ant-input" name="fecha" required>
+                <input type="text" class="ant-input" name="descripcion" placeholder="Ingresa una breve descripción del problema" required>
+                <button type="submit" class="ant-btn ant-btn-primary">Enviar</button>
+            </form>
+        </section>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/antd/4.16.13/antd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script>
+        flatpickr("#datepicker", {
+            dateFormat: "d-m-Y"
+        });
+
+        document.getElementById('mantenimientoForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            axios.post('/enviarDatos', data)
+                .then(response => {
+                    antd.message.success(response.data.message);
+                    window.location.href= '/';
+                })
+                .catch(error => {
+                    antd.message.error('Error al realizar la operación');
+                });
+        });
+    </script>
+</body>
+</html>

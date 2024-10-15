@@ -1,6 +1,6 @@
-var menu_toggle= document.querySelector('.menu_toggle');
+var menu_toggle = document.querySelector('.menu_toggle');
+var ul = document.querySelector('header ul');
 
-menu_toggle.addEventListener('click', ()=>{
-   var ul= document.querySelector('ul');
-   ul.classList.toggle('active')
-})
+menu_toggle.addEventListener('click', () => {
+    ul.classList.toggle('active');
+});
