@@ -91,7 +91,7 @@
             <h1>Carrito Vacio:</h1>
         </div>
     <%}%>
-    <%if(venta.length>0){%> 
+    <%if(venta.length>0 && venta[0].estatus != 'Entregado'){%> 
         <div class="estatus">
             <h1><%=venta[0].estatus%></h1> 
     <%if(venta[0].guia && venta[0].paqueteria >= 1){%>
@@ -99,7 +99,9 @@
             <h1>Número de Guía: <%=venta[0].guia%></h1>
     <%}%>
         </div>
-        
+    <% if(venta[0].estatus === 'Entregado'){%>
+        <div></div>
+    <% } %>
     <%}else{%>
     <%}%>
   <script src="script/responsive.js"></script>

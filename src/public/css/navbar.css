@@ -57,7 +57,7 @@ header a:hover {
 .red {
     margin: 0;
     width: 100%;
-    background-color: #f00000e8;
+    background-color: #f00000;
     position: fixed;
     z-index: 1;
 }

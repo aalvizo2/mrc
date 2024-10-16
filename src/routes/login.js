@@ -26,61 +26,59 @@ Router.get('/login', (req, res)=>{
   res.render('login')
 })
 
-Router.post('/auth', async(req, res)=>{
-    var user= req.body.usuario
-    var pass= req.body.pass
-    
-    connection.query("SELECT * FROM administrador WHERE admin=? AND pass=?",[user, pass], (err, data, fields)=>{
-      if(data.length > 0){
-        req.session.admin = true
-        req.session.name= user
-        res.redirect('inicio_admin')
-        
-      }else{
-        connection.query("SELECT * FROM usuario WHERE usuario=? AND pass=?", [user, pass], (err, data, fields)=>{
-          if(data.length >0){
-            req.session.user= true
-            req.session.usuario= user
-            res.redirect('/')
-            
-          }else{
-            res.render('login', {
-              alert: true,
-              alertMessage: "Error de autenticación",
-              alertIcon:'error',
-              showConfirmButton: true,
-              timer: false,
-              ruta: 'login'    
-          });
-          }
-        })
+Router.post('/auth', async (req, res) => {
+  const user = req.body.usuario
+  const pass = req.body.pass
+  
+  connection.query("SELECT * FROM administrador WHERE admin=? AND pass=?", [user, pass], (err, data) => {
+      if (data.length > 0) {
+          req.session.admin = true
+          req.session.name = user
+          res.redirect('inicio_admin')
+      } else {
+          connection.query("SELECT * FROM usuario WHERE usuario=? AND pass=?", [user, pass], (err, data) => {
+              if (data.length > 0) {
+                  req.session.user = true
+                  req.session.usuario = user
+                  res.status(200).redirect('/')
+                  
+                  
+              } else {
+                  res.status(401).send({
+                    message: 'Error de autenticación'
+                  })
+              }
+          })
       }
-    })
-})   
-Router.get('/inicio_admin', (req, res) =>{
-  if(req.session.admin){
-    const admin = req.session.name
-    res.render('inicio_admin', {
-      login: true,
-      admin: admin
-    })
-  }else{
-    res.redirect('/login')
+  })
+})
+
+Router.get('/inicio_admin', (req, res) => {
+  if (req.session.admin) {
+      const admin = req.session.name
+      res.render('inicio_admin', {
+          login: true,
+          admin: admin
+      })
+  } else {
+      res.redirect('/login')
   }
 })
-Router.get('/logout', (req, res)=>{
+
+Router.get('/logout', (req, res) => {
   req.session.destroy()
   res.redirect('login')
 })
-Router.get('/', (req, res)=>{
-  if(req.session.user){
-    const usuario= req.session.usuario
-    res.render('inicio_usuario',{
-      login: true,
-      usuario: usuario
-    })
-  }else{
-    res.redirect('login')
+
+Router.get('/', (req, res) => {
+  if (req.session.user) {
+      const usuario = req.session.usuario
+      res.render('inicio_usuario', {
+          login: true,
+          usuario: usuario
+      })
+  } else {
+      res.redirect('login')
   }
 })
 
