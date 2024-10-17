@@ -5,7 +5,7 @@ const multer= require('multer')
 const connection= require('./db')
 const Swal= require('sweetalert2')
 var ruta= '../uploads/'
-const bcrypt= require ('bcrypt')
+
 const fileUpload= require('express-fileupload')
 Router.use(express.urlencoded({extended: true}))
 Router.use(express.json())
