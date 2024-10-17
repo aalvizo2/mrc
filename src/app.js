@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express')
 const path = require('path')
 const ejs = require('ejs')
@@ -38,9 +39,9 @@ app.set('views', path.join(__dirname, 'public'))
 app.use(morgan('dev'))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
-app.use(cookie()) // Mover aquí
+app.use(cookie())
 app.use(session({
-    secret: 'secret',
+    secret: process.env.SECRET_KEY,
     resave: true,
     saveUninitialized: true
 }))
@@ -69,6 +70,21 @@ app.use('/', refacciones)
 app.use('/', mantenimiento)
 app.use('/', marcas)
 
+// Conexión a la base de datos
+const connection = mysql.createConnection({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
+})
+
+connection.connect(err => {
+    if (err) throw err
+    console.log('Conectado a la base de datos de mrc')
+})
+
+module.exports = connection
+
 // Iniciar el servidor
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
@@ -83,7 +99,5 @@ app.use((req, res, next) => {
 // Manejo de errores generales
 app.use((err, req, res, next) => {
     console.error(err.stack)
-    res.status(500).send('Algo salió mal!')
+    res.status(500).send('Algo salió mal')
 })
-
-
