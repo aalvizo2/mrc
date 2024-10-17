@@ -1,7 +1,7 @@
+/* Estilos generales del header */
 header {
     width: 100%;
     background: #f00000e8;
-    min-width: max-content;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -24,6 +24,7 @@ header ul {
     padding: 0;
     flex-grow: 1;
     justify-content: flex-end;
+    transition: all 0.3s ease-in-out;
 }
 
 header li {
@@ -42,43 +43,35 @@ header a:hover {
     transform: translateY(-5px);
 }
 
+/* Ícono del menú hamburguesa */
 .menu_toggle {
-    padding: 10px 15px;
-    font-size: 25px;
     display: none;
-    cursor: pointer;
+    font-size: 30px;
     color: #FFF;
+    cursor: pointer;
 }
 
-.search_icon {
-    margin-left: auto;
-}
-
-.red {
-    margin: 0;
-    width: 100%;
-    background-color: #f00000;
-    position: fixed;
-    z-index: 1;
-}
-
-/* Ajustes para pantallas menores de 1100px */
-@media screen and (max-width: 1100px) {
+/* Media Query para pantallas menores a 1000px */
+@media screen and (max-width: 1000px) {
     .menu_toggle {
         display: block;
     }
 
     header ul {
         position: absolute;
-        top: 90px;
-        right: 0;
-        background-color: #8E0A05;
+        top: 110px;
+        left: 0;
         width: 100%;
+        height: fit-content;
+        background-color: #8E0A05 !important;
         flex-direction: column;
         align-items: center;
-        display: none; /* Ocultar el menú inicialmente */
-        transition: all 0.3s ease-in-out;
+        display: none; /* Ocultar inicialmente */
         z-index: 999;
+    }
+
+    header ul.active {
+        display: flex;
     }
 
     header li {
@@ -90,28 +83,30 @@ header a:hover {
     header img {
         width: 20%;
     }
+
+    header li:hover{
+        background-color: #8e0a05a8;
+    }
 }
 
-/* Ajustes para pantallas menores de 600px */
-@media screen and (max-width: 600px) {
+/* Media Query para pantallas menores a 700px */
+@media screen and (max-width: 700px) {
     header img {
         width: 25%;
     }
 
     .menu_toggle {
-        font-size: 30px;
-        padding: 10px;
+        font-size: 28px;
+        margin-right: 20px;
     }
 
     header ul {
-        top: 70px;
+        top: 80px;
+        height: fit-content;
+        background-color: #8E0A05 !important;
     }
 
     header li {
         font-size: 18px;
-    }
-
-    header ul.active {
-        display: flex; /* Mostrar el menú cuando tiene la clase 'active' */
     }
 }

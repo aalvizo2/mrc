@@ -36,3 +36,46 @@
         font-size: 14px;
     }
 }
+
+
+
+.carousel-control-prev, .carousel-control-next {
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    top: 50%;  
+    transform: translateY(-50%);
+    z-index: 0;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-size: 70%;
+}
+
+.carousel-inner img {
+    max-height: 600px;  /* Ajustar el tamaño de las imágenes */
+    object-fit: cover;
+}
+
+/* Evita que el navbar quede cubierto */
+.navbar, header {
+    z-index: 1050;
+    position: relative;
+}
+
+/* Indicadores circulares */
+.carousel-indicators [data-bs-target] {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #000;
+}
+
+.carousel-indicators .active {
+    background-color: #fff;
+}
+.data-bs-slide-to{
+    display: none;
+}
