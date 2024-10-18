@@ -16,51 +16,116 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
     <script src="https://kit.fontawesome.com/5210f6d31f.js" crossorigin="anonymous"></script>
     <title><%=admin %></title>
-</head>
-<body>
-    <header class="red">
-      
-        <img src="img/logo.png" alt="">
-        <a class="menu_toggle">☰</a>
-        <ul>
-            <li><a href="/inicio_admin">INICIO</a></li>
-            <li><a href="/producto">PRODUCTOS</a></li>
-            <li><a href="">MENSAJES</a></li>
-            <li><a href="/upload">SUBIR PRODUCTO</a></li>
-            <li><a href="/ventas">VENTAS</a></li>
-            <li><a href="search" class="bi bi-search"></a></li>
-            <li><a href="cart" class="bi bi-cart"></a></li>
-            <li>
-              <% if ( login ){ %>
-              <a href=""><%= admin %></a>
-              <% } %>
-            </li>
-            <li><a href="/logout" class="bi bi-box-arrow-right"></a></li>
-            
-        </ul>     
-</header>
-<div class="top"></div> 
-<section class="ventas">
-    <% 
-        // Crear un conjunto para almacenar usuarios únicos
-        const usuariosMostrados = new Set();
 
-        // Iterar sobre las ventas
-        for (let i = 0; i < ventas.length; i++) {
-            // Verificar si el usuario ya se ha mostrado
-            if (!usuariosMostrados.has(ventas[i].usuario || ventas[i].fecha && ventas[i].total)) {
-                // Mostrar el usuario y agregarlo al conjunto
-    %>
-        <div class="lista_ventas">
-                <a href="detalle_venta?usuario=<%= ventas[i].usuario %>"><%= ventas[i].usuario %></a>
-                <a href="detalle_venta?usuario=<%= ventas[i].usuario %>"><%=ventas[i].fecha %></a>
-                <a href="detalle_venta?usuario=<%= ventas[i].usuario %>">$<%=parseFloat(ventas[i].total).toLocaleString() %>.00</a>
-        </div>
-                
-    <%
-                usuariosMostrados.add(ventas[i].usuario);
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .sidebar {
+            height: 100vh;
+            background-color: #f00000e8;
+            color: white;
+            position: fixed;
+            width: 240px;
+        }
+        .sidebar a {
+            color: white;
+            padding: 15px;
+            display: block;
+            text-decoration: none;
+        }
+        .sidebar a:hover {
+            background-color: #c90000;
+        }
+        .content {
+            margin-left: 240px;
+            padding: 20px;
+        }
+        .navbar {
+            background-color: #f00000e8;
+            color: white;
+        }
+        .navbar-brand {
+            color: white;
+        }
+        .sidebar-logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80px;
+        }
+        .sidebar-logo img {
+            max-height: 60px;
+        }
+        .widget {
+            border-radius: 10px;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+            .content {
+                margin-left: 0;
             }
         }
-    %>
+    </style>
+</head>
+<body>
+ <!-- Sidebar -->
+ <div class="sidebar">
+    <div class="sidebar-logo">
+        <img src="img/logo.png" alt="Logo">
+    </div>
+    <a href="/inicio_admin" class="bi bi-house-door"> INICIO</a>
+    <a href="/producto_admin" class="bi bi-box"> PRODUCTOS</a>
+    <a href="#" class="bi bi-chat-left-text"> MENSAJES</a>
+    <a href="/upload" class="bi bi-cloud-upload"> SUBIR PRODUCTO</a>
+    <a href="/ventas" class="bi bi-bar-chart"> VENTAS</a>
     
-</section>
+    <% if (login) { %>
+        <a href="#" class="bi bi-person-circle"> <%= admin %></a>
+    <% } %>
+    <a href="/logout" class="bi bi-box-arrow-right"> CERRAR SESIÓN</a>
+</div>
+
+<!-- Content -->
+<div class="content">
+    <nav class="navbar navbar-dark mb-4">
+        <div class="container-fluid">
+            <span class="navbar-brand">Bienvenido, <%= admin %></span>
+        </div>
+    </nav> 
+    <section class="ventas mt-5">
+        <div class="container">
+            <h2 class="text-center mb-4">Ventas</h2>
+            <div class="row">
+                <% 
+                    
+    
+                    // Iterar sobre las ventas
+                    for (let i = 0; i < ventas.length; i++) {
+                        
+                %>
+                    <div class="col-12 col-md-6 col-lg-4 mb-3">
+                        <div class="card shadow-sm border-light">
+                            <div class="card-body text-center">
+                                <h5 class="card-title"><a href="detalle_venta?usuario=<%= ventas[i].usuario %>" class="text-decoration-none text-dark"><%= ventas[i].usuario %></a></h5>
+                                <p class="card-text mb-1"><strong>Fecha:</strong> <a href="detalle_venta?usuario=<%= ventas[i].usuario %>" class="text-decoration-none text-dark"><%= ventas[i].fecha %></a></p>
+                                <p class="card-text fw-bold mb-0"><strong>Total:</strong> <a href="detalle_venta?usuario=<%= ventas[i].usuario %>" class="text-danger text-decoration-none">$<%= parseFloat(ventas[i].total).toLocaleString() %>.00</a></p>
+                            </div>
+                        </div>
+                    </div>
+                <%
+                          
+                    }
+                %>
+            </div>
+        </div>
+    </section>
+    

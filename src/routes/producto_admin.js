@@ -52,13 +52,21 @@ Router.post('/actualizar', async(req, res)=>{
         res.redirect('producto_admin')
     })
 })
-Router.get('/eliminar/:id', (req, res)=>{
-    const {id}= req.params
-    connection.query('DELETE FROM producto WHERE id=?', [id], (err)=>{
-        if(err) throw err
-        console.log('producto eliminado')
-        res.redirect('producto_admin')
-    })
-})
+Router.get('/eliminar/:id', (req, res) => {
+    const id = parseInt(req.params.id, 10); // Convertir a número para evitar errores
+  
+    if (isNaN(id)) {
+      return res.status(400).send({ message: 'ID inválido' }); // Validar que sea un número
+    }
+  
+    connection.query('DELETE FROM producto WHERE id = ?', [id], (err) => {
+      if (err) {
+        console.error('Error al eliminar:', err); // Log para depuración
+        return res.status(500).send({ message: 'Error al eliminar el producto' });
+      }
+      res.redirect('/producto_admin'); // Asegúrate que la ruta esté bien definida
+    });
+  });
+  
 
 module.exports=Router

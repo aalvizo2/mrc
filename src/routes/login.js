@@ -29,41 +29,98 @@ Router.get('/login', (req, res)=>{
 Router.post('/auth', async (req, res) => {
   const user = req.body.usuario
   const pass = req.body.pass
-  
+
+  // Primera consulta para 'administrador'
   connection.query("SELECT * FROM administrador WHERE admin=? AND pass=?", [user, pass], (err, data) => {
+      if (err) {
+          console.error('Error en la consulta de administrador:', err)
+          return res.status(500).send('Error interno del servidor')
+      }
+
       if (data.length > 0) {
           req.session.admin = true
           req.session.name = user
-          res.redirect('inicio_admin')
-      } else {
-          connection.query("SELECT * FROM usuario WHERE usuario=? AND pass=?", [user, pass], (err, data) => {
-              if (data.length > 0) {
-                  req.session.user = true
-                  req.session.usuario = user
-                  res.status(200).redirect('/')
-                  
-                  
-              } else {
-                  res.status(401).send({
-                    message: 'Error de autenticación'
-                  })
-              }
-          })
-      }
+          return res.redirect('inicio_admin')
+      } 
+
+      // Segunda consulta para 'usuario'
+      connection.query("SELECT * FROM usuario WHERE usuario=? AND pass=?", [user, pass], (err, data) => {
+          if (err) {
+              console.error('Error en la consulta de usuario:', err)
+              return res.status(500).send('Error interno del servidor')
+          }
+
+          if (data.length > 0) {
+              req.session.user = true
+              req.session.usuario = user
+              return res.status(200).redirect('/')
+          } else {
+              return res.status(401).send({
+                  message: 'Error de autenticación'
+              })
+          }
+      })
   })
 })
 
+
 Router.get('/inicio_admin', (req, res) => {
   if (req.session.admin) {
-      const admin = req.session.name
-      res.render('inicio_admin', {
-          login: true,
-          admin: admin
+    const admin = req.session.name
+    connection.query('SELECT COUNT(*) AS totalProductos FROM producto', (err, results) => {
+      if (err) {
+        console.error('Error en la consulta:', err) // Manejo de errores
+        return res.status(500).send('Error interno del servidor')
+      }
+
+      const totalProductos = results[0].totalProductos 
+      
+
+      connection.query('SELECT SUM(total) AS total_ventas FROM ventas', (err, resultado) => {
+        if (err) {
+          console.error('Error en la consulta:', err) // Manejo de errores
+          return res.status(500).send('Error interno del servidor')
+        }
+
+        const totalVentas = resultado[0].total_ventas
+        connection.query('SELECT COUNT(*) AS pedidos_pendientes FROM ventas WHERE estatus=?', ['Preparando pedido'], (err, resultado) => {
+          if (err) {
+            console.error('Error en la consulta:', err) // Manejo de errores
+            return res.status(500).send('Error interno del servidor')
+          }
+          
+          const pedidosPendientes = resultado[0].pedidos_pendientes // Asegúrate de acceder a pedidos_pendientes correctamente
+          
+
+          connection.query('SELECT COUNT(usuario) AS suma_usuario FROM usuario', (err, resultado)=> {
+             if(err) throw err
+             const sumaUsuarios= resultado[0].suma_usuario
+             connection.query('SELECT * FROM ventas WHERE estatus=?', ['Preparando pedido'], (err, Data) => {
+               if(err) throw err 
+               console.log(Data)
+               res.render('inicio_admin', {
+                login: true,
+                admin: admin,
+                totalProductos: totalProductos,
+                totalVentas: totalVentas,
+                pedidosPendientes: pedidosPendientes,
+                sumaUsuarios: sumaUsuarios,
+                Data: Data
+              })
+             })
+             
+          })
+
+          
+        })
       })
+    })
   } else {
-      res.redirect('/login')
+    res.redirect('/login')
   }
 })
+
+
 
 Router.get('/logout', (req, res) => {
   req.session.destroy()
