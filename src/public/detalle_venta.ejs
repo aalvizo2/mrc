@@ -136,22 +136,24 @@
                     <div class="form-group mr-2">
                         <label for="estatus" class="mr-2">Estatus:</label>
                         <select name="estatus" class="form-control" id="estatus">
-                            <option value="Preparando pedido">Preparando pedido</option>
-                            <option value="En camino">En camino</option>
-                            <option value="En paqueteria">En paqueteria</option>
-                            <option value="Entregado">Entregado</option>
+                            <option value="Preparando pedido" <%= datos[0].estatus === 'Preparando pedido' ? 'selected' : '' %>>Preparando pedido</option>
+                            <option value="En camino" <%= datos[0].estatus === 'En camino' ? 'selected' : '' %>>En camino</option>
+                            <option value="En paqueteria" <%= datos[0].estatus === 'En paqueteria' ? 'selected' : '' %>>En paqueteria</option>
+                            <option value="Entregado" <%= datos[0].estatus === 'Entregado' ? 'selected' : '' %>>Entregado</option>
                         </select>
+                        
                     </div>
                     <div class="form-group mr-2">
-                        <input type="text" name="paqueteria" class="form-control" placeholder="Paquetería">
+                        <input type="text" name="paqueteria" class="form-control" placeholder="Paquetería" value="<%=datos[0].paqueteria%>">
                     </div>
                     <div class="form-group mr-2">
-                        <input type="number" name="guia" class="form-control" placeholder="Número de guía">
+                        <input type="number" name="guia" class="form-control" placeholder="Número de guía" value="<%=datos[0].guia%>">
                     </div>
                     <input type="hidden" name="cliente" value="<%= datos[0].cliente_name %>">
                     <button type="submit" class="btn btn-primary" style="background-color: #c90000; border: none;">Actualizar</button>
                 </form>
             </div>
         </div>
+        
     </section>
     

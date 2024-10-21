@@ -7,7 +7,8 @@ const mysql = require('mysql')
 const session = require('express-session')
 const cookie = require('cookie-parser')
 const engine = require('ejs-mate')
-
+const socketIo= require('socket.io')
+const http= require('http')
 // Importar las rutas
 const route = require('./routes/routes')
 const login = require('./routes/login')
@@ -48,6 +49,10 @@ app.use(session({
     saveUninitialized: true
 }))
 
+const server= http.createServer(app)
+const io= socketIo(server)
+
+
 // Archivos estáticos
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.static(path.join(__dirname, 'routes')))
@@ -74,7 +79,24 @@ app.use('/', marcas)
 app.use('/', ventaCliente)
 app.use('/', message)
 
+//configuramos el evento de conexion para el chat 
+io.on('connection', (socket) => {
+    console.log('Usuario conectado al chat')
 
+    //Escucha el mensaje enviado por un cliente 
+    socket.on('mensaje', (data) => {
+        console.log(`Mensaje recibido: ${data.mensaje} de ${data.remitente}`)
+        io.emit('mensaje', data)
+    })
+
+    socket.on('disconect', () => {
+        console.log('Usuario desconectado')
+    })
+
+
+
+
+})
 
 // Iniciar el servidor
 const PORT = process.env.PORT || 3000

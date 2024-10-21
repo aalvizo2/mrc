@@ -55,19 +55,24 @@
     </header>
     <div class="top"></div>
     
-    <div class="gallery-container">
-      <% for (let i = 0; i < datos.length; i++) { %>
-        <a href="desc_details?id=<%= datos[i].id %>">
-          <div class="gallery">
-            <img src="productos/<%= datos[i].img_product %>" width="350" height="450" alt="<%= datos[i].nombre_prod %>">
-            <div class="desc">
-              <%= datos[i].nombre_prod %><br />
-              <b class="rojo">$<%= parseFloat(datos[i].precio_publico).toLocaleString() %>.00</b>
-            </div>
+    <div class="container mt-4">
+      <div class="row">
+        <% for (let i = 0; i < datos.length; i++) { %>
+          <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <a href="desc_details?id=<%= datos[i].id %>" class="text-decoration-none">
+              <div class="card h-100">
+                <img src="productos/<%= datos[i].img_product %>" class="card-img-top img-fluid" alt="<%= datos[i].nombre_prod %>">
+                <div class="card-body text-center">
+                  <h5 class="card-title"><%= datos[i].nombre_prod %></h5>
+                  <p class="card-text text-danger fw-bold">$<%= parseFloat(datos[i].precio_publico).toLocaleString() %>.00</p>
+                </div>
+              </div>
+            </a>
           </div>
-        </a>
-      <% } %>
+        <% } %>
+      </div>
     </div>
+    
     
        <div class="paginacion">
          <ul>
@@ -85,6 +90,6 @@
        </div>
      
     
-<script src="script/descuento.js"></script>
+<script src="script/responsive.js"></script>
 </body>
 </html>

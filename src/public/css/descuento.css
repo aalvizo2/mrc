@@ -66,16 +66,13 @@
     color:#f70f07;
 
 }
-.container{
-    border: 1px solid black;
-}
 
 
 .gallery-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center; /* Centrar el contenido */
-    margin-bottom: 30px; /* Espaciado inferior */
+    margin-bottom: 135px; /* Espaciado inferior */
   }
   
   .gallery {
