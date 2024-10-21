@@ -16,6 +16,14 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
     <script src="https://kit.fontawesome.com/5210f6d31f.js" crossorigin="anonymous"></script>
     <title>Carrito de Compras</title>
+    <style>
+        
+        @media screen and (max-width: 757px) {
+            .ocultar{
+                display: none;
+            }
+        }
+    </style>
 </head>
 <body>
     <header class="red">
@@ -51,59 +59,71 @@
           
         </header>
    <div class="top"></div>
-   <%if(usuario && fila.length>0){%>
-   <div class="carrito2">
-            <h1>Producto:</h1>
-            <h1>Cantidad:</h1>
-            <h1>Precio:</h1>
-            <h1>Total:</h1>
-           </div>
-    <%}%>
-    <%if(!usuario){%>
-        <center><div class="emptycart">
-           <h1>Favor de Iniciar Sesión
-
-           </h1>
-           <p><a href="/login">Iniciar Sesión</a> <a href="/registro">Registrar</a></p>
-        </div></center>
-        
-    <%}%>
-    <% for(i=0; i<fila.length; i++){%>
-    <div class="top"></div>
-     <div class="carrito">
-        <img src="productos/<%= fila[i].img_prod%>" alt="">
-        <h1><%= fila[i].producto%></h1>
-        <h1><%= fila[i].cantidad%></h1>
-        <h1>$<%= parseFloat(fila[i].precio).toLocaleString() %>.00</h1>
-        <h1>$<%= parseFloat(fila[i].total).toLocaleString() %>.00</h1>
-        <a href="/delete/<%= fila[i].id%>" class="bi bi-x-lg"></a>
-        <a href="/update_cart" class="bi bi-pencil-square"></a>
-     </div>
-    <%}%>
-    <% if(fila.length>0 && usuario){%>
-    <div class="total_cont">
-        <div class="total"><b>Total:</b> $<%= parseFloat(total).toLocaleString()%>.00</div>
-        <div class="vaciar_carrito"><a href="/empty_cart?total= <%= total%> ">Vaciar Carrito</a></div>
+   <% if (usuario && fila.length > 0) { %>
+    <div class="container my-4">
+      <div class="row text-center fw-bold bg-light py-2 ocultar">
+        <div class="col-md-3">Producto</div>
+        <div class="col-md-2">Cantidad</div>
+        <div class="col-md-2">Precio</div>
+        <div class="col-md-2">Total</div>
+        <div class="col-md-3">Acciones</div>
+      </div>
+  
+      <% fila.forEach(item => { %>
+        <div class="row align-items-center border-bottom py-2">
+          <div class="col-md-3">
+            <img src="productos/<%= item.img_prod %>" alt="" class="img-fluid" style="max-width: 80px;">
+            <h6><%= item.producto %></h6>
+          </div>
+          <div class="col-md-2"><h6><%= item.cantidad %></h6></div>
+          <div class="col-md-2"><h6>$<%= parseFloat(item.precio).toLocaleString() %>.00</h6></div>
+          <div class="col-md-2"><h6>$<%= parseFloat(item.total).toLocaleString() %>.00</h6></div>
+          <div class="col-md-3">
+            <a href="/delete/<%= item.id %>" class="btn btn-danger btn-sm me-2">
+              <i class="bi bi-x-lg"></i> Eliminar
+            </a>
+            <a href="/update_cart" class="btn btn-primary btn-sm">
+              <i class="bi bi-pencil-square"></i> Editar
+            </a>
+          </div>
+        </div>
+      <% }) %>
+  
+      <div class="row justify-content-between my-3">
+        <div class="col-md-6">
+          <h4>Total: $<%= parseFloat(total).toLocaleString() %>.00</h4>
+        </div>
+        <div class="col-md-6 text-end">
+          <a href="/empty_cart?total=<%= total %>" class="btn btn-warning">
+            Vaciar Carrito
+          </a>
+        </div>
+      </div>
     </div>
-    <%}%>
-    <%if(fila.length ===0 , venta.length===0 && usuario){%>
-        <div class="carro_vacio">
-            <h1>Carrito Vacio:</h1>
-        </div>
-    <%}%>
-    <%if(venta.length>0 && venta[0].estatus != 'Entregado'){%> 
-        <div class="estatus">
-            <h1><%=venta[0].estatus%></h1> 
-    <%if(venta[0].guia && venta[0].paqueteria >= 1){%>
-            <h1><%=venta[0].paqueteria%></h1> 
-            <h1>Número de Guía: <%=venta[0].guia%></h1>
-    <%}%>
-        </div>
-    <% if(venta[0].estatus === 'Entregado'){%>
-        <div></div>
-    <% } %>
-    <%}else{%>
-    <%}%>
+  <% } %>
+  
+  <% if (!usuario) { %>
+    <div class="text-center my-5">
+      <h1>Favor de Iniciar Sesión</h1>
+      <p>
+        <a href="/login" class="btn btn-primary" style="background-color: #8E0A05; border: none;">Iniciar Sesión</a>
+        <a href="/registro" class="btn btn-secondary">Registrar</a>
+      </p>
+    </div>
+  <% } %>
+  
+  <% if (fila.length === 0 && usuario) { %>
+    <div class="text-center my-5">
+      <h1>Carrito Vacío</h1>
+    </div>
+  <% } %>
+  
+  <% if (venta.length > 0) { %>
+    <div class="text-center my-5">
+      <a href="/venta_cliente?usuario=<%= usuario %>" class="btn btn-info">Ir a Ventas</a>
+    </div>
+  <% } %>
+  
   <script src="script/responsive.js"></script>
   
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>

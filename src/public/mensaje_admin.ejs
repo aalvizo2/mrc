@@ -93,59 +93,27 @@
                 <span class="navbar-brand">Bienvenido, <%= admin %></span>
             </div>
         </nav>
-
-        <!-- Widgets -->
-        <div class="row mb-4">
-            <div class="col-md-3">
-                <div class="widget text-center">
-                    <h4>Total Ventas</h4>
-                    <p class="display-6">$<%= parseFloat(totalVentas).toLocaleString() %>.00</p>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="widget text-center">
-                    <h4>Productos en Inventario</h4>
-                    <p class="display-6"><%= totalProductos %></p>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="widget text-center">
-                    <h4>Pedidos Pendientes</h4>
-                    <p class="display-6"><%= pedidosPendientes %></p>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="widget text-center">
-                    <h4>Usuarios Registrados</h4>
-                    <p class="display-6"><%= sumaUsuarios %></p>
-                </div>
-            </div>
-        </div>
-        <h2>Pedidos Recientes</h2>
-        <table class="table table-hover mt-3">
-            <thead class="table-dark">
-                <tr>
-                    
-                    <th>Cliente</th>
-                    <th>Producto</th>
-                    <th>Estado</th>
-                    <th>Fecha</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% for(i = 0; i < Data.length; i++) { %>
-                    <tr>
-                        
-                        <td><%= Data[i].usuario %></td>
-                        <td><%= Data[i].producto %></td>
-                        <td><span class="badge bg-success"><%= Data[i].estatus %></span></td>
-                        <td><%= Data[i].fecha %></td>
-                    </tr>
-                <% } %> <!-- Asegúrate de cerrar el ciclo for -->
-            </tbody>
-        </table>
+    
+        <div id="mensajesEnviados" class="mt-4">
+            <h3>Chat</h3>
+            <ul id="listaMensajes" class="list-group">
+                <% 
+                const mensajesFiltrados = Object.values(
+                    datos.reduce((acc, mensaje) => {
+                        acc[mensaje.nombre] = mensaje; 
+                        return acc;
+                    }, {})
+                );
         
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
-</body>
-</html>
+                mensajesFiltrados.forEach((dato) => { %>
+                    <li class="list-group-item mb-2 p-3 shadow-sm chat-bubble">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href='/conversacion?nombre=<%= dato.nombre%>' style="text-decoration: none;"><h5 class="mb-0 text-primary"><strong><%= dato.nombre %></strong></h5></a>
+                            <span class="text-muted" style="font-size: 0.9em;"><%= dato.fecha %></span>
+                        </div>
+                        <p class="mt-2 mb-0" style="font-size: 1.1em;"><%= dato.mensaje %></p>
+                    </li>
+                <% }) %>
+            </ul>
+        </div>
+        

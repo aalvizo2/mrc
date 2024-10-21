@@ -27,6 +27,8 @@ const ventas = require('./routes/ventas')
 const refacciones = require('./routes/refacciones')
 const mantenimiento = require('./routes/mantenimiento')
 const marcas = require('./routes/marcas')
+const ventaCliente= require('./routes/venta_cliente')
+const message= require('./routes/message')
 
 const app = express()
 
@@ -69,6 +71,8 @@ app.use('/', ventas)
 app.use('/', refacciones)
 app.use('/', mantenimiento)
 app.use('/', marcas)
+app.use('/', ventaCliente)
+app.use('/', message)
 
 
 

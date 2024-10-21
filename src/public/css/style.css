@@ -672,6 +672,12 @@ span{
 }
 
 
+.btn-primary{
+    background-color: #8E0A05;
+    border: none;
+}
+
+
 @media screen and (max-width: 600px) {
 
     .producto{
