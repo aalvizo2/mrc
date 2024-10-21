@@ -4,9 +4,9 @@ const connection= require('./db')
 
 Router.get('/marca', (req, res) => {
     const marca = `%${req.query.marca}%`
-    const usuario = req.session.name
+    const usuario = req.session.usuario
     const page = parseInt(req.query.page) || 1
-    const limit = 3
+    const limit = 15
     const offset = (page - 1) * limit
 
     connection.query('SELECT COUNT(*) as total FROM producto WHERE nombre_prod LIKE ?', [marca], (err, countResults) => {

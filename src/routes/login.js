@@ -135,7 +135,7 @@ Router.get('/', (req, res) => {
           usuario: usuario
       })
   } else {
-      res.redirect('login')
+      res.redirect('/login')
   }
 })
 

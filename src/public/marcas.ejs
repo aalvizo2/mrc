@@ -16,6 +16,32 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
     <script src="https://kit.fontawesome.com/5210f6d31f.js" crossorigin="anonymous"></script>
     <title>Producto</title>
+    <style>
+        .card-img-top {
+            object-fit: cover; /* Asegura que la imagen ocupe toda el área disponible */
+            height: 200px; /* Altura uniforme para todas las imágenes */
+        }
+    
+        .btn-custom {
+            background-color: #8E0A05;
+            color: white;
+            border: none;
+        }
+    
+        .btn-custom:hover {
+            background-color: #720804;
+        }
+    
+        .pagination .page-link {
+            color: #8E0A05;
+        }
+    
+        .pagination .page-item.active .page-link {
+            background-color: #8E0A05;
+            border-color: #8E0A05;
+            color: #ffff;
+        }
+    </style>
 </head>
 <body>
     <header class="red">
@@ -28,11 +54,22 @@
             <ul>
                 <li><a href="/">INICIO</a></li>
                 <li><a href="/producto">PRODUCTOS</a></li>
-                <li><a href="/descuentos">DESCUENTOS</a></li>
+                <li><a href="/descuentos">descuentos</a></li>
                 <li><a href="/nosotros">NOSOTROS</a></li>
                 
                 <li><a href="search" class="bi bi-search"></a></li>
+                <li><a href="cart" class="bi bi-cart"><%= objeto%></a>
+                  
+                </li>
                 
+                <li>
+                    <% if ( usuario ){ %>
+                        <a href=""><%= usuario %></a>
+                        <li><a href="/logout" class="bi bi-box-arrow-right"></a></li>
+                    <% }else{%>
+                        <a href="login" class="bi bi-person-circle"></a></li><br>
+                    <%}%>
+               
             </ul>
             
             
@@ -44,21 +81,19 @@
         
         <div class="container mt-5">
             <div class="row">
-                <!-- Verifica si no hay datos antes de iniciar el bucle -->
                 <% if (Data.length === 0) { %>
                     <div class="d-flex justify-content-center align-items-center vh-100">
                         <h1 class="display-4 text-center text-muted">No hay datos</h1>
                     </div>
                 <% } else { %>
-                    <!-- Si hay datos, recorre el array y crea las tarjetas -->
                     <% for (let i = 0; i < Data.length; i++) { %>
                         <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-                            <div class="card h-100">
+                            <div class="card h-100 shadow-sm">
                                 <img src="productos/<%= Data[i].img_product %>" class="card-img-top" alt="<%= Data[i].nombre_prod %>">
-                                <div class="card-body">
+                                <div class="card-body d-flex flex-column">
                                     <h5 class="card-title"><%= Data[i].nombre_prod %></h5>
-                                    <p class="card-text">Precio: $<%= Data[i].precio %></p>
-                                    <a href="/details?id=<%= Data[i].id %>" class="btn btn-primary">Ver Detalles</a>
+                                    <p class="card-text mb-4">Precio: $<%= Data[i].precio %></p>
+                                    <a href="/details?id=<%= Data[i].id %>" class="btn btn-custom mt-auto">Ver Detalles</a>
                                 </div>
                             </div>
                         </div>
@@ -88,7 +123,7 @@
                 </ul>
             </nav>
         </div>
-        
+    <script src="script/responsive.js"></script>
           
 
 </body>

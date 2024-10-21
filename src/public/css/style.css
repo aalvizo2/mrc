@@ -174,6 +174,7 @@ section img{
     padding: 0 55px;
     display: flex;
     flex-wrap: wrap;
+    margin-left: 80px
 }
 .galeria{
     width: 250px;
@@ -196,6 +197,30 @@ section img{
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+.btn-custom {
+    background-color: #8E0A05;  /* Color de fondo del botón */
+    border-color: #8E0A05;      /* Borde del mismo color */
+    color: white;               /* Texto blanco */
+  }
+  
+  .btn-outline-custom {
+    background-color: transparent;
+    border: 2px solid #8E0A05;  /* Borde en rojo */
+    color: #8E0A05;             /* Texto en rojo */
+  }
+  
+  .btn-custom:hover, 
+  .btn-outline-custom:hover {
+    background-color: #B21208;  /* Rojo más oscuro para hover */
+    border-color: #B21208;
+    color: white;
+  }
+  
+  .pagination .page-item.active .page-link {
+    background-color: #8E0A05;  /* Botón activo en rojo */
+    border-color: #8E0A05;
+  }
+  
   .links{
     background-color:#8E0A05;
     color:#fff;

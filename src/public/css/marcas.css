@@ -13,6 +13,7 @@
     background: white;
     white-space: nowrap;
     position: relative;
+    
   }
   
   .logos:before,
@@ -57,4 +58,11 @@
     opacity: 0.2;
     cursor: pointer;
     width: 150px;
+  }
+
+  @media screen and (max-width: 1000px) {
+    .logos{
+       padding: 10px 0;
+    }
+    
   }

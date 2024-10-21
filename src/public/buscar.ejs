@@ -23,6 +23,71 @@
     <title>Inicio</title>
   <%}%>
 </head>
+<style>
+  .form_container {
+      margin: 50px auto;
+      max-width: 600px;
+  }
+
+  .limpiar {
+      position: absolute;
+      text-align: right;
+      margin-right: 30px;
+      
+      top: 250px;
+      left: 250px
+  }
+
+  .limpiar a {
+      font-size: 24px;
+      text-decoration: none;
+      
+  }
+
+  .resultados_busq {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 30px;
+  }
+
+  .busq_container {
+      width: 250px;
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      overflow: hidden;
+      text-align: center;
+      padding: 15px;
+      transition: transform 0.3s;
+  }
+
+  .busq_container:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .busq_container img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      margin-bottom: 10px;
+  }
+
+  .busq_container p {
+      margin: 5px 0;
+  }
+  
+ 
+  .no-results h1 {
+      position: absolute;
+      text-align: center;
+      color: #a0a3a7;
+      
+      margin-right: 450px;
+      
+  }
+</style>
 <body>
   <header class="red">
     <img src="img/logo.png" alt="">
@@ -34,12 +99,12 @@
         <ul>
             <li><a href="/">INICIO</a></li>
             <li><a href="producto">PRODUCTOS</a></li>
-            <li><a href="/descuentos">DESCUENTOS</a></li>
+            <li><a href="/descuentos">PROMOCIONES</a></li>
             <li><a href="/nosotros">NOSOTROS</a></li>
             
             
-            <li><a href="cart" class="bi bi-cart"></a>
-              <a class="objeto" href="cart"><%= objeto%></a>
+            <li><a href="cart" class="bi bi-cart"><%= objeto%></a>
+              
             </li>
             
             <li>
@@ -53,30 +118,41 @@
         </ul>
     </header>
     <div class="top"></div>
-    <section class="form_container">
-        <form action="/buscar" method="post">
-            <input type="search" name="buscar" placeholder="Inserta un producto:">
-            <input type="submit" value="Buscar">
-        </form>
-    </section>
-    <section class="limpiar">
-       <a href="/limpiar">X</a>
-    </section>
-    <section class="resultados_busq">
-      <%if(busqueda.length>0){%>
-        <%for(i=0; i<busqueda.length; i++){%>
-        
-        <div class="busq_container">
-        <a href="details?id=<%= busqueda[i].id %>">
-          <img src="productos/<%=busqueda[i].img_product%>"></a>
-          <p><%=busqueda[i].nombre_prod%></p>
-          <p><b>$<%=parseFloat(busqueda[i].precio_publico).toLocaleString()%>.00</b></p>
-        </div>
-        
-        <%}%>
-      <%}else{%>
-        <h1>No se encontrarón resultados en la busqueda</h1>
-      <%}%>
-    </section>    
+    <!-- Formulario de búsqueda -->
+<section class="form_container">
+  <form action="/buscar" method="post" class="input-group">
+      <input 
+          type="search" 
+          name="buscar" 
+          placeholder="Inserta un producto:" 
+          class="form-control" 
+          required
+      >
+      <button type="submit" class="btn btn-primary">Buscar</button>
+  </form>
+</section>
+
+<!-- Botón Limpiar -->
+<!--<section class="limpiar">
+  <a href="/limpiar" title="Limpiar búsqueda">X</a>
+</section>-->
+
+<!-- Resultados de búsqueda -->
+<section class="resultados_busq container">
+<% if (busqueda.length > 0) { %>
+  <% for (let i = 0; i < busqueda.length; i++) { %>
+    <div class="busq_container">
+      <a href="details?id=<%= busqueda[i].id %>">
+        <img src="productos/<%= busqueda[i].img_product %>" alt="<%= busqueda[i].nombre_prod %>">
+      </a>
+      <p><%= busqueda[i].nombre_prod %></p>
+      <p><b>$<%= parseFloat(busqueda[i].precio_publico).toLocaleString() %>.00</b></p>
+    </div>
+  <% } %>
+<% } else { %>
+ <div class="no-results"><h1>No se encontraron resultados en la búsqueda</h1></div>
+  
+<% } %>
+</section>
 
   <script src="script/responsive.js"></script>

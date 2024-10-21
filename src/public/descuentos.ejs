@@ -31,7 +31,7 @@
         <ul>
             <li><a href="/">INICIO</a></li>
             <li><a href="/producto">PRODUCTOS</a></li>
-            <li><a href="/descuentos">DESCUENTOS</a></li>
+            <li><a href="/descuentos">PROMOCIONES</a></li>
             <li><a href="/nosotros">NOSOTROS</a></li>
             
             <li><a href="search" class="bi bi-search"></a></li>
@@ -54,18 +54,21 @@
       
     </header>
     <div class="top"></div>
-    <% for(i=0; i<datos.length; i++){%>
-        <a href="desc_details?id=<%=datos[i].id%>">
-        <div class="gallery">
-            
-              <img src="productos/<%= datos[i].img_product %>"  width="600" height="400">
-            </a>
-            <div class="desc"><%= datos[i].nombre_prod %><br/>
-                <b class="rojo">$<%=parseFloat (datos[i].precio_publico).toLocaleString() %>.00</b></div>
+    
+    <div class="gallery-container">
+      <% for (let i = 0; i < datos.length; i++) { %>
+        <a href="desc_details?id=<%= datos[i].id %>">
+          <div class="gallery">
+            <img src="productos/<%= datos[i].img_product %>" width="350" height="450" alt="<%= datos[i].nombre_prod %>">
+            <div class="desc">
+              <%= datos[i].nombre_prod %><br />
+              <b class="rojo">$<%= parseFloat(datos[i].precio_publico).toLocaleString() %>.00</b>
+            </div>
           </div>
-          </a>
-       
-       <% } %> 
+        </a>
+      <% } %>
+    </div>
+    
        <div class="paginacion">
          <ul>
             <%if(currentPage > 1){%>
@@ -80,7 +83,8 @@
          </ul>
          
        </div>
-
+     
+    
 <script src="script/descuento.js"></script>
 </body>
 </html>
