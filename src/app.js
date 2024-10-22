@@ -84,12 +84,12 @@ io.on('connection', (socket) => {
     console.log('Usuario conectado al chat')
 
     //Escucha el mensaje enviado por un cliente 
-    socket.on('mensaje', (data) => {
+    socket.on('sendMessage', (data) => {
         console.log(`Mensaje recibido: ${data.mensaje} de ${data.remitente}`)
-        io.emit('mensaje', data)
+        io.emit('sendMessage', data)
     })
 
-    socket.on('disconect', () => {
+    socket.on('disconnect', () => {
         console.log('Usuario desconectado')
     })
 
