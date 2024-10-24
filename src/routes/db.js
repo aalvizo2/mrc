@@ -23,9 +23,9 @@ pool.getConnection((err, connection) => {
 
     // Manejar errores en el pool
     pool.on('error', (err) => {
-        console.error('Error en el pool de conexiones: ', err);
+        console.error('Error en el pool de conexiones: ', err)
     });
-});
+})
 
 // Exportar el pool para su uso en otras partes de la aplicación
-module.exports = pool;
+module.exports = pool

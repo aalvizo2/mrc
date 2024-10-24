@@ -16,6 +16,22 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
     <script src="https://kit.fontawesome.com/5210f6d31f.js" crossorigin="anonymous"></script>
     <title>Producto</title>
+    <style>
+      .card {
+        width: 350px;
+        height: 450px;
+      }
+      .card-img-top {
+        height: 250px;
+        object-fit: cover; /* Mantiene la proporción de la imagen pero corta lo que sobre */
+      }
+      .card-title {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis; /* Agrega los "..." si el texto es muy largo */
+      }
+    </style>
+    
 </head>
 <body>
     <header class="red">
@@ -52,19 +68,24 @@
         </header>
      
    <div class="top"></div>
-   <div class="galeria_cont">
-     <%for(let i=0; i<datos.length; i++){%>
-        <a href="details?id=<%=datos[i].id%>"> 
-        <div class="galeria">
-            <img src="productos/<%=datos[i].img_product%>" alt="">
-        </a>
-            <p><%=datos[i].nombre_prod%><br></p>
-            <p><b>$<%=parseFloat(datos[i].precio_publico).toLocaleString()%>.00</b></p>
-        </div>
-        
-     <%}%>
-   </div>
-
+   <div class="container">
+      <div class="row">
+        <% for (let i = 0; i < datos.length; i++) { %>
+          <div class="col-12 col-md-4 mb-4 d-flex align-items-stretch">
+            <div class="card h-100" style="width: 350px;">
+              <a href="details?id=<%= datos[i].id %>">
+                <img src="productos/<%= datos[i].img_product %>" class="card-img-top" style="width: 100%; height: 250px; object-fit: cover;" alt="<%= datos[i].nombre_prod %>">
+              </a>
+              <div class="card-body text-center">
+                <h5 class="card-title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><%= datos[i].nombre_prod %></h5>
+                <p class="card-text"><b>$<%= parseFloat(datos[i].precio_publico).toLocaleString() %>.00</b></p>
+              </div>
+            </div>
+          </div>
+        <% } %>
+      </div>
+    </div>
+    
 
 
    <nav aria-label="Page navigation" class="mt-4">
