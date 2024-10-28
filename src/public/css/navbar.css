@@ -66,12 +66,18 @@ header a:hover {
         background-color: #8E0A05 !important;
         flex-direction: column;
         align-items: center;
-        display: none; /* Ocultar inicialmente */
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-20px); /* Deslizar hacia arriba */
+        transition: all 0.4s ease-in-out;
         z-index: 999;
     }
 
     header ul.active {
         display: flex;
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0); /* Deslizar a su posición normal */
     }
 
     header li {
@@ -84,7 +90,7 @@ header a:hover {
         width: 20%;
     }
 
-    header li:hover{
+    header li:hover {
         background-color: #8e0a05a8;
     }
 }

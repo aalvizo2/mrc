@@ -10,11 +10,16 @@ Router.get('/nosotros', (req, res)=>{
     connection.query('SELECT * FROM comentarios', (err, comentarios)=>{
         if(err) throw err
         console.log(comentarios)
-        res.render('nosotros',{
-            login: true,
-            usuario: usuario, 
-            comentarios: comentarios
+        connection.query('SELECT SUM (cantidad) as objeto FROM carrito WHERE usuario=?', [usuario], (err, objeto)=>{
+            const contador= objeto[0].objeto
+            res.render('nosotros',{
+                login: true,
+                usuario: usuario, 
+                comentarios: comentarios,
+                objeto: contador
+            })
         })
+        
     })
     
 })
