@@ -8,9 +8,10 @@ Router.get('/enviar-mensaje', (req, res) => {
 
     const query = `
         SELECT * FROM mensajes 
-        WHERE (remitente = ? AND receptor = ?)
-        OR (remitente = ? AND receptor = ?)
-        ORDER BY fecha ASC
+        WHERE (remitente = ? AND receptor = ?) 
+        OR (remitente = ? AND receptor = ?) 
+        ORDER BY fecha DESC
+        
     `;
 
     connection.query(query, [usuario, receptor, receptor, usuario], (err, Datos) => {
@@ -74,7 +75,7 @@ Router.get('/conversacion', (req, res) => {
         SELECT * FROM mensajes 
         WHERE (remitente = ? AND receptor = ?)
         OR (remitente = ? AND receptor = ?)
-        ORDER BY fecha ASC
+        ORDER BY fecha DESC
     `
     connection.query(query, [nombre, admin, admin, nombre], (err, datos) =>{
         if(err) throw err
@@ -88,11 +89,15 @@ Router.get('/conversacion', (req, res) => {
 })
 
 Router.post('/reply', (req, res) => {
-    const {remitente, mensaje, fecha, usuario}= req.body
+    const {nombre, mensaje, fecha, usuario}= req.body
     console.log(req.body)
-    connection.query('INSERT INTO mensajes(nombre, fecha, mensaje, remitente, receptor) VALUES (?,?,?,?,?)', [remitente, fecha, mensaje, remitente, usuario], (err) =>{
-        if(err) throw err 
-        res.redirect('/conversacion')
+    connection.query('INSERT INTO mensajes(nombre, fecha, mensaje, remitente, receptor) VALUES (?,?,?,?,?)', [nombre, fecha, mensaje, nombre, usuario], (err) =>{
+        if(err){
+            throw err
+        }else{
+            res.status(200).send({message: 'Operación realizada con éxito'})
+        }
+        
     })
 })
 

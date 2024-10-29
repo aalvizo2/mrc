@@ -91,6 +91,7 @@
             <div class="mb-3">
                 <label for="nombre" class="form-label">Nombre de Usuario</label>
                 <input type="text" class="form-control" id="nombre" name="nombre" value="<%= usuario %>" disabled>
+                
             </div>
             <div class="mb-3">
                 <label for="mensaje" class="form-label">Mensaje</label>
@@ -133,8 +134,17 @@
             const nombre = document.getElementById('nombre').value;
             const mensaje = document.getElementById('mensaje').value;
             const fecha = new Date().toLocaleDateString('es-ES', {
-                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+                   weekday: 'long', 
+                   year: 'numeric', 
+                   month: 'long', 
+                   day: 'numeric'
+            }) + ' ' + new Date().toLocaleTimeString('es-ES', {
+                   hour: '2-digit', 
+                   minute: '2-digit', 
+                   second: '2-digit'
             });
+
+            console.log(fecha);
 
             try {
                 const response = await fetch('/sendMessage', {

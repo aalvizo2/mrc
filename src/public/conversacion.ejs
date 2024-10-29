@@ -137,64 +137,94 @@
             </div>
         </nav>
 
-        <div id="messageList">
-            <% 
-            datos.forEach((dato) => { 
-                const isMine = dato.remitente === admin; // Verifica si es el remitente actual
-            %>
-                <div class="chat-bubble <%= isMine ? 'mine' : 'other' %>">
-                    <div class="chat-header">
-                        <h5 class="<%= isMine ? 'text-white' : 'text-primary' %>">
-                            <%= dato.remitente %>
-                        </h5>
-                        <span class="text-muted" style="font-size: 0.8em;"><%= dato.fecha %></span>
-                    </div>
-                    <p class="mt-2 mb-0"><%= dato.mensaje %></p>
+        <div class="container mt-5">
+            <form id="mensajeForm" action="/reply" method="post">
+                <h2 class="text-center mb-4" >Enviar Mensaje</h2>
+                <div class="mb-3">
+                    
+                    <input type="hidden" class="form-control" id="nombre" name="nombre" value="<%= admin %>" disabled>
+                    <input type="hidden" name="usuario"  id="username" value="<%= nombre %>">
                 </div>
-            <% }) %>
-        </div>
-        
-        
-        <form class="chat-form" action="/reply" method="post" onsubmit="agregarFecha()">
-            <input type="hidden" name="remitente" value="<%= admin %>"> <!-- Campo oculto -->
-        
-            <input type="hidden" id="fecha" name="fecha"> <!-- Campo oculto para la fecha -->
-            <input type="hidden" name="usuario" value="<%= nombre%>">
-            <div class="mb-3">
-                <label for="receptor" class="form-label">Receptor</label>
-                <input type="text" id="receptor" name="receptor" class="form-control"
-                       placeholder="Ingresa el nombre del receptor" value="<%= admin %>" disabled>
+                <div class="mb-3">
+                    <label for="mensaje" class="form-label">Mensaje</label>
+                    <textarea class="form-control" id="mensaje" name="mensaje" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary w-100" style="background-color: #8E0A05; border: none;">Enviar Mensaje</button>
+            </form>
+    
+            <!-- Spinner de carga -->
+            <div id="spinner" class="spinner-border text-primary d-none" role="status">
+                <span class="visually-hidden">Cargando...</span>
             </div>
-        
-            <div class="mb-3">
-                <label for="mensaje" class="form-label">Mensaje</label>
-                <textarea id="mensaje" name="mensaje" rows="3" class="form-control"
-                          placeholder="Escribe tu mensaje" required></textarea>
+    
+            <!-- Mensajes enviados -->
+            <div id="mensajesEnviados" class="mt-4">
+                <h3 class="text-center">Mensajes Enviados</h3>
+                <ul id="listaMensajes" class="list-group">
+                    <% datos.forEach((dato) => { %>
+                        <li class="list-group-item mb-2 p-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0 text-primary" style="color: #8E0A05; border: none;"><strong><%= dato.nombre %></strong></h5>
+                                <span class="text-muted" style="font-size: 0.9em;"><%= dato.fecha %></span>
+                            </div>
+                            <p class="mt-2 mb-0" style="font-size: 1.1em;"><%= dato.mensaje %></p>
+                        </li>
+                    <% }) %>
+                </ul>
             </div>
-            
-        
-            <button type="submit" class="btn btn-primary w-100">Enviar Mensaje</button>
-        </form>
-        
-        
         </div>
-        
-        
-        
-        
+    
         <script>
-            // Función para generar la fecha en formato: '18 de octubre de 2024'
-            function obtenerFechaConLetra() {
-                const opciones = { day: 'numeric', month: 'long', year: 'numeric' };
-                const fecha = new Date().toLocaleDateString('es-ES', opciones);
-                return fecha;
-            }
-        
-            function agregarFecha() {
-                // Asignar la fecha generada al campo oculto
-                document.getElementById('fecha').value = obtenerFechaConLetra();
-            }
-        </script>
+                    const mensajeForm = document.getElementById('mensajeForm');
+        const listaMensajes = document.getElementById('listaMensajes');
+        const spinner = document.getElementById('spinner');
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"></script>
+        mensajeForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            spinner.classList.remove('d-none'); // Mostrar spinner
+
+            const nombre = document.getElementById('nombre').value;
+            const mensaje = document.getElementById('mensaje').value;
+            const usuario= document.getElementById('username').value;
+            const fecha = new Date().toLocaleDateString('es-ES', {
+                   weekday: 'long', 
+                   year: 'numeric', 
+                   month: 'long', 
+                   day: 'numeric'
+            }) + ' ' + new Date().toLocaleTimeString('es-ES', {
+                   hour: '2-digit', 
+                   minute: '2-digit', 
+                   second: '2-digit'
+            });
+
+            console.log(fecha);
+
+            try {
+                const response = await fetch('/reply', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nombre, mensaje, fecha, usuario }),
+                });
+
+                if (!response.ok) throw new Error('Error en la red');
+
+                const nuevoMensaje = document.createElement('li');
+                nuevoMensaje.className = 'list-group-item mb-2 p-3';
+                nuevoMensaje.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0 text-primary"><strong>${nombre}</strong></h5>
+                        <span class="text-muted" style="font-size: 0.9em;">${fecha}</span>
+                    </div>
+                    <p class="mt-2 mb-0" style="font-size: 1.1em;">${mensaje}</p>
+                `;
+                listaMensajes.appendChild(nuevoMensaje);
+                mensajeForm.reset(); // Limpiar formulario
+            } catch (error) {
+                alert('Error al enviar el mensaje');
+            } finally {
+                spinner.classList.add('d-none'); // Ocultar spinner
+            }
+        });
+
+        </script>
         
