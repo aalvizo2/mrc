@@ -24,6 +24,7 @@
     height: 100%;
     content: "";
     z-index: 2;
+    
   }
   
   .logos:before {
@@ -60,9 +61,11 @@
     width: 150px;
   }
 
-  @media screen and (max-width: 1000px) {
-    .logos{
-       padding: 10px 0;
+  @media screen and (max-width: 600px) {
+    .logos:before,
+    .logos:after{
+       width: 50px;
+       
     }
     
   }
