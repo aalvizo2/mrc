@@ -5,10 +5,15 @@ const { readSync } = require('fs')
 
 Router.get('/mantenimiento', (req, res) =>{
     const usuario= req.session.usuario
-    res.render('mantenimiento', {
-        usuario: usuario
+    connection.query('SELECT SUM (cantidad) as objeto FROM carrito WHERE usuario=?', [usuario], (err, objeto)=>{
+        const contador= objeto[0].objeto
+        res.render('mantenimiento', {
+            usuario: usuario,
+            objeto: contador
+        })
     })
-})
+    })  
+    
 
 Router.post('/enviarDatos', (req, res) => {
     const {nombre, modelo, fecha, descripcion}= req.body

@@ -19,6 +19,79 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
     <script src="https://kit.fontawesome.com/5210f6d31f.js" crossorigin="anonymous"></script>
     <title>Producto</title>
+    <style>
+        .container{
+            border: 1px solid #ccc;
+            padding: 15px;
+        }
+        .product-carousel {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding: 20px 0;
+            scrollbar-width: none;
+        }
+
+        .product-carousel::-webkit-scrollbar {
+            display: block;
+        }
+
+        .product {
+            flex: 0 0 auto;
+            width: 250px;
+            height: 300px;
+            margin-right: 40px;
+            scroll-snap-align: start;
+            text-align: center;
+            border: 1px solid #ccc;
+        }
+
+        .product img {
+            width: 100%;
+            max-width: 1250px;
+            height: 60%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .product h5 {
+            margin: 10px 0;
+        }
+
+        .product p {
+            margin: 0;
+            font-weight: bold;
+        }
+
+        
+
+        #prevButton, #nextButton {
+           background-color: #ffff;  /* Color de fondo */
+           color: #cccc;           /* Color del texto */
+           border-radius: 50%;       /* Hacer el botón circular */
+           width: 40px;              /* Ancho del botón */
+           height: 40px;             /* Alto del botón */
+           border: 1px solid #ccc; /* Borde opcional */
+           display: flex;            /* Centrar el contenido */
+           justify-content: center;  /* Centrar horizontalmente */
+           align-items: center;      /* Centrar verticalmente */
+           cursor: pointer;          /* Cambiar el cursor al pasar el mouse */
+        }
+
+        #prevButton:hover, #nextButton:hover {
+             background-color: #f00000; /* Color de fondo al pasar el mouse */
+             color: #fff;                /* Color del texto al pasar el mouse */
+        }
+        
+
+        @media screen and (max-width: 600px) {
+            #prevButton,
+            #nextButton{
+                display: none;
+            }
+            
+        }
+    </style>
 </head>
 <body>
     <header class="red">
@@ -30,8 +103,7 @@
             <li><a href="/descuentos">PROMOCIONES</a></li>
             <li><a href="/nosotros">NOSOTROS</a></li>
             <li><a href="search" class="bi bi-search"></a></li>
-            <li><a href="cart" class="bi bi-cart"> <%= objeto%></a>
-            </li>
+            <li><a href="cart" class="bi bi-cart"> <%= objeto %></a></li>
             <li>
                 <% if (usuario) { %>
                     <a href="profile"><%= usuario %></a>
@@ -42,17 +114,18 @@
             </li>
         </ul>
     </header>
-    
+
     <div class="top"></div>
     <div class="container mt-4">
         <div class="row">
             <div class="col-md-6">
-                <img src="productos/<%= fila[0].img_product%>" alt="<%= fila[0].nombre_prod %>" class="img-fluid rounded">
+                <img src="productos/<%= fila[0].img_product %>" alt="<%= fila[0].nombre_prod %>" class="img-fluid rounded">
             </div>
             <div class="col-md-6">
                 <h1 class="display-5"><%= fila[0].nombre_prod %>:</h1>
                 <p class="lead"><%= fila[0].descripcion %></p>
-                <span>Precio: </span><p class="h5"><b>$<%= parseFloat(fila[0].precio_publico).toLocaleString() %>.00</b></p>
+                <span>Precio: </span>
+                <p class="h5"><b>$<%= parseFloat(fila[0].precio_publico).toLocaleString() %>.00</b></p>
                 <form action="add-to-cart" method="post" class="mt-3">
                     <input type="hidden" name="img_product" value="<%= fila[0].img_product %>">
                     <input type="hidden" name="nombre_prod" value="<%= fila[0].nombre_prod %>">
@@ -67,8 +140,62 @@
             </div>
         </div>
     </div>
+    
+    
+    
+    <div class="container mt-5" id="contenedor">
+        <h3 class="text-center">Productos Relacionados</h3>
+        <div class="d-flex justify-content-between align-items-center">
+            <button class="btn btn-secondary" id="prevButton">
+                <i class="bi bi-chevron-left"></i>
+            </button>
+            <div class="product-carousel">
+                <% for (let i = 0; i < data.length; i++) { %>
+                    <div class="product" style="border: 1px solid #ccc; border-radius: 5px; padding: 10px;">
+                        <a href="/details?id=<%= data[i].id %>">
+                            <img src="productos/<%= data[i].img_product %>" alt="<%= data[i].nombre_prod %>" class="img-fluid">
+                        </a>
+                        <h5><%= data[i].nombre_prod %></h5>
+                        <p>$<%= parseFloat(data[i].precio_publico).toLocaleString() %>.00</p>
+                    </div>
+                <% } %>
+            </div>
+            <button class="btn btn-secondary" id="nextButton">
+                <i class="bi bi-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+    
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
     <script src="script/responsive.js"></script>
+    <script>
+        const productCarousel = document.querySelector('.product-carousel');
+const prevButton = document.getElementById('prevButton');
+const nextButton = document.getElementById('nextButton');
+
+prevButton.addEventListener('click', () => {
+    productCarousel.scrollBy({
+        left: -250, // Desplazar a la izquierda
+        behavior: 'smooth'
+    });
+});
+
+nextButton.addEventListener('click', () => {
+    productCarousel.scrollBy({
+        left: 250, // Desplazar a la derecha
+        behavior: 'smooth'
+    });
+});
+
+productCarousel.addEventListener('wheel', (event) => {
+    event.preventDefault();
+    productCarousel.scrollBy({
+        left: event.deltaY < 0 ? -250 : 250,
+        behavior: 'smooth'
+    });
+});
+
+    </script>
 </body>
 </html>

@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" integrity="sha384-b6lVK+yci+bfDmaY1u0zE8YYJt0TZxLEAFyYSLHId4xoVvsrQu3INevFKo+Xir8e" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/navbar.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100&family=Quicksand&display=swap" rel="stylesheet">
@@ -24,7 +25,7 @@
     <header class="red">
         <img src="img/logo.png" alt="">
         <a class="menu_toggle">☰</a>
-        <nav>
+        
           
             
             
@@ -35,8 +36,8 @@
                 <li><a href="">NOSOTROS</a></li>
                 
                 <li><a href="search" class="bi bi-search"></a></li>
-                <li><a href="cart" class="bi bi-cart"></a>
-                  <a class="objeto" href="cart"><%= objeto%></a>
+                <li><a href="cart" class="bi bi-cart">   <%= objeto%></a>
+                  
                 </li>
                 
                 <li>
@@ -48,41 +49,44 @@
                     <%}%>
                
             </ul>
-            </nav>
+            
             
           
           
         </header>
    <div class="top"></div>
-   <section class="section"><img src="productos/<%= fila[0].img_product%>" alt=""></section>
-   <section class="section1">
-       <h1><%= fila[0].nombre_prod%>:</h1>
-       <p><%= fila[0].descripcion%></p>
-       
-       <p><b>$<%= parseFloat (fila[0].precio_publico).toLocaleString()%>.00</b></p>
-       <form action="add-to-cart" method="post">
-         <input type="hidden" name="img_product"  value="<%= fila[0].img_product%>">
-         <input type="hidden" name="nombre_prod"  value="<%= fila[0].nombre_prod%>">
-         <input type="hidden" name="precio_publico"  value="<%= fila[0].precio_publico%>">
-         <input type="number" name="cantidad" id="" placeholder="Cantidad">
-         <input type="submit" id="sweetalert" value="Agregar al Carrito">
-       </form>
-       
-       
+   <section class="container my-5">
+    <div class="row align-items-center">
+        <!-- Imagen del producto -->
+        <div class="col-md-7">
+            <img src="productos/<%= fila[0].img_product %>" alt="<%= fila[0].nombre_prod %>" class="img-fluid rounded shadow-lg" style="max-height: 500px; width: 100%; object-fit: cover;">
+        </div>
+
+        <!-- Detalles del producto -->
+        <div class="col-md-5">
+            <h1 class="display-5 fw-bold mb-3"><%= fila[0].nombre_prod %></h1>
+            <p class="lead text-muted"><%= fila[0].descripcion %></p>
+            <p class="h4 text-danger fw-bold">$<%= parseFloat(fila[0].precio_publico).toLocaleString() %>.00</p>
+
+            <!-- Formulario para agregar al carrito -->
+            <form action="add-to-cart" method="post" class="mt-4">
+                <input type="hidden" name="img_product" value="<%= fila[0].img_product %>">
+                <input type="hidden" name="nombre_prod" value="<%= fila[0].nombre_prod %>">
+                <input type="hidden" name="precio_publico" value="<%= fila[0].precio_publico %>">
+
+                <div class="mb-3">
+                    <label for="cantidad" class="form-label">Cantidad</label>
+                    <input type="number" name="cantidad" id="cantidad" class="form-control" placeholder="Cantidad" min="1" required>
+                </div>
+
+                <button type="submit" id="sweetalert" class="btn btn-danger btn-lg w-100">Agregar al Carrito</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+
        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
-       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-            <% if (typeof alert != "undefined")  { %>
-              <script>
-              Swal.fire({
-                
-                text:'<%= alertMessage %>',
-                icon:'<%= alertIcon %>',
-                showConfirmButton: <%= showConfirmButton %>,
-                timer: <%= timer %>
-              }).then(()=>{
-                window.location='/<%= ruta %>'
-              })
-              </script>
-            <% } %>
+       
    </section>
-   <script src="script/responsive.js></script>
+   <script src="script/responsive.js"></script>
