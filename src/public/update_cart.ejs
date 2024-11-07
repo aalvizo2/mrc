@@ -73,7 +73,7 @@
       <% for (let i = 0; i < fila.length; i++) { %>
         <div class="row align-items-center py-3 border-bottom carrito-item">
           <div class="col-md-4 col-sm-6 text-center">
-            <img src="productos/<%= fila[i].img_prod %>" class="img-fluid rounded" alt="<%= fila[i].producto %>" style="max-width: 80px;">
+            <img src="<%= urls[i] %>" class="img-fluid rounded" alt="<%= fila[i].producto %>" style="max-width: 80px;">
             <p class="mt-2"><strong><%= fila[i].producto %></strong></p>
           </div>
   

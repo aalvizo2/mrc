@@ -29,7 +29,7 @@
                 <ul>
                     <li><a href="/">INICIO</a></li>
                     <li><a href="/producto">PRODUCTOS</a></li>
-                    <li><a href="/descuentos">descuentos</a></li>
+                    <li><a href="/descuentos">PROMOCIONES</a></li>
                     <li><a href="/nosotros">NOSOTROS</a></li>
                     
                     <li><a href="search" class="bi bi-search"></a></li>
@@ -52,15 +52,20 @@
               
             </header>
    <div class="top"></div>
-   <div class="galeria_cont">
-     <%for(let i=0; i<datos.length; i++){%>
-        <a href="details?id=<%=datos[i].id%>"> 
-        <div class="galeria">
-            <img src="productos/<%=datos[i].img_product%>" alt="">
-        </a>
-            <p><%=datos[i].nombre_prod%><br></p>
-            <p><b>$<%=parseFloat(datos[i].precio_publico).toLocaleString()%>.00</b></p>
+   <div class="container">
+    <div class="row">
+      <% for(let i = 0; i < datos.length; i++) { %>
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+          <div class="card h-100">
+            <a href="details?id=<%= datos[i].id %>">
+              <img src="<%= urls[i] %>" class="card-img-top" alt="<%= datos[i].img_product %>">
+            </a>
+            <div class="card-body text-center">
+              <h5 class="card-title"><%= datos[i].nombre_prod %></h5>
+              <p class="card-text text-muted"><b>$<%= parseFloat(datos[i].precio_publico).toLocaleString() %>.00</b></p>
+            </div>
+          </div>
         </div>
-        
-     <%}%>
-   </div>
+      <% } %>
+    </div>
+  </div>

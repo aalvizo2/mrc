@@ -140,7 +140,7 @@
                     <div class="col-12 col-sm-6 col-md-4 col-lg-3">
                         <div class="card shadow-lg h-100">
                             <a href="details?id=<%= datos[i].id %>">
-                                <img src="productos/<%= datos[i].img_product %>" class="card-img-top" alt="<%= datos[i].nombre_prod %>">
+                                <img src="<%= urls[i] %>" class="card-img-top" alt="<%= datos[i].nombre_prod %>">
                             </a>
                             <div class="card-body text-center">
                                 <h5 class="card-title"><%= datos[i].nombre_prod %></h5>

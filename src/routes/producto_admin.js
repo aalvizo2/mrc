@@ -2,6 +2,19 @@ const express= require('express')
 const Router= express.Router()
 const connection= require('./db')
 const login= require('./login')
+const Minio= require('minio')
+
+
+
+//we gonna configurate minio 
+const minioClient= new Minio.Client({
+    endPoint: 'g7l6.la1.idrivee2-91.com', 
+    port: 443, 
+    useSSL: true, 
+    accessKey: 'Yll2kDG0a8R0OvLqqpDa',
+    secretKey: 'v4eaYdVa9NnrOibhLxEI21UQJV9oHSUEhiYJot5s'
+  })
+
 
 Router.get('/producto_admin', (req, res)=>{
     const admin= req.session.name
@@ -11,11 +24,29 @@ Router.get('/producto_admin', (req, res)=>{
     connection.query('SELECT * FROM producto', (err, datos)=>{
         if(err) throw err
         console.log(datos)
-        res.render('producto_admin', {
-            login: true, 
-            admin: admin, 
-            datos: datos
+        const imagenes= datos.map(item=> item.img_product)
+        
+        Promise.all(imagenes.map((imagen) => 
+             new Promise((resolve, reject) => {
+                minioClient.presignedUrl('GET', 'images', imagen, 24*60*60, (err, url) => {
+                    if(err){
+                        reject(err)
+                    }else{
+                        resolve(url)
+                    }
+                })
+             })
+        
+        ))
+        .then((urls) =>{
+            res.render('producto_admin', {
+                login: true, 
+                admin: admin, 
+                datos: datos, 
+                urls: urls
+            })
         })
+        
         
     })
     }

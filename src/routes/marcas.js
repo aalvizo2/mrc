@@ -1,6 +1,16 @@
 const express= require('express')
 const Router= express.Router()
 const connection= require('./db')
+const Minio= require('minio')
+
+//we gonna configurate minio 
+const minioClient= new Minio.Client({
+    endPoint: 'g7l6.la1.idrivee2-91.com', 
+    port: 443, 
+    useSSL: true, 
+    accessKey: 'Yll2kDG0a8R0OvLqqpDa',
+    secretKey: 'v4eaYdVa9NnrOibhLxEI21UQJV9oHSUEhiYJot5s'
+  })
 
 Router.get('/marca', (req, res) => {
     const marca = `%${req.query.marca}%`
@@ -24,17 +34,34 @@ Router.get('/marca', (req, res) => {
                 return res.status(500).send('Error en la consulta')
             }
 
+            const imagenes= results.map(item=> item.img_product)
+
+
             connection.query('SELECT SUM(cantidad) as objeto FROM carrito WHERE usuario=?', [usuario], (err, objeto) => {
                 const contador = objeto[0]?.objeto || 0
+                Promise.all(imagenes.map((imagen) =>
+                    new Promise((resolve, reject) => {
+                     minioClient.presignedUrl('GET', 'images', imagen, 24*60*60, (err, url)=> {
+                         if(err){
+                             reject(err)
+                         }else{
+                             resolve(url)
+                         }
+                     })
+                    })
+                 ))
+                 .then((urls) => {
+                    res.render('marcas', {
+                        Data: results,
+                        usuario: usuario,
+                        objeto: contador,
+                        currentPage: page,
+                        totalPages: totalPages,
+                        marca: req.query.marca, 
+                        urls: urls
+                    })
+                 })
                 
-                res.render('marcas', {
-                    Data: results,
-                    usuario: usuario,
-                    objeto: contador,
-                    currentPage: page,
-                    totalPages: totalPages,
-                    marca: req.query.marca // Pasar la variable marca
-                })
             })
         })
     })

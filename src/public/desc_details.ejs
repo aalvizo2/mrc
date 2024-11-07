@@ -32,7 +32,7 @@
             <ul>
                 <li><a href="/">INICIO</a></li>
                 <li><a href="producto">PRODUCTOS</a></li>
-                <li><a href="/descuentos">descuentos</a></li>
+                <li><a href="/descuentos">PROMOCIONES</a></li>
                 <li><a href="">NOSOTROS</a></li>
                 
                 <li><a href="search" class="bi bi-search"></a></li>
@@ -59,7 +59,7 @@
     <div class="row align-items-center">
         <!-- Imagen del producto -->
         <div class="col-md-7">
-            <img src="productos/<%= fila[0].img_product %>" alt="<%= fila[0].nombre_prod %>" class="img-fluid rounded shadow-lg" style="max-height: 500px; width: 100%; object-fit: cover;">
+            <img src="<%= url %>" alt="<%= fila[0].nombre_prod %>" class="img-fluid rounded shadow-lg" style="max-height: 500px; width: 100%; object-fit: cover;">
         </div>
 
         <!-- Detalles del producto -->

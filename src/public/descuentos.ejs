@@ -61,7 +61,7 @@
           <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
             <a href="desc_details?id=<%= datos[i].id %>" class="text-decoration-none">
               <div class="card h-100">
-                <img src="productos/<%= datos[i].img_product %>" class="card-img-top img-fluid" alt="<%= datos[i].nombre_prod %>">
+                <img src="<%= urls[i]%>" class="card-img-top img-fluid" alt="<%= datos[i].nombre_prod %>">
                 <div class="card-body text-center">
                   <h5 class="card-title"><%= datos[i].nombre_prod %></h5>
                   <p class="card-text text-danger fw-bold">$<%= parseFloat(datos[i].precio_publico).toLocaleString() %>.00</p>

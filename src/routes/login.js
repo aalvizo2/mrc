@@ -5,6 +5,7 @@ const multer= require('multer')
 const connection= require('./db')
 const Swal= require('sweetalert2')
 var ruta= '../uploads/'
+const Minio= require('minio')
 
 const fileUpload= require('express-fileupload')
 Router.use(express.urlencoded({extended: true}))
@@ -139,6 +140,13 @@ Router.get('/', (req, res) => {
   }
 })
 
+const minioClient= new Minio.Client({
+  endPoint: 'g7l6.la1.idrivee2-91.com', 
+  port: 443, 
+  useSSL: true, 
+  accessKey: 'Yll2kDG0a8R0OvLqqpDa',
+  secretKey: 'v4eaYdVa9NnrOibhLxEI21UQJV9oHSUEhiYJot5s'
+})
 
 Router.get('/upload', (req, res) =>{
   if(req.session.admin){
@@ -147,7 +155,7 @@ Router.get('/upload', (req, res) =>{
       login: true,
       admin: admin
     })
-    Router.post('/producto', (req, res)=>{
+    /*Router.post('/producto', async(req, res)=>{
       var nombre_prod= req.body.nombre_prod
       var imagen= req.files.imagen
       var uploadpath= path.join(__dirname, '..', 'public', 'productos', imagen.name)
@@ -166,13 +174,37 @@ Router.get('/upload', (req, res) =>{
        res.redirect('/producto_admin')
       })
       
-    })
+    })*/
     
   }else{
     res.redirect('/login')
   }
 })
 
+
+Router.post('/producto', async(req, res) =>{
+  if(!req.session.admin) return res.redirect('/login')
+  const { nombre_prod, descripcion, precio, precio_publico, categoria, cantidad } = req.body
+  const imagen = req.files.imagen
+  const img_prod = imagen.name
+
+  console.log(categoria, nombre_prod, descripcion, precio, precio_publico, img_prod)
+
+  try{
+      await minioClient.putObject(
+        'images', 
+        img_prod,
+        imagen.data
+      )
+      
+      connection.query("INSERT INTO producto(img_product, nombre_prod, descripcion, precio, precio_publico, categoria) VALUES(?,?,?,?,?, ?)", [img_prod, nombre_prod, descripcion, precio, precio_publico, categoria], (err)=>{
+        res.redirect('/producto_admin')
+       })
+
+  }catch(error){
+        console.error('Error al subir el archivo', error)
+  }
+})
 
 var usuario= session.user
 var admin= session.name

@@ -74,7 +74,7 @@
           <div class="col-12 col-md-4 mb-4 d-flex align-items-stretch">
             <div class="card h-100" style="width: 350px;">
               <a href="details?id=<%= datos[i].id %>">
-                <img src="productos/<%= datos[i].img_product %>" class="card-img-top" style="width: 100%; height: 250px; object-fit: cover;" alt="<%= datos[i].nombre_prod %>">
+                <img  src="<%= urls[i] %>" class="card-img-top" style="width: 100%; height: 250px; object-fit: cover;" alt="<%= datos[i].nombre_prod %>">
               </a>
               <div class="card-body text-center">
                 <h5 class="card-title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><%= datos[i].nombre_prod %></h5>
@@ -82,7 +82,9 @@
               </div>
             </div>
           </div>
+          
         <% } %>
+        
       </div>
     </div>
     
@@ -142,6 +144,7 @@
             <small>&copy; 2018 <b>MRC</b> - Todos los Derechos Reservados.</small>
         </div>
     </footer>
+    
     <script src="script/responsive.js"></script>
 </body>
 </html>   

@@ -2,7 +2,19 @@ const express= require('express')
 const Router= express.Router()
 const login= require('./login')
 const connection= require('./db')
-const { runInNewContext } = require('vm')
+const Minio= require('minio')
+
+
+
+//we gonna configurate minio 
+const minioClient= new Minio.Client({
+    endPoint: 'g7l6.la1.idrivee2-91.com', 
+    port: 443, 
+    useSSL: true, 
+    accessKey: 'Yll2kDG0a8R0OvLqqpDa',
+    secretKey: 'v4eaYdVa9NnrOibhLxEI21UQJV9oHSUEhiYJot5s'
+  })
+
 Router.get('/descuento_admin',(req, res)=>{
     const admin= req.session.name
     if(!admin){
@@ -32,16 +44,18 @@ Router.post('/insertar', (req, res)=>{
     console.log(producto)
     connection.query('SELECT * FROM producto WHERE nombre_prod=?',[producto], (err, dato)=>{
         const datos= dato[0]
-        const img_product= dato[0].img_product
-        const nombre_prod= dato[0].nombre_prod
-        const descripcion= dato[0].descripcion
-        const precio= dato[0].precio
-        const precio_publico= dato[0].precio_publico
-        res.render('insertar', {
-            dato, datos, 
-            login: true, 
-            admin: admin
+        const imagen= dato[0].img_product
+
+        minioClient.presignedUrl('GET', 'images', imagen, 24*60*60, (err, url) =>{
+            if(err) throw err 
+            res.render('insertar', {
+                dato, datos, 
+                login: true, 
+                admin: admin, 
+                url
+            })
         })
+        
     })
     
 });
@@ -71,17 +85,36 @@ Router.get('/descuentos', (req, res)=>{
           console.log(conteo)
           const totalPages= Math.ceil(TotalProducts/perPage)
           console.log(totalPages)
-          res.render('descuentos', {
-            login: true,
-            
-            usuario: usuario,
-            datos: row,
-            objeto: contador, 
-            currentPage: pagina,
-            totalPages: totalPages
-            
-  
+          const imagenes= row.map(item=> item.img_product)
+          
+          //Cargamos las imagenes del minio 
+          Promise.all(imagenes.map((imagen) => 
+             new Promise((resolve, reject) =>{
+                minioClient.presignedUrl('GET', 'images', imagen, 24*60*60, (err, url) => {
+                    if(err){
+                        reject(err)
+                    }else{
+                        resolve(url)
+                    }
+                })
+             })
+          ))
+          .then((urls) =>{
+            res.render('descuentos', {
+                login: true,
+                urls: urls,
+                usuario: usuario,
+                datos: row,
+                objeto: contador, 
+                currentPage: pagina,
+                totalPages: totalPages
+                
+      
+              })
           })
+
+
+          
         })    
       })
 });
