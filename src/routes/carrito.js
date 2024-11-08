@@ -3,20 +3,10 @@ require('./login')
 const connection= require('./db')
 const { format } = require('date-fns')
 const es = require('date-fns/locale/es')
-const Minio= require('minio')
+const getImageUrl= require('./getImageUrl')
 const Router= express.Router()
 //we requiring login so we can use its session 
 require('./login')
-
-
-//we gonna configurate minio 
-const minioClient= new Minio.Client({
-    endPoint: 'g7l6.la1.idrivee2-91.com', 
-    port: 443, 
-    useSSL: true, 
-    accessKey: 'Yll2kDG0a8R0OvLqqpDa',
-    secretKey: 'v4eaYdVa9NnrOibhLxEI21UQJV9oHSUEhiYJot5s'
-  })
 
 //we setting up the cart and we starting up with it
 Router.post('/add-to-cart', (req, res)=>{
@@ -60,21 +50,11 @@ Router.get('/cart', (req, res)=>{
     connection.query('SELECT * FROM carrito WHERE usuario=?', [usuario], (err, fila)=>{
         connection.query('SELECT * FROM ventas WHERE usuario=?', [usuario], (err, venta)=>{
             connection.query('SELECT SUM(total) AS suma FROM carrito WHERE usuario=?', [usuario], (err, suma)=>{
-                   const total= suma[0].suma
+                const total= suma[0].suma
                    
-                   const imagenes= fila.map(item=> item.img_prod)
-                   
-                   Promise.all(imagenes.map((imagen) =>
-                    new Promise((resolve, reject) => {
-                     minioClient.presignedUrl('GET', 'images', imagen, 24*60*60, (err, url)=> {
-                         if(err){
-                             reject(err)
-                         }else{
-                             resolve(url)
-                         }
-                     })
-                    })
-                 ))
+                const imagenes= fila.map(item=> item.img_prod)
+                 
+                Promise.all(imagenes.map(imagen=> getImageUrl(imagen))) 
                  .then((urls) => {
                     res.render('cart', {
                         login: true, 

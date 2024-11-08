@@ -54,11 +54,11 @@
             <ul>
                 <li><a href="/">INICIO</a></li>
                 <li><a href="/producto">PRODUCTOS</a></li>
-                <li><a href="/descuentos">descuentos</a></li>
+                <li><a href="/descuentos">PROMOCIONES</a></li>
                 <li><a href="/nosotros">NOSOTROS</a></li>
                 
                 <li><a href="search" class="bi bi-search"></a></li>
-                <li><a href="cart" class="bi bi-cart"><%= objeto%></a>
+                <li><a href="cart" class="bi bi-cart"><%= objeto === 0 ? '' : objeto%></a>
                   
                 </li>
                 
@@ -76,7 +76,6 @@
           
           
         </header>
-        
         <div class="top"></div>
         
         <div class="container mt-5">

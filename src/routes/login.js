@@ -197,7 +197,7 @@ Router.post('/producto', async(req, res) =>{
         imagen.data
       )
       
-      connection.query("INSERT INTO producto(img_product, nombre_prod, descripcion, precio, precio_publico, categoria) VALUES(?,?,?,?,?, ?)", [img_prod, nombre_prod, descripcion, precio, precio_publico, categoria], (err)=>{
+      connection.query("INSERT INTO producto(img_product, nombre_prod, descripcion, precio, precio_publico, categoria, cantidad) VALUES(?,?,?,?,?, ?, ?)", [img_prod, nombre_prod, descripcion, precio, precio_publico, categoria, cantidad], (err)=>{
         res.redirect('/producto_admin')
        })
 

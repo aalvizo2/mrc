@@ -2,18 +2,8 @@ const express= require('express')
 const Router= express.Router()
 const login= require('./login')
 const connection= require('./db')
-const Minio= require('minio')
-
-
-
-//we gonna configurate minio 
-const minioClient= new Minio.Client({
-    endPoint: 'g7l6.la1.idrivee2-91.com', 
-    port: 443, 
-    useSSL: true, 
-    accessKey: 'Yll2kDG0a8R0OvLqqpDa',
-    secretKey: 'v4eaYdVa9NnrOibhLxEI21UQJV9oHSUEhiYJot5s'
-  })
+const minioClient= require('./minioClient')
+const getImageUrl= require('./getImageUrl')
 
 Router.get('/descuento_admin',(req, res)=>{
     const admin= req.session.name
@@ -88,18 +78,8 @@ Router.get('/descuentos', (req, res)=>{
           const imagenes= row.map(item=> item.img_product)
           
           //Cargamos las imagenes del minio 
-          Promise.all(imagenes.map((imagen) => 
-             new Promise((resolve, reject) =>{
-                minioClient.presignedUrl('GET', 'images', imagen, 24*60*60, (err, url) => {
-                    if(err){
-                        reject(err)
-                    }else{
-                        resolve(url)
-                    }
-                })
-             })
-          ))
-          .then((urls) =>{
+          Promise.all(imagenes.map(imagen => getImageUrl(imagen)))
+          .then((urls) => {
             res.render('descuentos', {
                 login: true,
                 urls: urls,
@@ -110,7 +90,7 @@ Router.get('/descuentos', (req, res)=>{
                 totalPages: totalPages
                 
       
-              })
+            })
           })
 
 

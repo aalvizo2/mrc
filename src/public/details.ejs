@@ -82,6 +82,10 @@
              background-color: #f00000; /* Color de fondo al pasar el mouse */
              color: #fff;                /* Color del texto al pasar el mouse */
         }
+
+
+        
+
         
 
         @media screen and (max-width: 600px) {
@@ -118,21 +122,37 @@
     <div class="top"></div>
     <div class="container mt-4">
         <div class="row">
+            <!-- Imagen del producto -->
             <div class="col-md-6">
-                <img src="<%= url %>" alt="<%= fila[0].nombre_prod %>" class="img-fluid rounded">
+                <img src="<%= url %>" alt="<%= fila[0].nombre_prod %>" class="img-fluid rounded shadow-lg">
             </div>
+    
+            <!-- Detalles del producto -->
             <div class="col-md-6">
                 <h1 class="display-5"><%= fila[0].nombre_prod %>:</h1>
-                <p class="lead"><%= fila[0].descripcion %></p>
-                <span>Precio: </span>
-                <p class="h5"><b>$<%= parseFloat(fila[0].precio_publico).toLocaleString() %>.00</b></p>
+                <p class="lead text-muted"><%= fila[0].descripcion %></p>
+                
+                <!-- Precio y Existencia en una sola línea -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <span class="h6 text-secondary">Precio:</span>
+                        <p class="h5 price mb-0"><b>$<%= parseFloat(fila[0].precio_publico).toLocaleString() %>.00</b></p>
+                    </div>
+                    <div>
+                        <span class="h6 text-secondary">Existencia:</span>
+                        <p class="h5 stock mb-0"><%= fila[0].cantidad %></p>
+                    </div>
+                </div>
+    
+                <!-- Formulario para agregar al carrito -->
                 <form action="add-to-cart" method="post" class="mt-3">
                     <input type="hidden" name="img_product" value="<%= fila[0].img_product %>">
                     <input type="hidden" name="nombre_prod" value="<%= fila[0].nombre_prod %>">
                     <input type="hidden" name="precio_publico" value="<%= fila[0].precio_publico %>">
+                    
                     <div class="input-group mb-3">
                         <input type="number" name="cantidad" class="form-control" placeholder="Cantidad" min="1" required>
-                        <button type="submit" class="btn" style="background-color: #f00000; color: white;">
+                        <button type="submit" class="btn btn-danger">
                             <i class="bi bi-cart-fill"></i> Agregar al Carrito
                         </button>
                     </div>
@@ -140,6 +160,7 @@
             </div>
         </div>
     </div>
+    
     
     
     
@@ -157,6 +178,7 @@
                         </a>
                         <h5><%= data[i].nombre_prod %></h5>
                         <p>$<%= parseFloat(data[i].precio_publico).toLocaleString() %>.00</p>
+
                     </div>
                 <% } %>
             </div>
