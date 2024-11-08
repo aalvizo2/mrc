@@ -143,7 +143,7 @@
   <% for (let i = 0; i < busqueda.length; i++) { %>
     <div class="busq_container">
       <a href="details?id=<%= busqueda[i].id %>">
-        <img src="productos/<%= busqueda[i].img_product %>" alt="<%= busqueda[i].nombre_prod %>">
+        <img src="<%= urls[i]%>" alt="<%= busqueda[i].nombre_prod %>">
       </a>
       <p><%= busqueda[i].nombre_prod %></p>
       <p><b>$<%= parseFloat(busqueda[i].precio_publico).toLocaleString() %>.00</b></p>
