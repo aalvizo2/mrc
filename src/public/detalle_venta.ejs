@@ -136,6 +136,7 @@
                     <div class="form-group mr-2">
                         <label for="estatus" class="mr-2">Estatus:</label>
                         <select name="estatus" class="form-control" id="estatus">
+                            <option value="Venta Procesada" <%= datos[0].estatus === 'Venta Procesada' ? 'selected' : '' %>>Venta Procesada</option>
                             <option value="Preparando pedido" <%= datos[0].estatus === 'Preparando pedido' ? 'selected' : '' %>>Preparando pedido</option>
                             <option value="En camino" <%= datos[0].estatus === 'En camino' ? 'selected' : '' %>>En camino</option>
                             <option value="En paqueteria" <%= datos[0].estatus === 'En paqueteria' ? 'selected' : '' %>>En paqueteria</option>

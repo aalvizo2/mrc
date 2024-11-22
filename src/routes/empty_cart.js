@@ -53,7 +53,9 @@ Router.post('/procesar-pago', async (req, res) => {
         const productos= producto[i].producto
         const cantidad= producto[i].cantidad
         const precio= producto[i].precio
-        connection.query('INSERT INTO ventas(usuario, producto, cantidad, fecha, total, cliente_dir, cliente_name, telefono, email) VALUES(?,?,?,?,?,?,?,?,?)', [usuario, productos, cantidad, fecha_actual, total, direccion, nombre, telefono, email], (err)=>{
+        connection.query('INSERT INTO ventas(usuario, producto, cantidad, fecha, total, cliente_dir, cliente_name, telefono, email, estatus) VALUES(?,?,?,?,?,?,?,?,?,?)', [usuario, productos, cantidad, fecha_actual, total, direccion, nombre, telefono, email, 'Venta Procesada'], (err)=>{
+          if(err) throw err 
+          console.log('operacion realizada con exito')
           connection.query('SELECT * FROM producto WHERE nombre_prod=?', [productos], (err, data) => {
             if(err) throw err
             connection.query('UPDATE producto SET cantidad = cantidad - ? WHERE nombre_prod=?', [cantidad, productos], (err) =>{

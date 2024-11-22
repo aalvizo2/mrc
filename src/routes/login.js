@@ -96,7 +96,8 @@ Router.get('/inicio_admin', (req, res) => {
           connection.query('SELECT COUNT(usuario) AS suma_usuario FROM usuario', (err, resultado)=> {
              if(err) throw err
              const sumaUsuarios= resultado[0].suma_usuario
-             connection.query('SELECT * FROM ventas WHERE estatus=?', ['Preparando pedido'], (err, Data) => {
+             connection.query('SELECT * FROM ventas WHERE estatus!=? OR estatus=?', ['Entregado', null], (err, Data) => {
+               console.log('data encontrada', Data)
                if(err) throw err 
                console.log(Data)
                res.render('inicio_admin', {
@@ -204,6 +205,25 @@ Router.post('/producto', async(req, res) =>{
   }catch(error){
         console.error('Error al subir el archivo', error)
   }
+})
+
+
+//cargamos toda la informacion de servicio-admin 
+Router.get('/servicio-admin', (req, res) =>{
+   if(req.session.name){
+     res.redirect('/login')
+   }else{
+     const admin= req.session.name
+     connection.query('SELECT * FROM mantenimiento',  (err, Data) => {
+       if(err) throw err 
+       
+       res.render('servicio-admin', { 
+          login: true, 
+          admin, admin, 
+          Data: Data
+       })
+     })
+   }
 })
 
 var usuario= session.user
