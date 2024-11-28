@@ -1,0 +1,27 @@
+<header class="red">
+    <img src="img/logo.png" alt="Logo">
+    
+    <!-- Menú hamburguesa -->
+    <a class="menu_toggle">☰</a>
+
+    <!-- Menú principal -->
+    <div class="center-links">
+        <a href="/">INICIO</a>
+        <a href="/producto">PRODUCTOS</a>
+        <a href="/descuentos">PROMOCIONES</a>
+        <a href="/nosotros">NOSOTROS</a>
+    </div>
+    
+    <!-- Íconos del lado derecho -->
+    <div class="icons">
+        <a href="search" class="bi bi-search"></a>
+        <a href="cart" class="bi bi-cart"></a>
+
+        <% if (usuario) { %>
+            <a href="#"><%= usuario %></a>
+            <a href="/logout" class="bi bi-box-arrow-right"></a>
+        <% } else { %>
+            <a href="login" class="bi bi-person-circle"></a>
+        <% } %>
+    </div>
+</header>

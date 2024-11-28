@@ -41,35 +41,11 @@
   </style>
 </head>
 <body>
-  <header class="red">
-    <img src="img/logo.png" alt="">
-    <a class="menu_toggle">☰</a>
-    
-      
-        
-        
-        <ul>
-            <li><a href="/">INICIO</a></li>
-            <li><a href="producto">PRODUCTOS</a></li>
-            <li><a href="/descuentos">PROMOCIONES</a></li>
-            <li><a href="/nosotros">NOSOTROS</a></li>
-           
-            
-            <li><a href="cart" class="bi bi-cart"><%= objeto%></a>
-              
-            </li>
-            
-            <li>
-                <% if ( usuario ){ %>
-                    <a href=""><%= usuario %></a>
-                    <li><a href="/logout" class="bi bi-box-arrow-right"></a></li>
-                <% }else{%>
-                    <a href="login" class="bi bi-person-circle"></a></li><br>
-                <%}%>
-           
-        </ul>
-    </header>
+  
+  <%-include('./components/header') %>
+
     <div class="top"></div>
+
     <section class="form_container">
       <form action="/buscar" method="post" class="input-group">
           <input 

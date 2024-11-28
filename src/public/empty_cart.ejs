@@ -19,29 +19,10 @@
 </head>
 
 <body>
-    <header class="red">
-        <img src="img/logo.png" alt="Logo">
-        <a class="menu_toggle">☰</a>
-        <ul>
-            <li><a href="/">INICIO</a></li>
-            <li><a href="/producto">PRODUCTOS</a></li>
-            <li><a href="/descuentos">PROMOCIONES</a></li>
-            <li><a href="/nosotros">NOSOTROS</a></li>
-            <li><a href="search" class="bi bi-search"></a></li>
-            <li><a href="cart" class="bi bi-cart"></a>
-            </li>
-            <li>
-                <% if (usuario) { %>
-                    <a href="profile"><%= usuario %></a>
-                    <a href="/logout" class="bi bi-box-arrow-right"></a>
-                <% } else { %>
-                    <a href="login" class="bi bi-person-circle"></a>
-                <% } %>
-            </li>
-        </ul>
-    </header>
+   
+<%-include('./components/cartHeader') %>
     
-    <div class="top"></div>
+<div class="top"></div>
 
 <main class="container my-5">
     <div class="row">
