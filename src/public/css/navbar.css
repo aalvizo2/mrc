@@ -79,12 +79,12 @@ header a:hover {
     transform: translateY(-5px); /* El enlace se mueve hacia arriba */
 }
 
-header a.active {
+header a.activo {
     transform: translateY(-5px); 
     background: transparent !important;
 }
 
-header a.active::after {
+header a.activo::after {
     width: 100%; /* La línea del enlace activo permanece extendida */
     transform: translateY(-3px); /* Ajuste adicional para que la línea suba ligeramente */
 }
