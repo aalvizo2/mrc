@@ -83,7 +83,7 @@ section img{
     text-decoration: none;
     font-size: 20px;
 }
-.producto figure >.text a{
+.producto figure >.text span{
     justify-content: center;
     text-align: center;
     align-items: center;
