@@ -35,7 +35,8 @@ Router.get('/details', (req, res)=>{
                 objeto: contador, 
                 data: data, 
                 url: url,
-                urls: urls
+                urls: urls, 
+                currentPages: 'producto'
               })
             }) 
            
@@ -70,7 +71,8 @@ Router.get('/desc_details', (req, res)=>{
           usuario: usuario, 
           fila: fila,
           objeto: contador, 
-          url
+          url,
+          currentPages: 'promociones'
           
       
         

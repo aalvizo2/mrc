@@ -16,7 +16,8 @@ Router.get('/nosotros', (req, res)=>{
                 login: true,
                 usuario: usuario, 
                 comentarios: comentarios,
-                objeto: contador
+                objeto: contador, 
+                currentPages: 'nosotros'
             })
         })
         

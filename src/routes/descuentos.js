@@ -87,7 +87,8 @@ Router.get('/descuentos', (req, res)=>{
                 datos: row,
                 objeto: contador, 
                 currentPage: pagina,
-                totalPages: totalPages
+                totalPages: totalPages, 
+                currentPages: 'promociones'
                 
       
             })

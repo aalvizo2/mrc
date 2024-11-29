@@ -11,7 +11,8 @@ Router.get("/", (req, res)=>{
     res.render('inicio', {
         login: true, 
         usuario: usuario,
-        objeto: contador
+        objeto: contador, 
+        currentPages: 'inicio'
     })
 })
    

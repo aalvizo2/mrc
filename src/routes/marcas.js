@@ -39,7 +39,8 @@ Router.get('/marca', (req, res) => {
                         currentPage: page,
                         totalPages: totalPages,
                         marca: req.query.marca, 
-                        urls: urls
+                        urls: urls, 
+                        currentPages: 'producto'
                     })
                  })
                 

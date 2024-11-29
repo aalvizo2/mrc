@@ -18,7 +18,8 @@ Router.get('/refacciones', (req, res)=>{
                     usuario: usuario, 
                     datos: refacciones,
                     objeto: contador, 
-                    urls: urls
+                    urls: urls, 
+                    currentPages: 'producto'
                  })
             })
             

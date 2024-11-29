@@ -12,7 +12,8 @@ Router.get('/search', (req, res)=>{
         res.render('search', {
             login: true,
             usuario: usuario, 
-            objeto: contador
+            objeto: contador,
+            currentPages: 'buscar'
         })
     })    
 })
@@ -35,7 +36,8 @@ Router.post('/buscar', (req,res)=>{
                 usuario: usuario, 
                 objeto: contador, 
                 busqueda: busqueda,
-                urls
+                urls, 
+                currentPages: 'buscar'
             })
         })
         

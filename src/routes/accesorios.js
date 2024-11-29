@@ -24,7 +24,8 @@ Router.get('/accesorios', (req, res)=>{
           usuario: usuario, 
           datos: rows,
           objeto: contador, 
-          urls: urls
+          urls: urls, 
+          currentPages: 'producto'
          })
        })
        

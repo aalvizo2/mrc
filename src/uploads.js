@@ -52,7 +52,8 @@ Router.get('/producto', (req, res) => {
               objeto: contador,
               currentPage: pagina,
               totalPages: totalPages,
-              urls: urls // Array de URLs generadas para cada imagen
+              urls: urls, 
+              currentPages: 'producto' 
             })
           })
           .catch((err) => {

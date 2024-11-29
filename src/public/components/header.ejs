@@ -6,10 +6,10 @@
 
     <!-- Menú principal -->
     <div class="center-links">
-        <a href="/">INICIO</a>
-        <a href="/producto">PRODUCTOS</a>
-        <a href="/descuentos">PROMOCIONES</a>
-        <a href="/nosotros">NOSOTROS</a>
+        <a href="/"  class="<%= currentPages === 'inicio' ? 'active' : '' %>" >Inicio</a>
+        <a href="/producto" class="<%= currentPages === 'producto' ? 'active' : ''%>">Productos</a>
+        <a href="/descuentos" class="<%= currentPages === 'promociones' ? 'active' : ''%>">Promociones</a>
+        <a href="/nosotros" class="<%= currentPages === 'nosotros' ? 'active' : ''%>">Nosotros</a>
     </div>
     
     <!-- Íconos del lado derecho -->

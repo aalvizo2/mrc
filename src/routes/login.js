@@ -134,7 +134,7 @@ Router.get('/', (req, res) => {
       const usuario = req.session.usuario
       res.render('inicio_usuario', {
           login: true,
-          usuario: usuario
+          usuario: usuario,
       })
   } else {
       res.redirect('/login')

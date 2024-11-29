@@ -40,8 +40,10 @@ header .center-links{
     height: fit-content;
 }
 header .icons{
+    display: flex;
     align-items: center;
     height: fit-content;
+    gap: 15px;
     padding: 15px;
     
 }
@@ -52,11 +54,40 @@ header a {
     transition: all 0.3s ease;
 }
 
-header a:hover {
+/*header a:hover {
     transform: translateY(-5px);
-    text-decoration: underline;
+    border-bottom: 3px solid white; 
+}*/
+
+
+header a::after {
+    content: ''; /* Pseudo-elemento para la línea */
+    position: absolute;
+    bottom: 0; /* Línea en la parte inferior */
+    left: 0;
+    width: 0; /* Línea invisible al inicio */
+    height: 3px; /* Grosor de la línea */
+    background-color: white; /* Color de la línea */
+    transition: width 0.3s ease, transform 0.3s ease; /* Animación de la línea */
 }
 
+header a:hover::after {
+    width: 100%; /* La línea se extiende al hacer hover */
+}
+
+header a:hover {
+    transform: translateY(-5px); /* El enlace se mueve hacia arriba */
+}
+
+header a.active {
+    transform: translateY(-5px); 
+    background: transparent !important;
+}
+
+header a.active::after {
+    width: 100%; /* La línea del enlace activo permanece extendida */
+    transform: translateY(-3px); /* Ajuste adicional para que la línea suba ligeramente */
+}
 /* Ícono del menú hamburguesa */
 .menu_toggle {
     display: none;
@@ -116,6 +147,7 @@ header a:hover {
     
     header .icons {
         position: absolute;
+        display: flex;
         top: 365px;
         bottom: 10px; /* Coloca los iconos en la parte inferior */
         width: 100%; /* Ocupar todo el ancho */

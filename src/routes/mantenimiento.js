@@ -9,7 +9,8 @@ Router.get('/mantenimiento', (req, res) =>{
         const contador= objeto[0].objeto
         res.render('mantenimiento', {
             usuario: usuario,
-            objeto: contador
+            objeto: contador, 
+            currentPages: 'inicio'
         })
     })
     })  
