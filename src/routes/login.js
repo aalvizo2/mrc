@@ -210,9 +210,7 @@ Router.post('/producto', async(req, res) =>{
 
 //cargamos toda la informacion de servicio-admin 
 Router.get('/servicio-admin', (req, res) =>{
-   if(req.session.name){
-     res.redirect('/login')
-   }else{
+
      const admin= req.session.name
      connection.query('SELECT * FROM mantenimiento',  (err, Data) => {
        if(err) throw err 
@@ -223,7 +221,7 @@ Router.get('/servicio-admin', (req, res) =>{
           Data: Data
        })
      })
-   }
+   
 })
 
 var usuario= session.user

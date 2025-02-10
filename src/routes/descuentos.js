@@ -53,6 +53,7 @@ Router.post('/insertar_oferta', (req, res)=>{
     const {img_product, nombre_prod, descripcion, precio, precio_publico}= req.body
     console.log(img_product, nombre_prod, descripcion, precio, precio_publico)
     connection.query('INSERT INTO descuentos (img_product, nombre_prod, descripcion, precio, precio_publico) VALUES (?,?,?,?,?)', [img_product, nombre_prod, descripcion, precio, precio_publico], (err)=>{
+        if(err) throw err
         console.log('Datos insertados correctamente en descuentos')
     })
     connection.query('UPDATE producto SET precio_publico=? WHERE nombre_prod=?', [precio_publico,  nombre_prod], (err)=>{

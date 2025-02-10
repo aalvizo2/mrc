@@ -100,38 +100,19 @@ header a.activo::after {
 
 /* Media Query para pantallas menores a 1000px */
 @media screen and (max-width: 1100px) {
-    header{
+    header {
         justify-content: space-between;
     }
+
     .menu_toggle {
         display: block;
     }
-    header img{
+
+    header img {
         height: 3%;
     }
 
-    /*header ul {
-        position: absolute;
-        top: 100px;
-        left: 0;
-        width: 100%;
-        height: fit-content;
-        background-color: #8E0A05 !important;
-        flex-direction: column;
-        align-items: center;
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(-20px);
-        transition: all 0.4s ease-in-out;
-        z-index: 999;
-    }*/
-
-    
-
-
-    
-
-    header .center-links, .icons{
+    header .center-links {
         position: absolute;
         top: 90px;
         left: 0;
@@ -146,28 +127,33 @@ header a.activo::after {
         transition: all 0.4s ease-in-out;
         z-index: 999;
     }
-    
+
     header .icons {
         position: absolute;
-        display: flex;
-        top: 365px;
+        
+        display: flex; /* Asegúrate de que este sea el display principal */
+        justify-content: center; /* Centra los iconos horizontalmente */
+        align-items: center; /* Centra los iconos verticalmente */
+        top: 370px; 
+        right: 0px;
+        background-color: #8E0A05;;
         bottom: 10px; /* Coloca los iconos en la parte inferior */
-        width: 100%; /* Ocupar todo el ancho */
-        text-align: center; /* Centrar los íconos */
-        border-top: 1px solid #ccc;
+        width: 100%; /* Asegúrate de ocupar todo el ancho */
+        text-align: center; /* Centra el texto o los íconos */
+        border-top: 1px solid #ccc; /* Línea divisoria */
+        opacity: 0; /* Oculta inicialmente */
+        visibility: hidden; /* Oculta inicialmente */
+        transform: translateY(-20px); /* Efecto de entrada */
+        transition: all 0.4s ease-in-out; /* Animación */
+        z-index: 999; /* Encima de otros elementos */
     }
 
-
+    /* Mostrar cuando esté activo */
     .center-links.active, .icons.active {
         opacity: 1;
         visibility: visible;
         transform: translateY(0);
     }
-    
-
-    /*header ul.active {
-        
-    }*/
 
     header li {
         width: 100%;
