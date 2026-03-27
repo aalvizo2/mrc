@@ -63,7 +63,7 @@ Router.get('/mensaje_admin', (req, res) => {
     }
 })
 
-Router.get('/conversacion', (req, res) => {
+Router.get('/console.log', (req, res) => {
     const admin= req.session.name
     
     if(!admin){
@@ -79,7 +79,7 @@ Router.get('/conversacion', (req, res) => {
     `
     connection.query(query, [nombre, admin, admin, nombre], (err, datos) =>{
         if(err) throw err
-        res.render('conversacion', {
+        res.render('console.log', {
             datos: datos,
             admin: admin,
             login: true,

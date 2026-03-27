@@ -7,8 +7,8 @@ const mysql = require('mysql')
 const session = require('express-session')
 const cookie = require('cookie-parser')
 const engine = require('ejs-mate')
-const socketIo= require('socket.io')
-const http= require('http')
+const { Server } = require('socket.io')
+const http = require('http')
 
 // Importar las rutas
 const route = require('./routes/routes')
@@ -29,10 +29,18 @@ const ventas = require('./routes/ventas')
 const refacciones = require('./routes/refacciones')
 const mantenimiento = require('./routes/mantenimiento')
 const marcas = require('./routes/marcas')
-const ventaCliente= require('./routes/venta_cliente')
-const message= require('./routes/message')
+const ventaCliente = require('./routes/venta_cliente')
+const message = require('./routes/message')
+const chatTest = require('./routes/chat')
+const addMensaje = require('./routes/chatStore')
+const connection = require('./routes/db')
+const { isToday } = require('date-fns')
+const { read } = require('fs')
 
 const app = express()
+
+
+
 
 // Configuración del motor de plantillas
 app.engine('ejs', engine)
@@ -50,8 +58,8 @@ app.use(session({
     saveUninitialized: true
 }))
 
-const server= http.createServer(app)
-const io= socketIo(server)
+const server = http.createServer(app)
+const io = new Server(server)
 
 
 // Archivos estáticos
@@ -79,31 +87,15 @@ app.use('/', mantenimiento)
 app.use('/', marcas)
 app.use('/', ventaCliente)
 app.use('/', message)
-
-//configuramos el evento de conexion para el chat 
-io.on('connection', (socket) => {
-    console.log('Usuario conectado al chat')
-
-    //Escucha el mensaje enviado por un cliente 
-    socket.on('sendMessage', (data) => {
-        console.log(`Mensaje recibido: ${data.mensaje} de ${data.remitente}`)
-        io.emit('sendMessage', data)
-    })
-
-    socket.on('disconnect', () => {
-        console.log('Usuario desconectado')
-    })
+app.use('/', chatTest)
 
 
-
-
-})
 
 
 
 // Iniciar el servidor
 const PORT = process.env.PORT || 3000
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Servidor en ejecución en el puerto ${PORT}`)
 })
 
@@ -117,3 +109,96 @@ app.use((err, req, res, next) => {
     console.error(err.stack)
     res.status(500).send('Algo salió mal')
 })
+
+
+const sessionMiddleware = session({
+    secret: process.env.SECRET_KEY,
+    resave: false,
+    saveUninitialized: false
+});
+app.use(sessionMiddleware);
+
+//Conectar sesion en el socket
+io.use((socket, next) => {
+    sessionMiddleware(socket.request, {}, next)
+})
+
+
+//Creamos el endpoint del chat
+io.on('connection', (socket) => {
+
+
+    console.log('socket conectado');
+
+    socket.on('mensaje', (msg) => {
+
+        console.log('mensaje recibido:', msg);
+
+        // SIEMPRE GUARDAR
+        const sql = `
+            INSERT INTO mensajes (usuario, mensaje, tipo)
+            VALUES (?, ?, ?)
+        `;
+
+        // si viene usuario → es cliente
+        const esAdmin = msg.tipo === 'admin';
+
+        const tipo = esAdmin ? 'admin' : 'usuario';
+
+        connection.query(sql, [msg.usuario, msg.texto, tipo], (err, result) => {
+
+            if (err) {
+                console.error('ERROR DB:', err);
+                return;
+            }
+
+            const data = {
+                id: result.insertId,
+                usuario: msg.usuario,
+                texto: msg.texto,
+                tipo,
+                hora: new Date().toLocaleTimeString()
+            };
+
+            console.log('GUARDADO Y EMITIENDO:', data);
+
+            // ENVIAR A TODOS (para probar)
+            io.emit('mensaje', data);
+        });
+    });
+
+    //Historial de conversaciones
+    socket.on('historial', (data) =>{
+        let sql
+        let params=[]
+
+        console.log('datos del socket', data)
+
+        if(data.tipo === 'admin'){
+         sql= `SELECT * FROM mensajes ORDER BY id ASC`;
+        }else{
+          sql=`SELECT * FROM mensajes WHERE usuario=? ORDER BY id ASC`;
+          params= [data.usuario]
+        }
+
+        //Realizamos la consulta a la base de datos 
+        connection.query(sql, params, (err, results) =>{
+            if(err){
+                console.error(err)
+                return
+            }
+
+            const data= results.map(row=>({
+                id: row.id,
+                usuario: row.usuario,
+                texto: row.mensaje,
+                tipo: row.tipo,
+                hora:row.fecha.toLocaleTimeString()
+            }))
+            socket.emit('historial', data)
+        })
+        
+    })
+
+
+});

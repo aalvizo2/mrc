@@ -6,11 +6,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" integrity="sha384-b6lVK+yci+bfDmaY1u0zE8YYJt0TZxLEAFyYSLHId4xoVvsrQu3INevFKo+Xir8e" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css"
+        integrity="sha384-b6lVK+yci+bfDmaY1u0zE8YYJt0TZxLEAFyYSLHId4xoVvsrQu3INevFKo+Xir8e" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/navbar.css">
     <link rel="stylesheet" href="css/footer.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
     <title>Carrito de Compras</title>
@@ -67,98 +69,89 @@
 </head>
 
 <body>
-    
+
     <%-include('./components/cartHeader') %>
-    <div class="top"></div>
-    <div class="container mt-5">
-        <form id="mensajeForm" action="/sendMessage" method="post">
-            <h2 class="text-center mb-4" >Enviar Mensaje</h2>
-            <div class="mb-3">
-                <label for="nombre" class="form-label">Nombre de Usuario</label>
-                <input type="text" class="form-control" id="nombre" name="nombre" value="<%= usuario %>" disabled>
-                
-            </div>
-            <div class="mb-3">
-                <label for="mensaje" class="form-label">Mensaje</label>
-                <textarea class="form-control" id="mensaje" name="mensaje" rows="3" required></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary w-100" style="background-color: #8E0A05; border: none;">Enviar Mensaje</button>
-        </form>
+        <div class="top"></div>
+        <div class="container mt-5">
+            <form id="mensajeForm" action="/sendMessage" method="post">
+                <h2 class="text-center mb-4">Enviar Mensaje</h2>
+                <div class="mb-3">
+                    <label for="nombre" class="form-label">Nombre de Usuario</label>
+                    <input type="text" class="form-control" id="nombre" name="nombre" value="<%= usuario %>" disabled>
 
-        <!-- Spinner de carga -->
-        <div id="spinner" class="spinner-border text-primary d-none" role="status">
-            <span class="visually-hidden">Cargando...</span>
+                </div>
+                <div class="mb-3">
+                    <label for="mensaje" class="form-label">Mensaje</label>
+                    <textarea class="form-control" id="mensaje" name="mensaje" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary w-100"
+                    style="background-color: #8E0A05; border: none;">Enviar Mensaje</button>
+            </form>
+
+            <!-- Spinner de carga -->
+            <div id="spinner" class="spinner-border text-primary d-none" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+
+            <!-- Mensajes enviados -->
+            <div id="mensajesEnviados" class="mt-4">
+                <h3 class="text-center">Mensajes Enviados</h3>
+                <ul id="listaMensajes" class="list-group">
+                    <% datos.forEach((dato)=> { %>
+                        <li class="list-group-item mb-2 p-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0 text-primary" style="color: #8E0A05; border: none;"><strong>
+                                        <%= dato.nombre %>
+                                    </strong></h5>
+                                <span class="text-muted" style="font-size: 0.9em;">
+                                    <%= dato.fecha %>
+                                </span>
+                            </div>
+                            <p class="mt-2 mb-0" style="font-size: 1.1em;">
+                                <%= dato.mensaje %>
+                            </p>
+                        </li>
+                        <% }) %>
+                </ul>
+            </div>
         </div>
 
-        <!-- Mensajes enviados -->
-        <div id="mensajesEnviados" class="mt-4">
-            <h3 class="text-center">Mensajes Enviados</h3>
-            <ul id="listaMensajes" class="list-group">
-                <% datos.forEach((dato) => { %>
-                    <li class="list-group-item mb-2 p-3">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0 text-primary" style="color: #8E0A05; border: none;"><strong><%= dato.nombre %></strong></h5>
-                            <span class="text-muted" style="font-size: 0.9em;"><%= dato.fecha %></span>
-                        </div>
-                        <p class="mt-2 mb-0" style="font-size: 1.1em;"><%= dato.mensaje %></p>
-                    </li>
-                <% }) %>
-            </ul>
-        </div>
-    </div>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            const socket = io();
 
-    <script>
-        const mensajeForm = document.getElementById('mensajeForm');
-        const listaMensajes = document.getElementById('listaMensajes');
-        const spinner = document.getElementById('spinner');
+            const usuario = "<%= usuario %>";
+            socket.emit('join', { usuario, esAdmin: false }); // Cliente no es admin
 
-        mensajeForm.addEventListener('submit', async (event) => {
-            event.preventDefault();
-            spinner.classList.remove('d-none'); // Mostrar spinner
+            const mensajeForm = document.getElementById('mensajeForm');
+            const listaMensajes = document.getElementById('listaMensajes');
 
-            const nombre = document.getElementById('nombre').value;
-            const mensaje = document.getElementById('mensaje').value;
-            const fecha = new Date().toLocaleDateString('es-ES', {
-                   weekday: 'long', 
-                   year: 'numeric', 
-                   month: 'long', 
-                   day: 'numeric'
-            }) + ' ' + new Date().toLocaleTimeString('es-ES', {
-                   hour: '2-digit', 
-                   minute: '2-digit', 
-                   second: '2-digit'
+            mensajeForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const mensaje = document.getElementById('mensaje').value;
+                const fecha = new Date().toLocaleString('es-ES', { dateStyle: 'long', timeStyle: 'medium' });
+
+                socket.emit('sendMessage', { mensaje, fecha });
+                document.getElementById('mensaje').value = '';
             });
 
-            console.log(fecha);
+            // Escuchar mensajes entrantes del admin
+            socket.on('newMessage', ({ remitente, mensaje, fecha }) => {
+                const li = document.createElement('li');
+                li.className = 'list-group-item mb-2 p-3';
+                li.innerHTML = `
+          <div class="d-flex justify-content-between align-items-center">
+              <h5 class="mb-0 text-primary"><strong>${remitente}</strong></h5>
+              <span class="text-muted" style="font-size: 0.9em;">${fecha}</span>
+          </div>
+          <p class="mt-2 mb-0" style="font-size: 1.1em;">${mensaje}</p>
+      `;
+                listaMensajes.appendChild(li);
+            });
+        </script>
+        </script>
+        <script src="script/responsive.js"></script>
 
-            try {
-                const response = await fetch('/sendMessage', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ nombre, mensaje, fecha }),
-                });
-
-                if (!response.ok) throw new Error('Error en la red');
-
-                const nuevoMensaje = document.createElement('li');
-                nuevoMensaje.className = 'list-group-item mb-2 p-3';
-                nuevoMensaje.innerHTML = `
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0 text-primary"><strong>${nombre}</strong></h5>
-                        <span class="text-muted" style="font-size: 0.9em;">${fecha}</span>
-                    </div>
-                    <p class="mt-2 mb-0" style="font-size: 1.1em;">${mensaje}</p>
-                `;
-                listaMensajes.appendChild(nuevoMensaje);
-                mensajeForm.reset(); // Limpiar formulario
-            } catch (error) {
-                alert('Error al enviar el mensaje');
-            } finally {
-                spinner.classList.add('d-none'); // Ocultar spinner
-            }
-        });
-    </script>
-    <script src="script/responsive.js"></script>
 </body>
 
 </html>

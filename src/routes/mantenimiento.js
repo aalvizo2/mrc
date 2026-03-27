@@ -13,7 +13,7 @@ Router.get('/mantenimiento', (req, res) =>{
             currentPages: 'inicio'
         })
     })
-    })  
+})  
     
 
 Router.post('/enviarDatos', (req, res) => {

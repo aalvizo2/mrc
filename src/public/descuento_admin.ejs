@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <link rel="shortcut icon" href="img/favicon.png" sizes="150x150" />
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" 
-          rel="stylesheet" 
-          integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" 
-          crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
 
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/navbar.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100&family=Quicksand&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100&family=Quicksand&display=swap"
+        rel="stylesheet">
+
     <title>Producto</title>
     <style>
         body {
@@ -73,6 +73,7 @@
                 width: 100%;
                 height: auto;
             }
+
             .content {
                 margin-left: 0;
             }
@@ -83,7 +84,8 @@
         }
 
         .card:hover {
-            transform: scale(1.05); /* Small zoom on hover */
+            transform: scale(1.05);
+            /* Small zoom on hover */
         }
 
         .card-img-top {
@@ -93,7 +95,8 @@
 
         @media (max-width: 576px) {
             .card-img-top {
-                height: 150px; /* Smaller images for mobile */
+                height: 150px;
+                /* Smaller images for mobile */
             }
         }
 
@@ -105,25 +108,9 @@
         }
     </style>
 </head>
+
 <body>
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="sidebar-logo">
-            <img src="img/logo.png" alt="Logo">
-        </div>
-        <a href="/inicio_admin" class="bi bi-house-door"> INICIO</a>
-        <a href="/producto_admin" class="bi bi-box"> PRODUCTOS</a>
-        <a href="/mensaje_admin" class="bi bi-chat-left-text"> MENSAJES</a>
-        <a href="/upload" class="bi bi-cloud-upload"> SUBIR PRODUCTO</a>
-        <a href="/ventas" class="bi bi-bar-chart"> VENTAS</a>
-        <a href="/descuento_admin">DESCUENTOS</a>
-        <a href="/servicio-admin">SERVICIOS</a>
-        
-        <% if (login) { %>
-            <a href="/mensaje_admin" class="bi bi-person-circle"> <%= admin %></a>
-        <% } %>
-        <a href="/logout" class="bi bi-box-arrow-right"> CERRAR SESIÓN</a>
-    </div>
+   <%-include('./components/navbarAdmin')%>
 
     <!-- Content -->
     <div class="content">
@@ -134,23 +121,27 @@
         </nav>
 
         <div class="container my-5">
-          <div class="lista">
-              <form action="/insertar" method="post" class="form-inline">
-                  <div class="form-group mb-3">
-                      <label for="producto" class="form-label fw-bold me-3">Selecciona un producto:</label>
-                      <select name="producto" id="producto" class="form-select form-select-lg w-auto" style="border: 2px solid #343a40; border-radius: 10px; padding: 0.5em;">
-                          <% for(i = 0; i < producto.length; i++) { %>
-                              <option value="<%= producto[i].nombre_prod %>"><%= producto[i].nombre_prod %></option>
-                          <% } %>
-                      </select>
-                  </div>
-                  <button type="submit" class="btn btn-danger btn-lg ms-3">Enviar</button>
-              </form>
-          </div>
-      </div>
-      
-       
+            <div class="lista">
+                <form action="/insertar" method="post" class="form-inline">
+                    <div class="form-group mb-3">
+                        <label for="producto" class="form-label fw-bold me-3">Selecciona un producto:</label>
+                        <select name="producto" id="producto" class="form-select form-select-lg w-auto"
+                            style="border: 2px solid #343a40; border-radius: 10px; padding: 0.5em;">
+                            <% for(i=0; i < producto.length; i++) { %>
+                                <option value="<%= producto[i].nombre_prod %>">
+                                    <%= producto[i].nombre_prod %>
+                                </option>
+                                <% } %>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-danger btn-lg ms-3">Enviar</button>
+                </form>
+            </div>
+        </div>
+
+
     </div>
-<script src="script/descuento.js"></script>
+    <script src="script/descuento.js"></script>
 </body>
+
 </html>
