@@ -10,10 +10,10 @@ const engine = require('ejs-mate')
 const { Server } = require('socket.io')
 const http = require('http')
 
-// Importar las rutas
+
+// Rutas
 const route = require('./routes/routes')
 const login = require('./routes/login')
-const upload = require('./routes/upload')
 const registro = require('./routes/registro')
 const uploads = require('./uploads')
 const producto_ventas = require('./routes/producto_ventas')
@@ -32,37 +32,37 @@ const marcas = require('./routes/marcas')
 const ventaCliente = require('./routes/venta_cliente')
 const message = require('./routes/message')
 const chatTest = require('./routes/chat')
-const addMensaje = require('./routes/chatStore')
+const inventario = require('./routes/inventario')
+
 const connection = require('./routes/db')
-const { isToday } = require('date-fns')
-const { read } = require('fs')
 
 const app = express()
 
-
-
-
-// Configuración del motor de plantillas
+// EJS
 app.engine('ejs', engine)
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'public'))
 
-// Middleware
+// Middlewares base
 app.use(morgan('dev'))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cookie())
-app.use(session({
+
+// Session única
+const sessionMiddleware = session({
     secret: process.env.SECRET_KEY,
-    resave: true,
-    saveUninitialized: true
-}))
+    resave: false,
+    saveUninitialized: false
+})
 
-const server = http.createServer(app)
-const io = new Server(server)
+app.use(sessionMiddleware)
 
 
-// Archivos estáticos
+
+
+
+// Static files
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.static(path.join(__dirname, 'routes')))
 
@@ -71,7 +71,6 @@ app.use('/', route)
 app.use('/', login)
 app.use('/', accesorios)
 app.use('/', registro)
-app.use('/', upload)
 app.use('/', uploads)
 app.use('/', producto_ventas)
 app.use('/', carrito)
@@ -88,68 +87,37 @@ app.use('/', marcas)
 app.use('/', ventaCliente)
 app.use('/', message)
 app.use('/', chatTest)
+app.use('/', inventario)
 
+// Server HTTP + Socket
+const server = http.createServer(app)
+const io = new Server(server)
 
-
-
-
-// Iniciar el servidor
-const PORT = process.env.PORT || 3000
-server.listen(PORT, () => {
-    console.log(`Servidor en ejecución en el puerto ${PORT}`)
-})
-
-// Manejo de errores 404
-app.use((req, res, next) => {
-    res.status(404).send('Página no encontrada')
-})
-
-// Manejo de errores generales
-app.use((err, req, res, next) => {
-    console.error(err.stack)
-    res.status(500).send('Algo salió mal')
-})
-
-
-const sessionMiddleware = session({
-    secret: process.env.SECRET_KEY,
-    resave: false,
-    saveUninitialized: false
-});
-app.use(sessionMiddleware);
-
-//Conectar sesion en el socket
+// Socket session share
 io.use((socket, next) => {
     sessionMiddleware(socket.request, {}, next)
 })
 
+// SOCKET CHAT
+io.on('connection', socket => {
 
-//Creamos el endpoint del chat
-io.on('connection', (socket) => {
+    console.log('socket conectado')
 
+    socket.on('mensaje', msg => {
 
-    console.log('socket conectado');
+        const esAdmin = msg.tipo === 'admin'
+        const tipo = esAdmin ? 'admin' : 'usuario'
 
-    socket.on('mensaje', (msg) => {
-
-        console.log('mensaje recibido:', msg);
-
-        // SIEMPRE GUARDAR
         const sql = `
             INSERT INTO mensajes (usuario, mensaje, tipo)
             VALUES (?, ?, ?)
-        `;
-
-        // si viene usuario → es cliente
-        const esAdmin = msg.tipo === 'admin';
-
-        const tipo = esAdmin ? 'admin' : 'usuario';
+        `
 
         connection.query(sql, [msg.usuario, msg.texto, tipo], (err, result) => {
 
             if (err) {
-                console.error('ERROR DB:', err);
-                return;
+                console.error('ERROR DB', err)
+                return
             }
 
             const data = {
@@ -158,47 +126,57 @@ io.on('connection', (socket) => {
                 texto: msg.texto,
                 tipo,
                 hora: new Date().toLocaleTimeString()
-            };
+            }
 
-            console.log('GUARDADO Y EMITIENDO:', data);
+            io.emit('mensaje', data)
+        })
+    })
 
-            // ENVIAR A TODOS (para probar)
-            io.emit('mensaje', data);
-        });
-    });
+    socket.on('historial', data => {
 
-    //Historial de conversaciones
-    socket.on('historial', (data) =>{
         let sql
-        let params=[]
+        let params = []
 
-        console.log('datos del socket', data)
-
-        if(data.tipo === 'admin'){
-         sql= `SELECT * FROM mensajes ORDER BY id ASC`;
-        }else{
-          sql=`SELECT * FROM mensajes WHERE usuario=? ORDER BY id ASC`;
-          params= [data.usuario]
+        if (data.tipo === 'admin') {
+            sql = `SELECT * FROM mensajes ORDER BY id ASC`
+        } else {
+            sql = `SELECT * FROM mensajes WHERE usuario=? ORDER BY id ASC`
+            params = [data.usuario]
         }
 
-        //Realizamos la consulta a la base de datos 
-        connection.query(sql, params, (err, results) =>{
-            if(err){
+        connection.query(sql, params, (err, results) => {
+
+            if (err) {
                 console.error(err)
                 return
             }
 
-            const data= results.map(row=>({
+            const mensajes = results.map(row => ({
                 id: row.id,
                 usuario: row.usuario,
                 texto: row.mensaje,
                 tipo: row.tipo,
-                hora:row.fecha.toLocaleTimeString()
+                hora: new Date(row.fecha).toLocaleTimeString()
             }))
-            socket.emit('historial', data)
+
+            socket.emit('historial', mensajes)
         })
-        
     })
+})
 
+// Error 404
+app.use((req, res) => {
+    res.status(404).send('Página no encontrada')
+})
 
-});
+// Error 500
+app.use((err, req, res, next) => {
+    console.error(err.stack)
+    res.status(500).send('Algo salió mal')
+})
+
+// Start server
+const PORT = process.env.PORT || 3000
+server.listen(PORT, () => {
+    console.log(`Servidor en ejecución en puerto ${PORT}`)
+})

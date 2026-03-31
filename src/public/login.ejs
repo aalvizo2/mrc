@@ -57,106 +57,103 @@
 
     <%-include ('./components/loginHeader') %>
 
-    <div class="top"></div>
-    <div class="form-login-container">
-        <h3 class="text-center">Inicia Sesión</h3>
-        <form id="login-form" action="/auth" method="post">
-            <div class="mb-3">
-                <label for="usuario" class="form-label">Usuario</label>
-                <input type="text" class="form-control" id="usuario" name="usuario" placeholder="Usuario" required>
-            </div>
-            <div class="mb-3">
-                <label for="pass" class="form-label">Contraseña</label>
-                <div class="input-group">
-                    <input type="password" class="form-control" id="pass" name="pass" placeholder="Contraseña" required>
-                    <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility()">
-                        <i class="bi bi-eye-slash" id="togglePassIcon"></i>
+        <div class="top"></div>
+        <div class="form-login-container">
+            <h3 class="text-center">Inicia Sesión</h3>
+            <form id="login-form" action="/auth" method="post">
+                <div class="mb-3">
+                    <label for="usuario" class="form-label">Usuario</label>
+                    <input type="text" class="form-control" id="usuario" name="usuario" placeholder="Usuario" required>
+                </div>
+                <div class="mb-3">
+                    <label for="pass" class="form-label">Contraseña</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="pass" name="pass" placeholder="Contraseña"
+                            required>
+                        <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility()">
+                            <i class="bi bi-eye-slash" id="togglePassIcon"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="d-grid">
+                    <button type="submit" id="submit-btn" class="btn btn-custom-red">
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        Iniciar Sesión
                     </button>
                 </div>
+            </form>
+            <div id="error-message" class="error-message text-center"></div>
+            <div class="text-center mt-3">
+                <a href="registro">¿No tienes cuenta? Regístrate aquí</a>
             </div>
-            <div class="d-grid">
-                <button type="submit" id="submit-btn" class="btn btn-custom-red">
-                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                    Iniciar Sesión
-                </button>
-            </div>
-        </form>
-        <div id="error-message" class="error-message text-center"></div>
-        <div class="text-center mt-3">
-            <a href="registro">¿No tienes cuenta? Regístrate aquí</a>
         </div>
-    </div>
-    
 
-    <script>
+
+        <script>
             document.getElementById('login-form').addEventListener('submit', function (e) {
-        e.preventDefault(); // Prevenir envío tradicional
+                e.preventDefault()
 
-        const submitBtn = document.getElementById('submit-btn');
-        const spinner = submitBtn.querySelector('.spinner-border');
-        const errorMessage = document.getElementById('error-message'); // Obtener referencia del error
+                const submitBtn = document.getElementById('submit-btn')
+                const spinner = submitBtn.querySelector('.spinner-border')
+                const errorMessage = document.getElementById('error-message')
 
-        // Limpiar mensaje de error previo
-        errorMessage.textContent = ''; 
+                errorMessage.textContent = ''
 
-        // Mostrar spinner y desactivar botón
-        submitBtn.disabled = true;
-        spinner.style.display = 'inline-block';
+                submitBtn.disabled = true
+                spinner.style.display = 'inline-block'
 
-        // Obtener los datos del formulario
-        const formData = new FormData(this);
-        const usuario = formData.get('usuario');
-        const pass = formData.get('pass');
+                const usuario = document.getElementById('usuario').value
+                const pass = document.getElementById('pass').value
 
-        // Realizar la petición con fetch
-        fetch('/auth', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => {
-            console.log('respuesta de la Api', response)
-            if(response.status === 401){
+                fetch('/auth', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        usuario,
+                        pass
+                    })
+                })
+                    .then(async (response) => {
 
-                throw new Errror('Error de autenticación');
-            }else if(response.status === 200){
-                window.location.href = '/';
-            }if(usuario === 'mrc'){
-                window.location.href= '/inicio_admin'
+                        const text = await response.text()
+
+                        if (!response.ok) {
+                            throw new Error(text)
+                        }
+
+                        window.location.href = response.url
+                    })
+                    .catch(error => {
+                        errorMessage.textContent = 'Credenciales incorrectas' ;
+                    })
+                    .finally(() => {
+                        submitBtn.disabled = false
+                        spinner.style.display = 'none'
+                    })
+            })
+        </script>
+        <script>
+            function togglePasswordVisibility() {
+                const passwordInput = document.getElementById('pass');
+                const icon = document.getElementById('togglePassIcon');
+
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    icon.classList.remove('bi-eye-slash');
+                    icon.classList.add('bi-eye');
+                } else {
+                    passwordInput.type = 'password';
+                    icon.classList.remove('bi-eye');
+                    icon.classList.add('bi-eye-slash');
+                }
             }
-        })
-        .catch(error => {
-            // Mostrar mensaje de error
-            errorMessage.textContent = 'Error de autenticación';
-        })
-        .finally(() => {
-            // Reactivar botón y ocultar spinner
-            submitBtn.disabled = false;
-            spinner.style.display = 'none';
-        });
-    });
-
-
-    //password display 
-    function togglePasswordVisibility() {
-    const passwordInput = document.getElementById('pass');
-    const toggleIcon = document.getElementById('togglePassIcon');
-
-    // Alternar el tipo del input entre 'password' y 'text'
-    if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        toggleIcon.classList.remove('bi-eye-slash'); // Cambia el ícono
-        toggleIcon.classList.add('bi-eye'); // Muestra el ícono de "ojo"
-    } else {
-        passwordInput.type = 'password';
-        toggleIcon.classList.remove('bi-eye'); // Cambia el ícono
-        toggleIcon.classList.add('bi-eye-slash'); // Vuelve al ícono de "ojo con línea"
-    }
-}
-
-    </script>
-    <script src="script/responsive.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
+        </script>
+        <script src="script/responsive.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N"
+            crossorigin="anonymous"></script>
 </body>
 
 </html>

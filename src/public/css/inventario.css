@@ -1,0 +1,160 @@
+/* =========================
+   CONTENEDOR GENERAL
+========================= */
+.container-custom {
+    margin-left: 260px;
+    padding: 30px;
+}
+
+/* =========================
+   HEADER EN COLUMNA (SIN FLEX)
+========================= */
+.inventario-header {
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* TÍTULO EN BLOQUE */
+.inventario-title {
+    display: block;
+    font-size: 32px;
+    font-weight: 800;
+    color: #111827;
+    margin-bottom: 15px;
+}
+
+/* BOTÓN ABAJO DEL TÍTULO */
+.inventario-actions {
+    display: block;
+}
+
+/* =========================
+   BOTÓN EXCEL
+========================= */
+.progress-btn {
+    display: inline-block;
+    position: relative;
+
+    background: #1D6F42;
+    color: white;
+    border: none;
+
+    padding: 12px 18px;
+    border-radius: 12px;
+
+    font-weight: 600;
+    cursor: pointer;
+
+    box-shadow: 0 10px 25px rgba(34, 197, 94, 0.25);
+    transition: all 0.25s ease;
+}
+
+.progress-btn:hover {
+    transform: translateY(-2px);
+}
+
+.progress-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0%;
+    background: rgba(255,255,255,0.25);
+}
+
+/* =========================
+   TABLA SEPARADA
+========================= */
+.table-wrapper {
+    background: white;
+    border-radius: 18px;
+    padding: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+}
+
+/* =========================
+   TABLA ESTILO PRO
+========================= */
+thead {
+    background: #111827;
+}
+
+thead th {
+    color: white !important;
+    font-size: 13px;
+    text-transform: uppercase;
+    padding: 14px;
+}
+
+tbody td {
+    padding: 14px;
+    font-size: 14px;
+    color: #374151;
+}
+
+tbody tr:hover {
+    background: #f9fafb;
+}
+
+/* =========================
+   BADGE
+========================= */
+.badge-descuento {
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* =========================
+   ACCIONES
+========================= */
+.acciones i {
+    cursor: pointer;
+    margin: 0 5px;
+    padding: 6px;
+    border-radius: 8px;
+    transition: 0.2s;
+}
+
+.acciones i:hover {
+    background: #f3f4f6;
+    transform: scale(1.15);
+}
+
+
+
+
+.confirm-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.confirm-modal.hidden {
+    display: none;
+}
+
+.confirm-box {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    min-width: 300px;
+}
+
+.confirm-actions {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-around;
+}

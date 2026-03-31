@@ -1,25 +1,22 @@
 const express = require('express')
 const Router = express.Router()
 const mysql = require('mysql')
-const multer = require('multer')
 const connection = require('./db')
 const Swal = require('sweetalert2')
-var ruta = '../uploads/'
 const Minio = require('minio')
-const bcrypt= require('bcrypt')
-
-const fileUpload = require('express-fileupload')
-Router.use(express.urlencoded({ extended: true }))
-Router.use(express.json())
+const bcrypt = require('bcrypt')
 const session = require('express-session')
 const path = require('path')
+//const fileUpload= require('express-fileupload')
+Router.use(express.urlencoded({ extended: true }))
+Router.use(express.json())
+
 Router.use(session({
   secret: 'secret',
   resave: true,
   saveUninitialized: true
 }))
-
-Router.use(fileUpload())
+//Router.use(fileUpload())
 Router.use(express('public'))
 Router.use(express('upload'))
 
@@ -29,134 +26,149 @@ Router.get('/login', (req, res) => {
 })
 
 Router.post('/auth', async (req, res) => {
+
   const user = req.body.usuario
   const pass = req.body.pass
+  console.log('datos que se envian', req.body)
 
-  // Primera consulta para 'administrador'
-  connection.query("SELECT * FROM administrador WHERE admin=? AND pass=?", [user, pass], (err, data) => {
-    if (err) {
-      console.error('Error en la consulta de administrador:', err)
-      return res.status(500).send('Error interno del servidor')
-    }
+  connection.query(
+    "SELECT * FROM administrador WHERE admin=? AND pass=?",
+    [user, pass],
+    (err, data) => {
 
-    if (data.length > 0) {
-      req.session.admin = true
-      req.session.name = user
-      return res.redirect('inicio_admin')
-    }
-
-    connection.query("SELECT * FROM usuario WHERE usuario=?", [user], async (err, data) => {
       if (err) {
-        console.error('Error en la consulta de usuario:', err);
-        return res.status(500).send('Error interno del servidor');
+        console.error(err)
+        return res.status(500).send('Error interno')
       }
 
-      if (data.length === 0) {
-        return res.status(401).send({ message: 'Usuario no encontrado' });
+      if (data.length > 0) {
+        req.session.admin = true
+        req.session.name = user
+        return res.redirect('inicio_admin')
       }
 
-      const usuarioDB = data[0];
+      connection.query(
+        "SELECT * FROM usuario WHERE usuario=?",
+        [user],
+        async (err, data) => {
 
-      // Comparar la contraseña con bcrypt
-      const isMatch = await bcrypt.compare(pass, usuarioDB.pass);
+          if (err) return res.status(500).send('Error interno')
 
-      if (!isMatch) {
-        return res.status(401).send({ message: 'Contraseña incorrecta' });
-      }
+          if (data.length === 0) {
+            return res.status(401).send({ message: 'Usuario no encontrado' })
+          }
 
-      // Si coincide, iniciar sesión
-      req.session.user = true;
-      req.session.usuario = user;
-      return res.status(200).redirect('/');
-    });
+          const usuarioDB = data[0]
+
+          const isMatch = await bcrypt.compare(pass, usuarioDB.pass)
+
+          if (!isMatch) {
+            return res.status(401).send({ message: 'Contraseña incorrecta' })
+          }
+
+          req.session.user = true
+          req.session.usuario = user
+          return res.redirect('/')
+        }
+      )
+    }
+  )
+})
+
+Router.get('/inicio_admin', (req, res) => {
+
+  if (!req.session.admin) {
+    return res.redirect('/login')
+  }
+
+  const admin = req.session.name
+
+  connection.query('SELECT COUNT(*) AS totalProductos FROM producto', (err, results) => {
+
+    if (err) return res.status(500).send('Error')
+
+    const totalProductos = results[0].totalProductos
+
+    connection.query('SELECT SUM(total) AS total_ventas FROM ventas', (err, resultado) => {
+
+      if (err) return res.status(500).send('Error')
+
+      const totalVentas = resultado[0].total_ventas
+
+      connection.query(
+        'SELECT COUNT(*) AS pedidos_pendientes FROM ventas WHERE estatus=?',
+        ['Preparando pedido'],
+        (err, resultado) => {
+
+          if (err) return res.status(500).send('Error')
+
+          const pedidosPendientes = resultado[0].pedidos_pendientes
+
+          connection.query(
+            'SELECT COUNT(usuario) AS suma_usuario FROM usuario',
+            (err, resultado) => {
+
+              if (err) throw err
+
+              const sumaUsuarios = resultado[0].suma_usuario
+
+              connection.query(
+                'SELECT * FROM ventas WHERE estatus!=? OR estatus=?',
+                ['Entregado', null],
+                (err, Data) => {
+
+                  if (err) throw err
+
+                  res.render('inicio_admin', {
+                    login: true,
+                    admin,
+                    totalProductos,
+                    totalVentas,
+                    pedidosPendientes,
+                    sumaUsuarios,
+                    Data
+                  })
+                }
+              )
+            }
+          )
+        }
+      )
+    })
   })
 })
 
 
-Router.get('/inicio_admin', (req, res) => {
-  if (req.session.admin) {
-    const admin = req.session.name
-    connection.query('SELECT COUNT(*) AS totalProductos FROM producto', (err, results) => {
-      if (err) {
-        console.error('Error en la consulta:', err) // Manejo de errores
-        return res.status(500).send('Error interno del servidor')
-      }
-
-      const totalProductos = results[0].totalProductos
-
-
-      connection.query('SELECT SUM(total) AS total_ventas FROM ventas', (err, resultado) => {
-        if (err) {
-          console.error('Error en la consulta:', err) // Manejo de errores
-          return res.status(500).send('Error interno del servidor')
-        }
-
-        const totalVentas = resultado[0].total_ventas
-        connection.query('SELECT COUNT(*) AS pedidos_pendientes FROM ventas WHERE estatus=?', ['Preparando pedido'], (err, resultado) => {
-          if (err) {
-            console.error('Error en la consulta:', err) // Manejo de errores
-            return res.status(500).send('Error interno del servidor')
-          }
-
-          const pedidosPendientes = resultado[0].pedidos_pendientes // Asegúrate de acceder a pedidos_pendientes correctamente
-
-
-          connection.query('SELECT COUNT(usuario) AS suma_usuario FROM usuario', (err, resultado) => {
-            if (err) throw err
-            const sumaUsuarios = resultado[0].suma_usuario
-            connection.query('SELECT * FROM ventas WHERE estatus!=? OR estatus=?', ['Entregado', null], (err, Data) => {
-              console.log('data encontrada', Data)
-              if (err) throw err
-              console.log(Data)
-              res.render('inicio_admin', {
-                login: true,
-                admin: admin,
-                totalProductos: totalProductos,
-                totalVentas: totalVentas,
-                pedidosPendientes: pedidosPendientes,
-                sumaUsuarios: sumaUsuarios,
-                Data: Data
-              })
-            })
-
-          })
-
-
-        })
-      })
-    })
-  } else {
-    res.redirect('/login')
-  }
-})
-
-
-
+//Logout
 Router.get('/logout', (req, res) => {
   req.session.destroy()
   res.redirect('login')
 })
 
+//Home usuario
 Router.get('/', (req, res) => {
+
   if (req.session.user) {
+
     const usuario = req.session.usuario
+
     res.render('inicio_usuario', {
       login: true,
-      usuario: usuario,
+      usuario
     })
+
   } else {
     res.redirect('/login')
   }
 })
-
+//Minio configuracion 
 const minioClient = new Minio.Client({
   endPoint: 'g7l6.la1.idrivee2-91.com',
   port: 443,
   useSSL: true,
-  accessKey: 'Yll2kDG0a8R0OvLqqpDa',
-  secretKey: 'v4eaYdVa9NnrOibhLxEI21UQJV9oHSUEhiYJot5s'
+  accessKey: 'TU_ACCESS_KEY',
+  secretKey: 'TU_SECRET_KEY'
 })
-
 Router.get('/upload', (req, res) => {
   if (req.session.admin) {
     const admin = req.session.name
@@ -190,50 +202,57 @@ Router.get('/upload', (req, res) => {
   }
 })
 
-
+//Ingresamos los productos
 Router.post('/producto', async (req, res) => {
+
   if (!req.session.admin) return res.redirect('/login')
+
   const { nombre_prod, descripcion, precio, precio_publico, categoria, cantidad } = req.body
   const imagen = req.files.imagen
+
   const img_prod = imagen.name
 
-  console.log(categoria, nombre_prod, descripcion, precio, precio_publico, img_prod)
-
   try {
+
     await minioClient.putObject(
       'images',
       img_prod,
       imagen.data
     )
 
-    connection.query("INSERT INTO producto(img_product, nombre_prod, descripcion, precio, precio_publico, categoria, cantidad) VALUES(?,?,?,?,?, ?, ?)", [img_prod, nombre_prod, descripcion, precio, precio_publico, categoria, cantidad], (err) => {
-      res.redirect('/producto_admin')
-    })
+    connection.query(
+      "INSERT INTO producto(img_product, nombre_prod, descripcion, precio, precio_publico, categoria, cantidad) VALUES(?,?,?,?,?,?,?)",
+      [img_prod, nombre_prod, descripcion, precio, precio_publico, categoria, cantidad],
+      (err) => {
+        if (err) throw err
+        res.redirect('/producto_admin')
+      }
+    )
 
   } catch (error) {
-    console.error('Error al subir el archivo', error)
+    console.error(error)
   }
 })
 
-
-//cargamos toda la informacion de servicio-admin 
+//SErvicio admin
 Router.get('/servicio-admin', (req, res) => {
 
   const admin = req.session.name
+
   connection.query('SELECT * FROM mantenimiento', (err, Data) => {
+
     if (err) throw err
 
     res.render('servicio-admin', {
       login: true,
-      admin, admin,
-      Data: Data
+      admin,
+      Data
     })
   })
-
 })
 
-var usuario = session.user
-var admin = session.name
-module.exports = admin
-module.exports = usuario
+// var usuario = session.user
+// var admin = session.name
+// module.exports = admin
+// module.exports = usuario
 module.exports = Router

@@ -3,7 +3,7 @@ const Router= express.Router()
 const connection= require('./routes/db')
 require('./routes/login')
 const getImageUrl= require('./routes/getImageUrl')
-const minioClient= require('./routes/minioClient')
+
 
 
 
