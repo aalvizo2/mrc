@@ -1,26 +1,125 @@
-  <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="sidebar-logo">
-            <img src="img/logo.png" alt="Logo">
-        </div>
-        <a href="/inicio_admin" class="bi bi-house-door"> INICIO</a>
-        <a href="/producto_admin" class="bi bi-box"> PRODUCTOS</a>
-        <a href="/chat-test" class="bi bi-chat-left-text"> MENSAJES</a>
-        <a href="/upload" class="bi bi-cloud-upload"> SUBIR PRODUCTO</a>
-        <a href="/ventas" class="bi bi-bar-chart"> VENTAS</a>
-        <a href="/descuento_admin">
-            <i class="fas fa-tags"></i> DESCUENTOS
-        </a>
-        <a href="/servicio-admin">
-            <i class="fas fa-tools"></i> SERVICIOS
-        </a>
-        
-        <a href="/inventario"><i class="bi-list"></i>INVENTARIO</a>
+<div class="sidebar">
 
+    <div class="sidebar-logo">
+        <img src="img/logo.png" alt="Logo">
+    </div>
+
+    <!-- MENÚ PRINCIPAL -->
+    <a href="/inicio_admin"><i class="bi bi-house-door"></i> Inicio</a>
+    <a href="/producto_admin"><i class="bi bi-box"></i> Productos</a>
+    <a href="/inventario"><i class="bi bi-list"></i> Inventario</a>
+    <a href="/ventas"><i class="bi bi-bar-chart"></i> Ventas</a>
+    <a href="/ventasMostrador"><i class="bi bi-cash-coin"></i> Mostrador</a>
+
+    <!-- 💰 CAJA -->
+    <a href="/corteCaja"><i class="bi bi-cash-stack"></i> Corte de Caja</a>
+    <a href="/historial-cortes"><i class="bi bi-clock-history"></i> Historial Cortes</a>
+
+    <!-- OPERACIONES -->
+    <a href="/upload"><i class="bi bi-cloud-upload"></i> Subir Producto</a>
+    <a href="/descuento_admin"><i class="fas fa-tags"></i> Descuentos</a>
+    <a href="/servicio-admin"><i class="fas fa-tools"></i> Servicios</a>
+    <a href="/chat-test"><i class="bi bi-chat-left-text"></i> Mensajes</a>
+    <a href="javascript:void(0)" onclick="toggleNotificaciones()">
+        <i class="bi bi-bell"></i> Notificaciones
+        <span id="badgeNotif" class="badge bg-danger">0</span>
+    </a>
+
+    <div id="panelNotificaciones" class="panel-notif d-none">
+        <h6>Notificaciones</h6>
+        <div id="contenidoNotif"></div>
+    </div>
+    <!-- USUARIO -->
+    <div class="user-section">
         <% if (login) { %>
-            <a href="/chat-test" class="bi bi-person-circle">
+            <a href="/chat-test">
+                <i class="bi bi-person-circle"></i>
                 <%= admin %>
             </a>
             <% } %>
-                <a href="/logout" class="bi bi-box-arrow-right"> CERRAR SESIÓN</a>
+
+                <a href="/logout">
+                    <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+                </a>
     </div>
+
+</div>
+
+<div id="panelNotificaciones" class="panel-notif d-none">
+    <h6 class="p-2 border-bottom"> Notificaciones</h6>
+    <div id="contenidoNotif"></div>
+</div>
+
+
+<script>
+    let ultimaCantidad = 0 // 🔥 para detectar nuevas
+
+    function toggleNotificaciones() {
+        const panel = document.getElementById('panelNotificaciones')
+        panel.classList.toggle('d-none')
+    }
+
+    function cargarNotificaciones() {
+
+        Promise.all([
+            fetch('/stock-bajo').then(r => r.json()),
+            fetch('/chat').then(r => r.json()).catch(() => [])
+        ])
+            .then(([stock, chat]) => {
+
+                const cont = document.getElementById('contenidoNotif')
+                const badge = document.getElementById('badgeNotif')
+
+                cont.innerHTML = ''
+                let total = 0
+
+                // 🔴 STOCK
+                stock.forEach(p => {
+                    cont.innerHTML = `
+                <div class="notif-item text-danger">
+                    ⚠️ ${p.producto} (${p.cantidad})
+                </div>
+            ` + cont.innerHTML
+                    total++
+                })
+
+                // SOLO MENSAJES DE CLIENTES
+                const mensajesCliente = chat.filter(m => m.tipo === 'usuario')
+
+                mensajesCliente.slice(0, 5).forEach(m => {
+                    cont.innerHTML = `
+                <div class="notif-item">
+                    💬 ${m.usuario}: ${m.mensaje}
+                    <button onclick="responder('${m.usuario}')" class="view-btn">Ver</button>
+                </div>
+            ` + cont.innerHTML
+
+                    total++
+                })
+
+                // 🔔 BADGE
+                if (total > 0) {
+                    badge.innerText = total
+                    badge.style.display = 'inline-block'
+                } else {
+                    badge.style.display = 'none'
+                }
+
+                // 🔥 DETECTAR NUEVAS (opcional)
+                if (total > ultimaCantidad) {
+                    console.log('🔔 Nueva notificación')
+                }
+
+                ultimaCantidad = total
+            })
+    }
+
+    // 🔥 REDIRECCIÓN
+    function responder(usuario) {
+        window.location.href = `/chat-test?user=${usuario}`
+    }
+
+    // 🔥 AUTO CARGA
+    cargarNotificaciones()
+    setInterval(cargarNotificaciones, 5000)
+</script>

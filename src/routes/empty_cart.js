@@ -73,11 +73,19 @@ Router.post('/procesar-pago', async (req, res) => {
       }
     })
     // Aquí puedes realizar acciones adicionales después de que el pago sea exitoso
-    res.redirect('/')
+    res.redirect('/pago-exitoso')
   } catch (error) {
     res.status(500).send({ error: error.message });
   }
 });
+
+
+Router.get('/pago-exitoso', (req, res) => {
+  const usuario= req.session.usuario
+  if(!usuario) res.redirect('/cart')
+  res.render('pago-exitoso', {
+})
+})
 
 
 

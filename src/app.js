@@ -33,7 +33,9 @@ const ventaCliente = require('./routes/venta_cliente')
 const message = require('./routes/message')
 const chatTest = require('./routes/chat')
 const inventario = require('./routes/inventario')
-
+const ventasMostrador= require('./routes/ventasMostrador')
+const corteCaja= require('./routes/corteCaja')
+const notificaciones= require('./routes/notificaciones')
 const connection = require('./routes/db')
 
 const app = express()
@@ -88,6 +90,9 @@ app.use('/', ventaCliente)
 app.use('/', message)
 app.use('/', chatTest)
 app.use('/', inventario)
+app.use('/', ventasMostrador)
+app.use('/', corteCaja)
+app.use('/', notificaciones)
 
 // Server HTTP + Socket
 const server = http.createServer(app)

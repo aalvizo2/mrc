@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="img/favicon.png" sizes="150x150" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ventas de Mostrador</title>
+    <link rel="shortcut icon" href="img/favicon.png" sizes="150x150" />
+    <!-- Bootstrap + Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/inventario.css">
+    <link rel="stylesheet" href="css/navbar-admin.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css"
+        integrity="sha384-b6lVK+yci+bfDmaY1u0zE8YYJt0TZxLEAFyYSLHId4xoVvsrQu3INevFKo+Xir8e" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100&family=Quicksand&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+    <script src="https://kit.fontawesome.com/5210f6d31f.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+        }
+
+        .carrito {
+            background: white;
+            /* padding: 15px; */
+            border-radius: 10px;
+            height: 500px;
+            overflow-y: auto;
+        }
+
+        .total-box {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        /* Contenedor productos */
+        .productos-card {
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Evita que el select se desborde */
+        #productoSelect {
+            width: 100%;
+            max-width: 100%;
+        }
+
+        /* Opcional: mejora visual */
+        .productos-body {
+            overflow: hidden;
+        }
+
+        .row {
+            margin-left: 450px;
+        }
+    </style>
+</head>
+
+<body>
+    <%- include('./components/navbarAdmin') %>
+
+        <div class="container-fluid mt-0">
+            <div class="row">
+
+                <!-- PRODUCTOS -->
+                <div class="col-md-5 mt-3">
+                    <div class="card p-3">
+                        <h4>Productos</h4>
+
+                        <input type="text" id="buscadorProducto" class="form-control mb-2"
+                            placeholder="Buscar producto o escanear código..." autocomplete="off" />
+
+                        <select id="productoSelect" class="form-control mb-2" size="5">
+                            <% data.forEach(p=> { %>
+                                <option value="<%= p.id %>" data-nombre="<%= p.producto %>"
+                                    data-precio="<%= p.precio_publico %>" data-codigo="<%= p.codigo_barras || '' %>">
+                                    <%= p.producto %> - <%= new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(p.precio_publico) %>
+                                </option>
+                                <% }) %>
+                        </select>
+
+                        <small class="text-muted">ENTER para agregar / escanear código</small>
+                    </div>
+                </div>
+
+                <!-- CARRITO -->
+                <div class="col-md-4 mt-3">
+                    <div class="card d-flex flex-column" style="height: 80vh;">
+
+                        <!-- LISTA -->
+                        <div class="p-3 flex-grow-1 overflow-auto">
+                            <h5>Venta actual</h5>
+                            <ul id="listaCarrito" class="list-group"></ul>
+                        </div>
+
+                        <!-- FOOTER -->
+                        <div class="p-3 border-top bg-light">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="fw-bold fs-5">Total:</span>
+                                <span class="fw-bold fs-4">$<span id="total">0</span></span>
+                            </div>
+
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-success w-100" data-bs-toggle="modal"
+                                    data-bs-target="#modalPago">
+                                    Cobrar
+                                </button>
+
+                                <button class="btn btn-danger w-100" onclick="nuevaVenta()">
+                                    Nueva
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <!-- MODAL COBRO -->
+            <div class="modal fade" id="modalPago" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content p-3">
+
+                        <h4>Total: $<span id="totalModal">0</span></h4>
+
+                        <input type="number" id="recibido" class="form-control mt-3" placeholder="Dinero recibido">
+
+                        <h5 class="mt-3">Cambio: $<span id="cambio">0</span></h5>
+
+                        <button class="btn btn-success w-100 mt-3" onclick="finalizarVenta()">
+                            Confirmar venta
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            let carrito = []
+            let total = 0
+
+            const select = document.getElementById('productoSelect')
+
+            // ENTER agrega producto
+            select.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter') {
+                    agregarDesdeSelect()
+                }
+            })
+
+            const formatearMoneda = (valor) => {
+                return new Intl.NumberFormat('es-MX', {
+                    style: 'currency',
+                    currency: 'MXN',
+                    minimumFractionDigits: 2
+                }).format(valor);
+            }
+
+            function agregarDesdeSelect() {
+                const option = select.options[select.selectedIndex]
+
+                if (!option.value) return
+
+                const id = option.value
+                console.log('id asignado', id)
+                const nombre = option.dataset.nombre
+                const precio = Number(option.dataset.precio)
+
+                agregarProducto(id, nombre, precio)
+
+                select.value = ""
+            }
+
+            function agregarProducto(id, nombre, precio) {
+                const existe = carrito.find(p => p.id === id)
+
+                if (existe) {
+                    existe.cantidad++
+                } else {
+                    carrito.push({ id, nombre, precio, cantidad: 1 })
+                }
+
+                renderCarrito()
+            }
+
+            function renderCarrito() {
+                const lista = document.getElementById('listaCarrito')
+                lista.innerHTML = ''
+                total = 0
+
+                carrito.forEach(p => {
+                    const subtotal = p.precio * p.cantidad
+                    total += subtotal
+
+                    lista.innerHTML += `
+            <li class="list-group-item d-flex justify-content-between">
+                ${p.nombre} x${p.cantidad}
+                <span>${formatearMoneda(subtotal)}</span>
+            </li>
+        `
+                })
+
+                // Aquí aplicamos el formato a los textos de total
+                document.getElementById('total').innerText = formatearMoneda(total).replace('$', '')
+                document.getElementById('totalModal').innerText = formatearMoneda(total).replace('$', '')
+            }
+
+            document.getElementById('recibido').addEventListener('input', () => {
+                const recibido = Number(document.getElementById('recibido').value)
+                const cambio = recibido - total
+                document.getElementById('cambio').innerText = cambio >= 0 ? cambio : 0
+            })
+
+            function nuevaVenta() {
+                carrito = []
+                total = 0
+                renderCarrito()
+            }
+
+
+            //toast de antd
+            function notifySuccess(msg) {
+                Toastify({
+                    text: msg,
+                    duration: 3000,
+                    gravity: "top",
+                    position: "center",
+                    style: {
+                        background: "#28a745"
+
+                    }
+                }).showToast();
+            }
+
+
+            function finalizarVenta() {
+                const recibido = Number(document.getElementById('recibido').value)
+                const cambio = recibido - total
+
+                if (recibido < total) {
+                    alert("Dinero insuficiente")
+                    return
+                }
+
+                fetch('/ventas-mostrador', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ carrito, total, recibido, cambio })
+                })
+                    .then(() => {
+                        notifySuccess('Venta realizada')
+                        nuevaVenta()
+                        location.reload()
+                    })
+            }
+
+
+            //Buscador por codigo de barras
+            const buscador = document.getElementById('buscadorProducto')
+
+            // 🔍 FILTRAR POR NOMBRE
+            buscador.addEventListener('input', () => {
+                const texto = buscador.value.toLowerCase()
+
+                Array.from(select.options).forEach(option => {
+                    const nombre = option.dataset.nombre.toLowerCase()
+
+                    if (nombre.includes(texto)) {
+                        option.style.display = ''
+                    } else {
+                        option.style.display = 'none'
+                    }
+                })
+            })
+        </script>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+</body>
+
+</html>
