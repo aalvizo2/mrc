@@ -68,6 +68,10 @@
             margin-top: 100px;
         }
 
+        #chat-container.admin-view {
+            margin-top: 0;
+        }
+
         /* MENSAJES */
         #messages {
             flex: 1;
@@ -120,7 +124,7 @@
         }
 
         /* BOTÓN */
-        button {
+        .chat-btn {
             margin-left: 10px;
             padding: 10px 20px;
             background: #b30000;
@@ -131,13 +135,15 @@
             transition: 0.2s;
         }
 
-        button:hover {
+        .chat-btn :hover {
             background: #7a0000;
         }
-        .top{
+
+        .top {
             width: 100%;
             height: 150px;
         }
+
         /* 📱 RESPONSIVE */
         @media (max-width: 768px) {
 
@@ -192,7 +198,7 @@
                 font-size: 14px;
             }
 
-            button {
+            .chat-btn {
                 padding: 8px 12px;
                 font-size: 14px;
             }
@@ -207,24 +213,24 @@
 
                 <% if (usuario) { %>
                     <%- include('./components/header') %>
-                    
-                <% } %>
-                           
+
+                        <% } %>
+
                             <div id="sidebar"></div>
 
-                            <div id="chat-container">
+                            <div id="chat-container" class="<%= administrador ? 'admin-view' : '' %>">
                                 <div id="messages"></div>
 
                                 <form id="form">
                                     <input id="input" placeholder="Escribe..." autocomplete="off" />
-                                    <button type="submit">Enviar</button>
+                                    <button type="submit" class="chat-btn">Enviar</button>
                                 </form>
                             </div>
 
                             <script>
                                 const USUARIO = "<%= usuario || '' %>";
-                                const ES_ADMIN = <%= admin ? 'true' : 'false' %>;
-                                const administrador = "<%= administrador %>";
+                                const ES_ADMIN = <%= esAdmin ? 'true' : 'false' %>;
+                                const administrador = "<%= admin %>";
                             </script>
 
                             <script src="/socket.io/socket.io.js"></script>
@@ -396,6 +402,20 @@
                                         data.forEach(pintar);
                                     }
                                 });
+
+
+                                const params = new URLSearchParams(window.location.search)
+                                const usuarioFromURL = params.get('user')
+
+                                if (usuarioFromURL) {
+                                    usuarioActivo = usuarioFromURL
+
+                                    // simular click en el usuario
+                                    setTimeout(() => {
+                                        const userDiv = document.getElementById(`user-${usuarioFromURL}`)
+                                        if (userDiv) userDiv.click()
+                                    }, 500)
+                                }
                             </script>
 
 </body>

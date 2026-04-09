@@ -70,6 +70,23 @@
         .negativo {
             color: #dc3545;
         }
+
+        /* 📱 MOBILE & TABLET FIX */
+        @media (max-width: 992px) {
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .content {
+                margin-left: 0;
+                /* 🔥 clave */
+                padding: 15px;
+            }
+
+        }
     </style>
 </head>
 
@@ -201,7 +218,7 @@
                         document.getElementById('montoInicial').value = data.montoInicial || 0
                         document.getElementById('showInicial').innerText = formatoMoneda(data.montoInicial || 0)
 
-                        calcular() 
+                        calcular()
                     })
             }
 

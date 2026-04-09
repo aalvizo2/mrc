@@ -46,7 +46,10 @@
 </div>
 
 <div id="panelNotificaciones" class="panel-notif d-none">
-    <h6 class="p-2 border-bottom"> Notificaciones</h6>
+    <div class="d-flex justify-content-between align-items-center p-2 border-bottom">
+        <h6 class="m-0">Notificaciones</h6>
+        <i class="bi bi-x-lg cerrar-notif"></i>
+    </div>
     <div id="contenidoNotif"></div>
 </div>
 
@@ -121,5 +124,18 @@
 
     // 🔥 AUTO CARGA
     cargarNotificaciones()
-    setInterval(cargarNotificaciones, 5000)
+    setInterval(cargarNotificaciones, 800)
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const panel = document.getElementById("panelNotificaciones")
+        document.body.appendChild(panel) // 🔥 lo saca de cualquier contenedor roto
+    })
+
+    //Cerrar notificaciones
+    document.addEventListener("click", (e) => {
+    if (e.target.classList.contains("cerrar-notif")) {
+        document.getElementById("panelNotificaciones").classList.add("d-none")
+    }
+})
 </script>

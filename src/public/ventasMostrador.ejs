@@ -71,6 +71,85 @@
         .row {
             margin-left: 450px;
         }
+
+        /* 🔥 FIX GLOBAL (esto es CLAVE) */
+        .row {
+            margin-left: 260px;
+            /* para desktop con sidebar */
+        }
+
+        /* 📱 TABLET */
+        @media (max-width: 992px) {
+            .row {
+                margin-left: 0;
+                /* 🔥 quita el espacio del sidebar */
+            }
+
+            .productos-card,
+            .card {
+                height: auto !important;
+            }
+
+            #productoSelect {
+                height: 150px;
+            }
+        }
+
+        /* 📱 MÓVIL */
+        @media (max-width: 768px) {
+
+            .row {
+                margin-left: 0;
+                flex-direction: column;
+            }
+
+            /* PRODUCTOS y CARRITO en vertical */
+            .col-md-5,
+            .col-md-4 {
+                width: 100%;
+            }
+
+            /* CARDS más compactas */
+            .card {
+                height: auto !important;
+                margin-bottom: 15px;
+            }
+
+            /* SELECT más usable */
+            #productoSelect {
+                height: 120px;
+                font-size: 14px;
+            }
+
+            /* INPUT */
+            #buscadorProducto {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            /* LISTA CARRITO */
+            #listaCarrito li {
+                font-size: 13px;
+            }
+
+            /* BOTONES */
+            .btn {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            /* TOTAL */
+            .total-box,
+            #total,
+            #totalModal {
+                font-size: 18px;
+            }
+
+            /* MODAL */
+            .modal-dialog {
+                margin: 10px;
+            }
+        }
     </style>
 </head>
 
@@ -92,7 +171,8 @@
                             <% data.forEach(p=> { %>
                                 <option value="<%= p.id %>" data-nombre="<%= p.producto %>"
                                     data-precio="<%= p.precio_publico %>" data-codigo="<%= p.codigo_barras || '' %>">
-                                    <%= p.producto %> - <%= new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(p.precio_publico) %>
+                                    <%= p.producto %> - <%= new Intl.NumberFormat('es-MX', { style: 'currency' ,
+                                            currency: 'MXN' }).format(p.precio_publico) %>
                                 </option>
                                 <% }) %>
                         </select>
@@ -272,18 +352,17 @@
                     })
             }
 
-
-            //Buscador por codigo de barras
+            //Buscador
             const buscador = document.getElementById('buscadorProducto')
 
-            // 🔍 FILTRAR POR NOMBRE
             buscador.addEventListener('input', () => {
                 const texto = buscador.value.toLowerCase()
 
                 Array.from(select.options).forEach(option => {
                     const nombre = option.dataset.nombre.toLowerCase()
+                    const codigo = (option.dataset.codigo || '').toLowerCase()
 
-                    if (nombre.includes(texto)) {
+                    if (nombre.includes(texto) || codigo.includes(texto)) {
                         option.style.display = ''
                     } else {
                         option.style.display = 'none'

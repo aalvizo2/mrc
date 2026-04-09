@@ -13,6 +13,9 @@ body {
     display: flex;
     flex-direction: column;
     box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+
+
+    overflow-y: auto;
 }
 
 /* LOGO */
@@ -87,19 +90,16 @@ body {
 
 .panel-notif {
     position: fixed;
-    left: 260px; /* justo al lado del sidebar */
+    left: 260px;
     top: 480px;
-    width: 520px;
+    width: 380px;
     max-height: 400px;
     overflow-y: auto;
-    color: #333;
-    background: #ffffff;
+    background: #fff;
     border-radius: 10px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    z-index: 9999;
-    padding: 10px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    z-index: 99999; /* 🔥 BIEN ALTO */
 }
-
 .notif-item {
     display: flex;
     justify-content: space-between;
@@ -125,6 +125,36 @@ body {
     text-decoration: underline;
     background-color: none;
 }
+
+
+.cerrar-notif {
+    font-size: 18px;
+    cursor: pointer;
+    color: #999;
+    transition: 0.2s;
+}
+
+.cerrar-notif:hover {
+    color: #d10000;
+    transform: scale(1.1);
+}
+
+
+
+
+#panelNotificaciones {
+    position: fixed !important;
+    top: 480px !important;
+    left: 260px !important;
+    width: 400px !important;
+    max-height: 400px !important;
+    overflow-y: auto !important;
+    background: white !important;
+    z-index: 999999 !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important;
+    border-radius: 10px !important;
+}
+
 /* RESPONSIVE */
 @media (max-width: 768px) {
     .sidebar {

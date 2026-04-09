@@ -81,6 +81,7 @@
                                 <th>Precio Público</th>
                                 <th>Precio Descuento</th>
                                 <th>Marca</th>
+                                <th>Código de barras</th>
                                 <th class="text-center">Acciones</th>
                             </tr>
                         </thead>
@@ -115,7 +116,9 @@
                                         <td class="editable" data-id="<%= item.id %>" data-field="marca">
                                             <%= item.marca %>
                                         </td>
-
+                                        <td class="editable" data-id="<%= item.id %>" data-field="codigo_barras">
+                                            <%= item.codigo_barras %>
+                                        </td>
                                         <td class="text-center acciones">
                                             <i class="bi bi-trash text-danger delete-btn" title="Eliminar"
                                                 data-id="<% item.id %>"></i>

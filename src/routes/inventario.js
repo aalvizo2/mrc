@@ -48,6 +48,7 @@ router.post('/inventario/upload', upload.single('excel'), async (req, res) => {
             const precio_publico = parseFloat(row.Precio || 0);
             const precio_descuento = parseFloat(row.Descuento || 0) || null;
             const marca = row.Marca || '';
+            const codigo_barras= row.Codigo_Baras || 'Codigo de barras';
 
             if (!producto) {
                 errores++;
@@ -58,15 +59,16 @@ router.post('/inventario/upload', upload.single('excel'), async (req, res) => {
                 await new Promise((resolve, reject) => {
                     connection.query(`
                         INSERT INTO inventario
-                        (id, producto, descripcion, cantidad, precio_publico, precio_descuento, marca)
-                        VALUES (UUID(), ?, ?, ?, ?, ?, ?)
+                        (id, producto, descripcion, cantidad, precio_publico, precio_descuento, marca, codigo_barras)
+                        VALUES (UUID(), ?, ?, ?, ?, ?, ?, ?)
                     `, [
                         producto,
                         descripcion,
                         cantidad,
                         precio_publico,
                         precio_descuento,
-                        marca
+                        marca,
+                        codigo_barras
                     ], (err) => {
                         if (err) return reject(err);
                         resolve();

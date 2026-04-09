@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <link rel="shortcut icon" href="img/favicon.png" sizes="150x150" />
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Bootstrap + Icons -->
+    <!-- Bootstrap + Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="css/inventario.css">
     <link rel="stylesheet" href="css/navbar-admin.css">
-    <link rel="stylesheet" href="css/style.css">
+    
     <link rel="stylesheet" href="css/navbar.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css"
         integrity="sha384-b6lVK+yci+bfDmaY1u0zE8YYJt0TZxLEAFyYSLHId4xoVvsrQu3INevFKo+Xir8e" crossorigin="anonymous">
@@ -33,6 +34,11 @@
     <style>
         body {
             background-color: #f8f9fa;
+        }
+
+        .container {
+            margin-top: 150px;
+            /* ajusta según altura del panel */
         }
 
         .sidebar {
@@ -86,6 +92,7 @@
                 width: 100%;
                 height: auto;
             }
+
             .content {
                 margin-left: 0;
             }
@@ -96,7 +103,8 @@
         }
 
         .card:hover {
-            transform: scale(1.05); /* Small zoom on hover */
+            transform: scale(1.05);
+            /* Small zoom on hover */
         }
 
         .card-img-top {
@@ -106,7 +114,8 @@
 
         @media (max-width: 576px) {
             .card-img-top {
-                height: 150px; /* Smaller images for mobile */
+                height: 150px;
+                /* Smaller images for mobile */
             }
         }
 
@@ -118,27 +127,30 @@
         }
     </style>
 </head>
+
 <body>
-   <%-include('./components/navbarAdmin')%>
-    <!-- Content -->
-    <div class="content">
-        <!-- <nav class="navbar navbar-dark mb-4">
+    <%-include('./components/navbarAdmin')%>
+        <!-- Content -->
+        <div class="content">
+            <!-- <nav class="navbar navbar-dark mb-4">
             <div class="container-fluid">
                 <span class="navbar-brand">Bienvenido, <%= admin %></span>
             </div>
         </nav> -->
-    </div>
+        </div>
 
         <div class="container mt-5">
             <div class="row g-4">
-                <% for (let i = 0; i < datos.length; i++) { %>
+                <% for (let i=0; i < datos.length; i++) { %>
                     <div class="col-12 col-sm-6 col-md-4 col-lg-3">
                         <div class="card shadow-lg h-100">
                             <a href="details?id=<%= datos[i].id %>">
                                 <img src="<%= urls[i] %>" class="card-img-top" alt="<%= datos[i].nombre_prod %>">
                             </a>
                             <div class="card-body text-center">
-                                <h5 class="card-title"><%= datos[i].nombre_prod %></h5>
+                                <h5 class="card-title">
+                                    <%= datos[i].nombre_prod %>
+                                </h5>
                                 <p class="card-text fw-bold text-danger">$<%= datos[i].precio_publico %>.00</p>
                             </div>
                             <div class="card-footer d-flex justify-content-center gap-2">
@@ -147,14 +159,15 @@
                             </div>
                         </div>
                     </div>
-                <% } %>
+                    <% } %>
             </div>
         </div>
-    </div>
+        </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N"
             crossorigin="anonymous"></script>
 </body>
+
 </html>
