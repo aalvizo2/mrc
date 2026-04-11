@@ -1,10 +1,10 @@
-const express= require('express')
-const router= express.Router()
+const express = require('express')
+const router = express.Router()
 
 
-router.get('/corteCaja', (req, res) =>{
-    const admin= req.session.name
-    if(!admin) res.redirect('/login')
+router.get('/corteCaja', (req, res) => {
+    const admin = req.session.name
+    if (!admin) res.redirect('/login')
     res.render('corteCaja', {
         login: true,
         admin: admin
@@ -127,10 +127,10 @@ router.get('/corte-caja/:id', (req, res) => {
 
 //Detalle del corte de caja 
 router.get('/historial-cortes', (req, res) => {
-    const admin= req.session.name
-    if(!admin) res.redirect('/login')
+    const admin = req.session.name
+    if (!admin) res.redirect('/login')
     res.render('historialCortes', {
-        login: true, 
+        login: true,
         admin: admin
     })
 })
@@ -149,15 +149,15 @@ router.get('/detalle-corte/:id', (req, res) => {
 
         // 🔥 ventas del rango
         const sqlVentas = `
-            SELECT * FROM ventas_mostrador
-            WHERE fecha BETWEEN ? AND ?
+          SELECT * FROM ventas_mostrador
+          WHERE DATE(fecha) = DATE(?)
         `
 
         const sqlGastos = `
             SELECT * FROM gastos_corte WHERE corte_id = ?
         `
 
-        connection.query(sqlVentas, [c.fecha_inicio, c.fecha_fin], (err, ventas) => {
+        connection.query(sqlVentas, [c.fecha], (err, ventas) => {
             if (err) return res.status(500).send(err)
 
             connection.query(sqlGastos, [id], (err, gastos) => {
@@ -174,4 +174,30 @@ router.get('/detalle-corte/:id', (req, res) => {
 })
 
 
-module.exports= router
+router.get('/detalle-venta/:id', (req, res) => {
+    const { id } = req.params
+
+    const sql = `
+        SELECT * FROM detalle_venta
+        WHERE venta_id = ?
+    `
+
+    connection.query(sql, [id], (err, productos) => {
+
+        if (err) {
+            console.error('ERROR SQL:', err)
+            return res.status(500).send(err)
+        }
+
+        // 🔥 FIX
+        const lista = productos || []
+
+        const total = lista.reduce((acc, p) => acc + Number(p.precio || 0), 0)
+
+        res.json({
+            productos: lista,
+            total
+        })
+    })
+})
+module.exports = router

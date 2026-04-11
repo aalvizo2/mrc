@@ -245,3 +245,59 @@ function confirmAction(message) {
         };
     });
 }
+
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    const modalElement = document.getElementById('modalProducto')
+    const openBtn = document.getElementById('openModalBtn')
+
+    if (!modalElement || !openBtn) {
+        console.error('No existe el modal o el botón')
+        return
+    }
+
+    const modal = new bootstrap.Modal(modalElement)
+
+    openBtn.addEventListener('click', () => {
+        modal.show()
+    })
+
+    // FORM
+    document.getElementById('formProducto').addEventListener('submit', async (e) => {
+        e.preventDefault()
+
+        const form = e.target
+
+        const data = {
+            producto: form.producto.value,
+            descripcion: form.descripcion.value,
+            cantidad: form.cantidad.value,
+            precio_publico: form.precio_publico.value,
+            precio_descuento: form.precio_descuento.value,
+            marca: form.marca.value,
+            codigo_barras: form.codigo_barras.value
+        }
+
+        try {
+            const res = await fetch('/inventario', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+
+            await res.json()
+
+            notifySuccess("Producto agregado")
+            modal.hide()
+            location.reload()
+
+        } catch (error) {
+            console.error(error)
+            notifyError("Error al guardar")
+        }
+    })
+
+})

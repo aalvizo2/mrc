@@ -158,3 +158,9 @@ tbody tr:hover {
     display: flex;
     justify-content: space-around;
 }
+
+
+.row{
+    display: flex;
+    justify-content: space-between;
+}

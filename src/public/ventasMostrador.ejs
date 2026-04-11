@@ -149,6 +149,31 @@
             .modal-dialog {
                 margin: 10px;
             }
+
+            /* 📱 RESPONSIVE */
+            @media (max-width: 768px) {
+
+                body {
+                    flex-direction: column;
+                }
+
+                /* sidebar rojo (navbarAdmin) */
+                .sidebar {
+                    position: relative;
+                    width: 100%;
+                    height: auto;
+                }
+
+                /* sidebar de usuarios */
+                #sidebar {
+                    margin-left: 0;
+                    width: 100%;
+                    height: 200px;
+                    overflow-y: auto;
+                    display: flex;
+                    flex-direction: column;
+                }
+            }
         }
     </style>
 </head>
@@ -159,8 +184,10 @@
         <div class="container-fluid mt-0">
             <div class="row">
 
-                <!-- PRODUCTOS -->
-                <div class="col-md-5 mt-3">
+                <!-- IZQUIERDA -->
+                <div class="col-md-5 mt-3 d-flex flex-column gap-3">
+
+                    <!-- PRODUCTOS -->
                     <div class="card p-3">
                         <h4>Productos</h4>
 
@@ -179,9 +206,27 @@
 
                         <small class="text-muted">ENTER para agregar / escanear código</small>
                     </div>
-                </div>
 
-                <!-- CARRITO -->
+                    <!-- SERVICIOS -->
+                    <div class="card p-3">
+                        <h5 class="mb-3">Servicios</h5>
+
+                        <div class="d-flex gap-2 align-items-center">
+                            <input type="text" id="servicioNombre" class="form-control"
+                                placeholder="Descripción del servicio">
+
+                            <input type="number" id="servicioPrecio" class="form-control" placeholder="Precio">
+
+                            <button class="btn btn-danger d-flex align-items-center justify-content-center"
+                                style="width: 45px; height: 38px;" onclick="agregarServicio()">
+                                <i class="bi bi-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                </div> <!-- ✅ CIERRA IZQUIERDA -->
+
+                <!-- DERECHA -->
                 <div class="col-md-4 mt-3">
                     <div class="card d-flex flex-column" style="height: 80vh;">
 
@@ -214,24 +259,27 @@
                 </div>
 
             </div>
-            <!-- MODAL COBRO -->
-            <div class="modal fade" id="modalPago" tabindex="-1">
-                <div class="modal-dialog">
-                    <div class="modal-content p-3">
+        </div>
 
-                        <h4>Total: $<span id="totalModal">0</span></h4>
+        </div>
+        <!-- MODAL COBRO -->
+        <div class="modal fade" id="modalPago" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content p-3">
 
-                        <input type="number" id="recibido" class="form-control mt-3" placeholder="Dinero recibido">
+                    <h4>Total: $<span id="totalModal">0</span></h4>
 
-                        <h5 class="mt-3">Cambio: $<span id="cambio">0</span></h5>
+                    <input type="number" id="recibido" class="form-control mt-3" placeholder="Dinero recibido">
 
-                        <button class="btn btn-success w-100 mt-3" onclick="finalizarVenta()">
-                            Confirmar venta
-                        </button>
+                    <h5 class="mt-3">Cambio: $<span id="cambio">0</span></h5>
 
-                    </div>
+                    <button class="btn btn-success w-100 mt-3" onclick="finalizarVenta()">
+                        Confirmar venta
+                    </button>
+
                 </div>
             </div>
+        </div>
         </div>
         <script>
             let carrito = []
@@ -286,33 +334,46 @@
                 lista.innerHTML = ''
                 total = 0
 
-                carrito.forEach(p => {
-                    const subtotal = p.precio * p.cantidad
+                carrito.forEach((p, index) => {
+
+                    const precioFinal = p.precio * (1 - (p.descuento || 0) / 100)
+                    const subtotal = precioFinal * p.cantidad
+
                     total += subtotal
 
                     lista.innerHTML += `
-            <li class="list-group-item d-flex justify-content-between">
-                ${p.nombre} x${p.cantidad}
-                <span>${formatearMoneda(subtotal)}</span>
-            </li>
+        <li class="list-group-item">
+
+            <div class="fw-bold">${p.nombre}</div>
+
+            <div class="d-flex gap-2 mt-2">
+
+                <span class="editable" data-index="${index}" data-field="cantidad">
+                    Cant: ${p.cantidad}
+                </span>
+
+                <span class="editable" data-index="${index}" data-field="precio">
+                    $${p.precio}
+                </span>
+
+                <span class="editable" data-index="${index}" data-field="descuento">
+                    %${p.descuento || 0}
+                </span>
+
+            </div>
+
+            <div class="text-end mt-1">
+                <strong>${formatearMoneda(subtotal)}</strong>
+            </div>
+
+        </li>
         `
                 })
 
-                // Aquí aplicamos el formato a los textos de total
                 document.getElementById('total').innerText = formatearMoneda(total).replace('$', '')
                 document.getElementById('totalModal').innerText = formatearMoneda(total).replace('$', '')
-            }
 
-            document.getElementById('recibido').addEventListener('input', () => {
-                const recibido = Number(document.getElementById('recibido').value)
-                const cambio = recibido - total
-                document.getElementById('cambio').innerText = cambio >= 0 ? cambio : 0
-            })
-
-            function nuevaVenta() {
-                carrito = []
-                total = 0
-                renderCarrito()
+                activarEdicion()
             }
 
 
@@ -329,7 +390,19 @@
                     }
                 }).showToast();
             }
+            
+            //Nueva Venta 
+            function nuevaVenta() {
+                carrito = []
+                total = 0
 
+                document.getElementById('listaCarrito').innerHTML = ''
+                document.getElementById('total').innerText = '0'
+                document.getElementById('totalModal').innerText = '0'
+
+                document.getElementById('recibido').value = ''
+                document.getElementById('cambio').innerText = '0'
+            }
 
             function finalizarVenta() {
                 const recibido = Number(document.getElementById('recibido').value)
@@ -347,8 +420,16 @@
                 })
                     .then(() => {
                         notifySuccess('Venta realizada')
-                        nuevaVenta()
-                        location.reload()
+
+                        const modalEl = document.getElementById('modalPago')
+                        const modal = bootstrap.Modal.getOrCreateInstance(modalEl)
+
+                        modalEl.addEventListener('hidden.bs.modal', () => {
+                            nuevaVenta()
+                        }, { once: true })
+
+                        modal.hide()
+
                     })
             }
 
@@ -368,6 +449,89 @@
                         option.style.display = 'none'
                     }
                 })
+            })
+
+
+            function agregarServicio() {
+                const nombre = document.getElementById('servicioNombre').value
+                const precio = Number(document.getElementById('servicioPrecio').value)
+
+                if (!nombre || !precio) {
+                    alert('Completa los datos')
+                    return
+                }
+
+                carrito.push({
+                    id: 'serv-' + Date.now(),
+                    nombre,
+                    precio,
+                    cantidad: 1,
+                    descuento: 0
+                })
+
+                document.getElementById('servicioNombre').value = ''
+                document.getElementById('servicioPrecio').value = ''
+
+                renderCarrito()
+            }
+
+
+            function activarEdicion() {
+                document.querySelectorAll('.editable').forEach(el => {
+
+                    el.addEventListener('click', function () {
+
+                        if (this.querySelector('input')) return
+
+                        const index = this.dataset.index
+                        const field = this.dataset.field
+
+                        let valor = carrito[index][field] || 0
+
+                        const input = document.createElement('input')
+                        input.type = "number"
+                        input.value = valor
+                        input.classList.add("form-control", "form-control-sm")
+
+                        this.innerHTML = ''
+                        this.appendChild(input)
+                        input.focus()
+
+                        input.addEventListener('keydown', (e) => {
+
+                            if (e.key === "Enter") {
+
+                                let nuevo = Number(input.value)
+
+                                // 🔥 límite de descuento
+                                if (field === 'descuento' && nuevo > 50) {
+                                    nuevo = 50
+                                }
+
+                                carrito[index][field] = nuevo
+
+                                renderCarrito()
+                            }
+
+                            if (e.key === "Escape") {
+                                renderCarrito()
+                            }
+                        })
+
+                        input.addEventListener('blur', () => renderCarrito())
+                    })
+                })
+            }
+
+
+            const recibidoInput = document.getElementById('recibido')
+            const cambioSpan = document.getElementById('cambio')
+
+            recibidoInput.addEventListener('input', () => {
+                const recibido = Number(recibidoInput.value) || 0
+                const cambio = recibido - total
+
+                cambioSpan.innerText = cambio.toFixed(2)
             })
         </script>
 

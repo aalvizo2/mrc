@@ -4,22 +4,30 @@
         <img src="img/logo.png" alt="Logo">
     </div>
 
-    <!-- MENÚ PRINCIPAL -->
+    <!-- 🧭 SITIO WEB -->
+    <div class="sidebar-title">Sitio Web</div>
+
     <a href="/inicio_admin"><i class="bi bi-house-door"></i> Inicio</a>
     <a href="/producto_admin"><i class="bi bi-box"></i> Productos</a>
     <a href="/inventario"><i class="bi bi-list"></i> Inventario</a>
     <a href="/ventas"><i class="bi bi-bar-chart"></i> Ventas</a>
-    <a href="/ventasMostrador"><i class="bi bi-cash-coin"></i> Mostrador</a>
 
-    <!-- 💰 CAJA -->
+    <!-- 💰 MOSTRADOR -->
+    <div class="sidebar-title">Ventas Mostrador</div>
+
+    <a href="/ventasMostrador"><i class="bi bi-cash-coin"></i> Mostrador</a>
     <a href="/corteCaja"><i class="bi bi-cash-stack"></i> Corte de Caja</a>
     <a href="/historial-cortes"><i class="bi bi-clock-history"></i> Historial Cortes</a>
 
-    <!-- OPERACIONES -->
+    <!-- ⚙️ OPERACIONES -->
+    <div class="sidebar-title">Operaciones</div>
+
     <a href="/upload"><i class="bi bi-cloud-upload"></i> Subir Producto</a>
     <a href="/descuento_admin"><i class="fas fa-tags"></i> Descuentos</a>
     <a href="/servicio-admin"><i class="fas fa-tools"></i> Servicios</a>
     <a href="/chat-test"><i class="bi bi-chat-left-text"></i> Mensajes</a>
+
+    <!-- 🔔 NOTIFICACIONES (NO TOCADO) -->
     <a href="javascript:void(0)" onclick="toggleNotificaciones()">
         <i class="bi bi-bell"></i> Notificaciones
         <span id="badgeNotif" class="badge bg-danger">0</span>
@@ -29,18 +37,19 @@
         <h6>Notificaciones</h6>
         <div id="contenidoNotif"></div>
     </div>
-    <!-- USUARIO -->
+
+    <!-- 👤 USUARIO -->
     <div class="user-section">
         <% if (login) { %>
             <a href="/chat-test">
                 <i class="bi bi-person-circle"></i>
                 <%= admin %>
             </a>
-            <% } %>
+        <% } %>
 
-                <a href="/logout">
-                    <i class="bi bi-box-arrow-right"></i> Cerrar sesión
-                </a>
+        <a href="/logout">
+            <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+        </a>
     </div>
 
 </div>

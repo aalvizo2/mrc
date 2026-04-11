@@ -149,43 +149,46 @@
 
             body {
                 flex-direction: column;
+                height: 100vh;
+                overflow: hidden;
             }
 
-            /* sidebar rojo (navbarAdmin) */
+            /* sidebar rojo (navbar admin) */
             .sidebar {
                 position: relative;
                 width: 100%;
                 height: auto;
             }
 
-            /* sidebar de usuarios */
+            /* sidebar usuarios */
             #sidebar {
                 margin-left: 0;
                 width: 100%;
-                height: 200px;
+                height: calc(100vh - 60px);
                 overflow-y: auto;
+                display: block;
+            }
+
+            /* chat oculto por default */
+            #chat-container {
+                display: none;
+                width: 100%;
+                height: calc(100vh - 60px);
+            }
+
+            /* cuando está activo */
+            #chat-container.active {
                 display: flex;
                 flex-direction: column;
             }
 
-            .user {
-                padding: 10px;
-                font-size: 14px;
-            }
-
-            /* chat ocupa todo */
-            #chat-container {
-                width: 100%;
-                margin-left: 0;
-                height: calc(100vh - 200px);
-            }
-
             #messages {
+                flex: 1;
                 padding: 10px;
             }
 
             .msg {
-                max-width: 80%;
+                max-width: 85%;
                 font-size: 13px;
             }
 
@@ -201,6 +204,16 @@
             .chat-btn {
                 padding: 8px 12px;
                 font-size: 14px;
+            }
+
+            /* botón regresar */
+            .back-btn {
+                padding: 10px;
+                background: #b30000;
+                color: white;
+                border: none;
+                width: 100%;
+                text-align: left;
             }
         }
     </style>
@@ -219,6 +232,7 @@
                             <div id="sidebar"></div>
 
                             <div id="chat-container" class="<%= administrador ? 'admin-view' : '' %>">
+                                <button id="backBtn" class="back-btn d-none">← Regresar</button>
                                 <div id="messages"></div>
 
                                 <form id="form">
@@ -416,7 +430,37 @@
                                         if (userDiv) userDiv.click()
                                     }, 500)
                                 }
+
+                                const chatContainer = document.getElementById('chat-container')
+                                const backBtn = document.getElementById('backBtn')
+
+
+                                div.onclick = () => {
+                                    usuarioActivo = usuario;
+                                    messages.innerHTML = '';
+
+                                    conversaciones[usuario].forEach(pintar);
+
+                                    document.querySelectorAll('.user').forEach(u => u.classList.remove('active'));
+                                    div.classList.add('active');
+
+                                    // 🔥 MOBILE: cambiar vista
+                                    if (window.innerWidth < 768) {
+                                        sidebar.style.display = 'none'
+                                        chatContainer.style.display = 'flex'
+                                        chatContainer.classList.add('active')
+                                        backBtn.classList.remove('d-none')
+                                    }
+                                };
+
+                                backBtn.addEventListener('click', () => {
+                                    sidebar.style.display = 'block'
+                                    chatContainer.style.display = 'none'
+                                    chatContainer.classList.remove('active')
+                                    backBtn.classList.add('d-none')
+                                })
                             </script>
+                            <script src="script/responsive.js"></script>
 
 </body>
 

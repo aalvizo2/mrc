@@ -70,17 +70,63 @@
             border-radius: 15px;
         }
 
-        @media (max-width: 992px) {
 
-            .sidebar {
-                position: relative;
-                width: 100%;
-                height: auto;
-            }
 
+        @media (max-width: 768px) {
+
+            /* layout general */
             .content {
                 margin-left: 0;
-                padding: 15px;
+                padding: 10px;
+            }
+
+            .title {
+                font-size: 20px;
+                text-align: center;
+            }
+
+            /* 🔥 TABLA: que no se rompa */
+            .card-pro {
+                overflow-x: auto;
+            }
+
+            table {
+                min-width: 600px;
+                /* fuerza scroll en vez de romper */
+                font-size: 13px;
+            }
+
+            /* 🔥 MODAL más cómodo */
+            .modal-dialog {
+                margin: 10px;
+            }
+
+            /* 🔥 VENTAS (NO rompemos estructura) */
+            #listaVentas .row {
+                display: flex;
+                flex-wrap: wrap;
+            }
+
+            #listaVentas .col-4 {
+                flex: 0 0 100%;
+                max-width: 100%;
+                text-align: left !important;
+                margin-bottom: 5px;
+            }
+
+            #listaVentas button {
+                width: 100% !important;
+            }
+
+            /* 🔥 GASTOS */
+            #listaGastos li {
+                font-size: 14px;
+            }
+
+            /* 🔥 DETALLE VENTA */
+            #detalleVenta .d-flex {
+                flex-direction: column;
+                align-items: flex-start !important;
             }
         }
     </style>
@@ -132,10 +178,13 @@
                     <!-- GASTOS -->
                     <h5>Gastos</h5>
                     <ul id="listaGastos" class="list-group"></ul>
-
+                    <div id="detalleVenta" class="mt-3"></div>
                 </div>
+
             </div>
         </div>
+
+
 
         <script>
             // Dar formato a MXN 
@@ -213,10 +262,28 @@
 
                         ventas.forEach(v => {
                             listaVentas.innerHTML += `
-                        <li class="list-group-item d-flex justify-content-between">
-                            Venta #${v.id}
-                            <span>${formatoMoneda(v.total)}</span>
-                        </li>
+                        <li class="list-group-item">
+    
+                       <div class="row align-items-center text-center">
+
+                        <div class="col-4 text-start">
+                          Venta No. ${v.id}
+                        </div>
+
+                        <div class="col-4">
+                          <button class="btn btn-sm btn-default w-75"
+                           onclick="verDetalleVenta(${v.id})">
+                             Ver Detalle
+                          </button>
+                       </div>
+
+                       <div class="col-4 text-end fw-bold">
+                           ${formatoMoneda(v.total)}
+                        </div>
+
+                        </div>
+
+                     </li>
                     `
                         })
 
@@ -236,6 +303,36 @@
                         // ABRIR MODAL
                         const modal = new bootstrap.Modal(document.getElementById('modalDetalle'))
                         modal.show()
+                    })
+            }
+
+
+            function verDetalleVenta(id) {
+
+                fetch(`/detalle-venta/${id}`)
+                    .then(res => res.json())
+                    .then(data => {
+
+                        const cont = document.getElementById('detalleVenta')
+
+                        cont.innerHTML = `
+                <div class="card p-3">
+                    <h6>Detalle Venta No. ${id}</h6>
+
+                    ${data.productos.map(p => `
+                        <div class="d-flex justify-content-between">
+                            <span>${p.nombre}</span>
+                            <span>${formatoMoneda(p.precio)}</span>
+                        </div>
+                    `).join('')}
+
+                    <hr>
+
+                    <strong class="text-end d-block">
+                        Total: ${formatoMoneda(data.total)}
+                    </strong>
+                </div>
+            `
                     })
             }
         </script>

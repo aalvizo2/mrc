@@ -12,7 +12,7 @@ body {
     width: 240px;
     display: flex;
     flex-direction: column;
-    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
 
 
     overflow-y: auto;
@@ -24,7 +24,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 90px;
-    border-bottom: 1px solid rgba(255,255,255,0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .sidebar-logo img {
@@ -33,7 +33,7 @@ body {
 
 /* LINKS */
 .sidebar a {
-    color: rgba(255,255,255,0.9);
+    color: rgba(255, 255, 255, 0.9);
     padding: 12px 20px;
     display: flex;
     align-items: center;
@@ -51,7 +51,7 @@ body {
 
 /* HOVER */
 .sidebar a:hover {
-    background: rgba(255,255,255,0.1);
+    background: rgba(255, 255, 255, 0.1);
     padding-left: 25px;
     color: #fff;
 }
@@ -68,7 +68,7 @@ body {
 /* FOOTER USER */
 .sidebar .user-section {
     margin-top: auto;
-    border-top: 1px solid rgba(255,255,255,0.2);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 /* CONTENIDO */
@@ -97,16 +97,19 @@ body {
     overflow-y: auto;
     background: #fff;
     border-radius: 10px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-    z-index: 99999; /* 🔥 BIEN ALTO */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    z-index: 99999;
+    /* 🔥 BIEN ALTO */
 }
+
 .notif-item {
     display: flex;
     justify-content: space-between;
     padding: 10px;
     border-bottom: 1px solid #eee;
     font-size: 14px;
-    color: #333; /* 🔥 ESTO arregla que no se vea */
+    color: #333;
+    /* 🔥 ESTO arregla que no se vea */
 }
 
 .notif-item:hover {
@@ -119,7 +122,7 @@ body {
     font-weight: 600;
 }
 
-.view-btn{
+.view-btn {
     border: none;
     color: #ccc;
     text-decoration: underline;
@@ -151,17 +154,42 @@ body {
     overflow-y: auto !important;
     background: white !important;
     z-index: 999999 !important;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
     border-radius: 10px !important;
 }
 
+.sidebar-title {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 12px 20px 5px;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 600;
+}
+
+.sidebar a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+.sidebar a:hover {
+    background: rgba(255, 255, 255, 0.1);
+    padding-left: 25px;
+}
+
 /* RESPONSIVE */
-@media (max-width: 768px) {
+@media (max-width: 992px) {
     .sidebar {
         position: relative;
         width: 100%;
         height: auto;
     }
+
+
 
     .content {
         margin-left: 0;

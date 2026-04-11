@@ -85,7 +85,7 @@ router.post('/inventario/upload', upload.single('excel'), async (req, res) => {
         return res.json({
             insertados,
             errores,
-            roast: errores === 0 ? "Todo bien 🔥" : "Se dejó subir 😏"
+            roast: errores === 0 ? "Todo bien " : "Se dejó subir "
         });
 
     } catch (error) {
@@ -138,5 +138,51 @@ router.delete('/inventario/delete', (req, res) =>{
     })
 })
 
+
+
+router.post('/inventario', (req, res) =>{
+    const {
+        producto, 
+        descripcion, 
+        cantidad, 
+        precio_publico, 
+        precio_descuento, 
+        marca, 
+        codigo_barras
+    }= req.body
+
+
+    const sql=`
+        INSERT INTO inventario 
+        (producto,
+         descripcion, 
+         cantidad, 
+         precio_publico,
+         precio_descuento,
+         marca,
+         codigo_barras
+        )VALUES(?,?,?,?,?,?,?)
+    `
+
+    connection.query(sql,
+        [
+            producto,
+            descripcion,
+            cantidad,
+            precio_publico,
+            precio_descuento,
+            marca,
+            codigo_barras
+        ],
+        (err)=>{
+          if(err){
+            console.error('error al insertar los datos', err)
+          }
+          res.json({
+            message: 'Datos insertados correctamente'
+          })
+        
+    })
+})
 
 module.exports = router
