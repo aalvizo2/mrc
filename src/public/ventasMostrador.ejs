@@ -336,6 +336,8 @@
 
                 carrito.forEach((p, index) => {
 
+                    const esServicio = p.id.startsWith('serv-')
+
                     const precioFinal = p.precio * (1 - (p.descuento || 0) / 100)
                     const subtotal = precioFinal * p.cantidad
 
@@ -344,23 +346,31 @@
                     lista.innerHTML += `
         <li class="list-group-item">
 
-            <div class="fw-bold">${p.nombre}</div>
+            <div class="fw-bold ${esServicio ? 'editable' : ''}" 
+               ${esServicio ? `data-index="${index}" data-field="nombre"` : ''}>
+               ${p.nombre}
+            </div>
 
             <div class="d-flex gap-2 mt-2">
 
-                <span class="editable" data-index="${index}" data-field="cantidad">
+                <span class="${esServicio ? 'editable' : ''}" data-index="${index}" data-field="cantidad">
                     Cant: ${p.cantidad}
                 </span>
 
-                <span class="editable" data-index="${index}" data-field="precio">
+                <span class="${esServicio ? 'editable' : ''}" data-index="${index}" data-field="precio">
                     $${p.precio}
                 </span>
 
-                <span class="editable" data-index="${index}" data-field="descuento">
+                <span class="${esServicio ? 'editable' : ''}" data-index="${index}" data-field="descuento">
                     %${p.descuento || 0}
                 </span>
 
             </div>
+
+                <!-- 🔥 BOTÓN ELIMINAR -->
+            <button class="btn btn-sm btn-danger ms-2" onclick="eliminarItem(${index})">
+               <i class="bi bi-trash"></i>
+            </button>
 
             <div class="text-end mt-1">
                 <strong>${formatearMoneda(subtotal)}</strong>
@@ -376,7 +386,6 @@
                 activarEdicion()
             }
 
-
             //toast de antd
             function notifySuccess(msg) {
                 Toastify({
@@ -391,6 +400,13 @@
                 }).showToast();
             }
             
+            //Eliminar del carrito
+            function eliminarItem(index){
+                if(confirm('¿Eliminar este producto?')){
+                    carrito.splice(index, 1)
+                    renderCarrito()
+                }
+            }
             //Nueva Venta 
             function nuevaVenta() {
                 carrito = []
@@ -456,6 +472,9 @@
                 const nombre = document.getElementById('servicioNombre').value
                 const precio = Number(document.getElementById('servicioPrecio').value)
 
+
+
+                
                 if (!nombre || !precio) {
                     alert('Completa los datos')
                     return
@@ -489,7 +508,7 @@
                         let valor = carrito[index][field] || 0
 
                         const input = document.createElement('input')
-                        input.type = "number"
+                        input.type = field === 'nombre' ? 'text' : 'number'
                         input.value = valor
                         input.classList.add("form-control", "form-control-sm")
 
@@ -501,7 +520,13 @@
 
                             if (e.key === "Enter") {
 
-                                let nuevo = Number(input.value)
+                                let nuevo
+
+                                if (field === 'nombre') {
+                                    nuevo = input.value // texto normal
+                                } else {
+                                    nuevo = Number(input.value) // números
+                                }
 
                                 // 🔥 límite de descuento
                                 if (field === 'descuento' && nuevo > 50) {
