@@ -1,25 +1,25 @@
-const express= require('express')
-const router= express.Router()
-const connection= require('./db')
+const express = require('express')
+const router = express.Router()
+const connection = require('./db')
 
 router.get('/ventasMostrador', (req, res) => {
-    const admin= req.session.name
+    const admin = req.session.name
 
-    if(!admin) res.redirect('/login')
-     const query=`
+    if (!admin) res.redirect('/login')
+    const query = `
         SELECT * FROM inventario WHERE cantidad > 0
-     ` 
+     `
 
-     connection.query(query, (err, result) => {
+    connection.query(query, (err, result) => {
 
-        
-        if(err) throw new Error 
+
+        if (err) throw new Error
         res.render('ventasMostrador', {
             data: result,
-            login: true, 
+            login: true,
             admin: admin
         })
-     })
+    })
 
 })
 
@@ -27,7 +27,6 @@ router.get('/ventasMostrador', (req, res) => {
 router.post('/ventas-mostrador', (req, res) => {
     const { carrito, total, recibido, cambio } = req.body
 
-    // 1. Insertar venta
     const sqlVenta = `
         INSERT INTO ventas_mostrador (total, recibido, cambio, fecha)
         VALUES (?, ?, ?, NOW())
@@ -41,46 +40,52 @@ router.post('/ventas-mostrador', (req, res) => {
 
         const ventaId = result.insertId
 
-        // 2. Insertar detalle de cada producto
         const sqlDetalle = `
             INSERT INTO detalle_venta 
             (venta_id, producto_id, nombre, precio, cantidad, subtotal)
             VALUES (?, ?, ?, ?, ?, ?)
         `
 
-        // 🔥 Insertar todos los productos
         carrito.forEach(p => {
-            const subtotal = p.precio * p.cantidad
+
+            // 🔥 aplicar descuento igual que frontend
+            const precioFinal = p.precio * (1 - (p.descuento || 0) / 100)
+            const subtotal = precioFinal * p.cantidad
+
+            const esServicio = p.id.startsWith('serv-')
 
             connection.query(sqlDetalle, [
                 ventaId,
-                p.id,
+                esServicio ? null : p.id, // 👈 servicios no tienen producto_id
                 p.nombre,
-                p.precio,
+                precioFinal, // 👈 guardas precio con descuento aplicado
                 p.cantidad,
                 subtotal
             ], (err) => {
                 if (err) {
                     console.error('Error al insertar detalle:', err)
                 }
+            })
 
-                //Rebajamos la cantidad 
-                const sqlCantidad=`
-                   UPDATE inventario SET cantidad= cantidad - ?
+            // 🔥 SOLO productos afectan inventario
+            if (!esServicio) {
+                const sqlCantidad = `
+                    UPDATE inventario 
+                    SET cantidad = cantidad - ?
+                    WHERE id = ?
                 `
 
-                connection.query(sqlCantidad, [p.cantidad], (err) =>{
-                   if(err) console.log(err)
-                   console.log('Cantidad actualizada en inventario')
+                connection.query(sqlCantidad, [p.cantidad, p.id], (err) => {
+                    if (err) console.log(err)
                 })
-            })
+            }
+
         })
 
         console.log('Venta y detalle guardados correctamente')
         res.status(200).send('Venta Registrada')
     })
 })
-
 
 //Ventas del dia
 router.get('/ventas-hoy', (req, res) => {
@@ -119,4 +124,4 @@ router.get('/ventas-hoy', (req, res) => {
     })
 })
 
-module.exports= router
+module.exports = router
