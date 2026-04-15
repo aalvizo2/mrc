@@ -103,13 +103,13 @@ router.get('/ventas-hoy', (req, res) => {
         }
 
         const sqlCaja = `
-            SELECT monto_inicial 
-            FROM corte_caja
-            WHERE DATE(fecha) = CURDATE()
-            ORDER BY id DESC
-            LIMIT 1
+           SELECT monto_inicial 
+           FROM corte_caja
+           WHERE fecha >= CURDATE()
+           AND fecha < CURDATE() + INTERVAL 1 DAY
+           ORDER BY id DESC
+           LIMIT 1
         `
-
         connection.query(sqlCaja, (err, caja) => {
             if (err) {
                 console.error(err)

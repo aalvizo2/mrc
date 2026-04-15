@@ -140,7 +140,7 @@ router.delete('/inventario/delete', (req, res) =>{
 
 
 
-router.post('/inventario', (req, res) =>{
+router.post('/inventario', (req, res) => {
     const {
         producto, 
         descripcion, 
@@ -149,10 +149,9 @@ router.post('/inventario', (req, res) =>{
         precio_descuento, 
         marca, 
         codigo_barras
-    }= req.body
+    } = req.body;
 
-
-    const sql=`
+    const sql = `
         INSERT INTO inventario 
         (producto,
          descripcion, 
@@ -161,28 +160,33 @@ router.post('/inventario', (req, res) =>{
          precio_descuento,
          marca,
          codigo_barras
-        )VALUES(?,?,?,?,?,?,?)
-    `
+        ) VALUES (?, ?, ?, ?, ?, ?, ?)
+    `;
 
     connection.query(sql,
         [
-            producto,
-            descripcion,
-            cantidad,
-            precio_publico,
-            precio_descuento,
-            marca,
-            codigo_barras
+            producto || null,
+            descripcion || null,
+            cantidad || null,
+            precio_publico || null,
+            precio_descuento || null,
+            marca || null,
+            codigo_barras || null
         ],
-        (err)=>{
-          if(err){
-            console.error('error al insertar los datos', err)
-          }
-          res.json({
-            message: 'Datos insertados correctamente'
-          })
-        
-    })
-})
+        (err) => {
+            if (err) {
+                console.error('error al insertar los datos', err);
+                return res.status(500).json({
+                    message: 'Error al insertar',
+                    error: err
+                });
+            }
+
+            res.json({
+                message: 'Datos insertados correctamente'
+            });
+        }
+    );
+});
 
 module.exports = router

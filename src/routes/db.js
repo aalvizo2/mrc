@@ -2,14 +2,17 @@ require('dotenv').config();
 const mysql = require('mysql');
 
 const pool = mysql.createPool({
-  connectionLimit: 10,
-  host: process.env.DB_HOST || 'localhost',
-  user: process.env.DB_USER || 'root',
-  port: process.env.DB_PORT || 3306,
-  password: process.env.DB_PASSWORD || '123456789',
-  database: process.env.DB_NAME || 'mrc',
-});
+  connectionLimit: 3, // 🔥 BAJO para Clever
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  port: process.env.DB_PORT,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
 
+  waitForConnections: true,
+  queueLimit: 0,
+  acquireTimeout: 10000
+});
 function connectDb() {
   pool.getConnection((err, connection) => {
     if (err) {
