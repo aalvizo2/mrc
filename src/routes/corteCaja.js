@@ -161,7 +161,7 @@ router.get('/detalle-corte/:id', (req, res) => {
             if (err) return res.status(500).send(err)
 
             connection.query(sqlGastos, [id], (err, gastos) => {
-                if (err) return res.status(500).send(err)
+                if (err) console.error(err, 'error ')
 
                 res.json({
                     corte: c,
@@ -197,6 +197,28 @@ router.get('/detalle-venta/:id', (req, res) => {
         res.json({
             productos: lista,
             total
+        })
+    })
+})
+
+
+//Caja chica 
+router.get('/caja-chica', (req, res) => {
+
+    const sql = `
+        SELECT caja_chica 
+        FROM corte_caja
+        WHERE fecha >= CURDATE()
+        AND fecha < CURDATE() + INTERVAL 1 DAY
+        ORDER BY id DESC
+        LIMIT 1
+    `
+
+    connection.query(sql, (err, result) => {
+        if (err) return res.status(500).json({ error: err })
+
+        res.json({
+            cajaChica: result[0]?.caja_chica || 0
         })
     })
 })

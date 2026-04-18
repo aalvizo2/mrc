@@ -227,7 +227,6 @@
                 })
 
 
-            // 🔥 MODAL DETALLE
             function verDetalle(id) {
 
                 fetch(`/detalle-corte/${id}`)
@@ -236,76 +235,95 @@
 
                         const { corte, ventas, gastos } = data
 
+                        // =========================
                         // INFO GENERAL
+                        // =========================
                         document.getElementById('infoCorte').innerHTML = `
-                    <div class="row text-center">
-                        <div class="col">
-                            <h6>Ventas</h6>
-                            <strong>${formatoMoneda(corte.total_ventas)}</strong>
-                        </div>
-                        <div class="col">
-                            <h6>Gastos</h6>
-                            <strong>${formatoMoneda(corte.total_gastos)}</strong>
-                        </div>
-                        <div class="col">
-                            <h6>Diferencia</h6>
-                            <strong class="${corte.diferencia < 0 ? 'text-danger' : 'text-success'}">
-                                ${formatoMoneda(corte.diferencia)}
-                            </strong>
-                        </div>
+                <div class="row text-center">
+                    <div class="col">
+                        <h6>Ventas</h6>
+                        <strong>${formatoMoneda(corte.total_ventas)}</strong>
                     </div>
-                `
+                    <div class="col">
+                        <h6>Gastos</h6>
+                        <strong>${formatoMoneda(corte.total_gastos)}</strong>
+                    </div>
+                    <div class="col">
+                        <h6>Diferencia</h6>
+                        <strong class="${corte.diferencia < 0 ? 'text-danger' : 'text-success'}">
+                            ${formatoMoneda(corte.diferencia)}
+                        </strong>
+                    </div>
+                </div>
+            `
 
-                        // VENTAS
+                        // =========================
+                        // VENTAS (OPTIMIZADO)
+                        // =========================
                         const listaVentas = document.getElementById('listaVentas')
-                        listaVentas.innerHTML = ''
 
-                        ventas.forEach(v => {
-                            listaVentas.innerHTML += `
-                        <li class="list-group-item">
-    
-                       <div class="row align-items-center text-center">
+                        let htmlVentas = ''
 
-                        <div class="col-4 text-start">
-                          Venta No. ${v.id}
+                        for (let i = 0; i < ventas.length; i++) {
+                            const v = ventas[i]
+
+                            htmlVentas += `
+                    <li class="list-group-item">
+                        <div class="row align-items-center text-center">
+
+                            <div class="col-4 text-start">
+                                Venta No. ${v.id}
+                            </div>
+
+                            <div class="col-4">
+                                <button class="btn btn-sm btn-default w-75"
+                                    onclick="verDetalleVenta(${v.id})">
+                                    Ver Detalle
+                                </button>
+                            </div>
+
+                            <div class="col-4 text-end fw-bold">
+                                ${formatoMoneda(v.total)}
+                            </div>
+
                         </div>
+                    </li>
+                `
+                        }
 
-                        <div class="col-4">
-                          <button class="btn btn-sm btn-default w-75"
-                           onclick="verDetalleVenta(${v.id})">
-                             Ver Detalle
-                          </button>
-                       </div>
+                        listaVentas.innerHTML = htmlVentas
 
-                       <div class="col-4 text-end fw-bold">
-                           ${formatoMoneda(v.total)}
-                        </div>
 
-                        </div>
-
-                     </li>
-                    `
-                        })
-
-                        // GASTOS
+                        // =========================
+                        // GASTOS (OPTIMIZADO)
+                        // =========================
                         const listaGastos = document.getElementById('listaGastos')
-                        listaGastos.innerHTML = ''
 
-                        gastos.forEach(g => {
-                            listaGastos.innerHTML += `
-                        <li class="list-group-item d-flex justify-content-between">
-                            ${g.descripcion}
-                            <span>${formatoMoneda(g.monto)}</span>
-                        </li>
-                    `
-                        })
+                        let htmlGastos = ''
 
-                        // ABRIR MODAL
-                        const modal = new bootstrap.Modal(document.getElementById('modalDetalle'))
+                        for (let i = 0; i < gastos.length; i++) {
+                            const g = gastos[i]
+
+                            htmlGastos += `
+                    <li class="list-group-item d-flex justify-content-between">
+                        ${g.descripcion}
+                        <span>${formatoMoneda(g.monto)}</span>
+                    </li>
+                `
+                        }
+
+                        listaGastos.innerHTML = htmlGastos
+
+
+                        // =========================
+                        // MODAL (OPEN LIGERO)
+                        // =========================
+                        const modalEl = document.getElementById('modalDetalle')
+                        const modal = bootstrap.Modal.getOrCreateInstance(modalEl)
+
                         modal.show()
                     })
             }
-
 
             function verDetalleVenta(id) {
 
