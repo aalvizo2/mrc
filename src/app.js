@@ -38,6 +38,7 @@ const corteCaja= require('./routes/corteCaja')
 const notificaciones= require('./routes/notificaciones')
 const connection = require('./routes/db')
 
+
 const app = express()
 
 // EJS
@@ -93,6 +94,7 @@ app.use('/', inventario)
 app.use('/', ventasMostrador)
 app.use('/', corteCaja)
 app.use('/', notificaciones)
+
 
 // Server HTTP + Socket
 const server = http.createServer(app)

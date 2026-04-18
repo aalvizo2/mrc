@@ -123,7 +123,8 @@ router.post('/inventario/update-field', (req, res) => {
 
 //Eliminar
 router.delete('/inventario/delete', (req, res) =>{
-    const {id} = req.body
+    const id = req.body.id
+    console.log('id que se esta recibiendo', id)
 
 
 

@@ -6,7 +6,7 @@ router.get('/stock-bajo', (req, res) =>{
     const sql=`
       SELECT producto, cantidad
       FROM inventario
-      WHERE cantidad <= 5
+      WHERE cantidad <= 1
       ORDER BY cantidad ASC
     `
     connection.query(sql, (err, result) => {
