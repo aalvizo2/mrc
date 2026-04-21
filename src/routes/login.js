@@ -166,8 +166,8 @@ const minioClient = new Minio.Client({
   endPoint: 'g7l6.la1.idrivee2-91.com',
   port: 443,
   useSSL: true,
-  accessKey: 'TU_ACCESS_KEY',
-  secretKey: 'TU_SECRET_KEY'
+  accessKey: 'VOGqOzRzqwGu2aiTOKIi',
+  secretKey: 'N2CSDZncTKKl92HuZznbkM93bsxehCA990Ijb3uS'
 })
 Router.get('/upload', (req, res) => {
   if (req.session.admin) {

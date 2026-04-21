@@ -25,8 +25,8 @@ function getImageUrl(imagen) {
         expiresAt: now + 60 * 1000 // Expiración en 1 minuto
       }
 
-      console.log(`Nueva URL generada para ${imagen}:`, url)
-      console.log(`Expira en: ${new Date(urlCache[imagen].expiresAt).toLocaleTimeString()}`)
+      //console.log(`Nueva URL generada para ${imagen}:`, url)
+      //console.log(`Expira en: ${new Date(urlCache[imagen].expiresAt).toLocaleTimeString()}`)
 
       resolve(url)
     })

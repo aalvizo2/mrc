@@ -91,11 +91,10 @@ router.post('/ventas-mostrador', (req, res) => {
 router.get('/ventas-hoy', (req, res) => {
 
     const sqlVentas = `
-        SELECT SUM(total) as total
-        FROM ventas_mostrador
-        WHERE DATE(fecha) = CURDATE()
+         SELECT SUM(total) total
+         FROM ventas_mostrador
+         WHERE fecha >= CURDATE() - INTERVAL 6 HOUR
     `
-
     connection.query(sqlVentas, (err, ventas) => {
         if (err) {
             console.error(err)

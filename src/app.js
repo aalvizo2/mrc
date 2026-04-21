@@ -9,6 +9,7 @@ const cookie = require('cookie-parser')
 const engine = require('ejs-mate')
 const { Server } = require('socket.io')
 const http = require('http')
+const fileUpload = require('express-fileupload')
 
 
 // Rutas
@@ -37,6 +38,7 @@ const ventasMostrador= require('./routes/ventasMostrador')
 const corteCaja= require('./routes/corteCaja')
 const notificaciones= require('./routes/notificaciones')
 const connection = require('./routes/db')
+const carousel= require('./routes/carousel')
 
 
 const app = express()
@@ -51,6 +53,9 @@ app.use(morgan('dev'))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cookie())
+app.use(fileUpload({
+  useTempFiles: false
+}))
 
 // Session única
 const sessionMiddleware = session({
@@ -94,6 +99,7 @@ app.use('/', inventario)
 app.use('/', ventasMostrador)
 app.use('/', corteCaja)
 app.use('/', notificaciones)
+app.use('/', carousel)
 
 
 // Server HTTP + Socket
