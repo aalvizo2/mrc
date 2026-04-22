@@ -17,10 +17,7 @@ router.post('/corte-caja', (req, res) => {
     const { montoInicial, gastos, cajaChica, dineroReal, totalVentas } = req.body
 
     // 🔥 Validaciones básicas
-    if (!montoInicial && montoInicial !== 0) {
-        return res.status(400).send('Monto inicial requerido')
-    }
-
+    
     // 🧮 Calcular gastos
     let totalGastos = 0
     gastos.forEach(g => {
@@ -28,7 +25,7 @@ router.post('/corte-caja', (req, res) => {
     })
 
     // 🧮 Calcular esperado y diferencia
-    const totalEsperado = montoInicial + totalVentas - totalGastos
+    const totalEsperado = cajaChica + totalVentas - totalGastos
     const diferencia = dineroReal - totalEsperado
 
     // 1️⃣ Insertar corte
