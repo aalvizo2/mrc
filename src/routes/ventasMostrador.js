@@ -94,11 +94,10 @@ router.post('/ventas-mostrador', (req, res) => {
             // Cuando termina todo el carrito actualizamos caja chica UNA sola vez
             if (pendientes === 0) {
                 const sqlCajaActual = `
-                    SELECT id, caja_chica
-                    FROM corte_caja
-                    WHERE DATE(fecha) = CURDATE()
-                    ORDER BY fecha DESC
-                    LIMIT 1
+                  SELECT id, caja_chica
+                  FROM corte_caja
+                  ORDER BY id DESC
+                  LIMIT 1
                 `
 
                 connection.query(sqlCajaActual, (err, cajaResult) => {
@@ -148,38 +147,24 @@ router.post('/ventas-mostrador', (req, res) => {
         })
     })
 })
-//Ventas del dia
+
+
 router.get('/ventas-hoy', (req, res) => {
 
-    const sqlVentas = `
-      SELECT COALESCE(SUM(total), 0) AS total
-      FROM ventas_mostrador
-      WHERE DATE(fecha) = CURDATE()
+    const sql = `
+        SELECT COALESCE(SUM(total),0) AS total
+        FROM ventas_mostrador
+        WHERE corte_id IS NULL
     `
-    connection.query(sqlVentas, (err, ventas) => {
+
+    connection.query(sql, (err, ventas) => {
         if (err) {
             console.error(err)
             return res.status(500).send('Error')
         }
 
-        const sqlCaja = `
-           SELECT monto_inicial 
-           FROM corte_caja
-           WHERE fecha >= CURDATE()
-           AND fecha < CURDATE() + INTERVAL 1 DAY
-           ORDER BY id DESC
-           LIMIT 1
-        `
-        connection.query(sqlCaja, (err, caja) => {
-            if (err) {
-                console.error(err)
-                return res.status(500).send('Error')
-            }
-
-            res.json({
-                totalVentas: ventas[0]?.total || 0,
-                montoInicial: caja[0]?.monto_inicial || 0
-            })
+        res.json({
+            totalVentas: ventas[0].total || 0
         })
     })
 })

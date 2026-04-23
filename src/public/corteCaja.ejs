@@ -104,10 +104,10 @@
                 <div class="col-md-8">
 
                     <!-- APERTURA -->
-                    <div class="card card-pro p-4 mb-4">
+                    <!-- <div class="card card-pro p-4 mb-4">
                         <h5 class="mb-3">Apertura de Caja</h5>
                         <input type="number" id="montoInicial" class="form-control" placeholder="Monto inicial">
-                    </div>
+                    </div> -->
 
                     <!-- GASTOS -->
                     <div class="card card-pro p-4">
@@ -148,10 +148,10 @@
                             <strong><span id="totalGastos">0</span></strong>
                         </div>
 
-                        <div class="d-flex justify-content-between mb-2">
+                        <!-- <div class="d-flex justify-content-between mb-2">
                             <span>Caja inicial</span>
                             <strong><span id="showInicial">0</span></strong>
-                        </div>
+                        </div> -->
 
                         <div class="d-flex justify-content-between mb-2">
                             <span>Caja chica</span>
@@ -216,8 +216,8 @@
 
                 document.getElementById('totalVentas').innerText = formatoMoneda(totalVentas)
 
-                document.getElementById('montoInicial').value = ventas.montoInicial || 0
-                document.getElementById('showInicial').innerText = formatoMoneda(ventas.montoInicial || 0)
+                // document.getElementById('montoInicial').value = ventas.montoInicial || 0
+                // document.getElementById('showInicial').innerText = formatoMoneda(ventas.montoInicial || 0)
 
                 const el = document.getElementById('showCajaChica')
                 if (el) el.innerText = formatoMoneda(caja.cajaChica || 0)
@@ -270,8 +270,7 @@
                 lista.innerHTML = ''
 
                 let total = 0
-                totalGastos = total
-                document.getElementById('totalGastos').innerText = formatoMoneda(total)
+
                 gastos.forEach(g => {
                     total += g.monto
 
@@ -282,28 +281,49 @@
         </li>`
                 })
 
+                totalGastos = total // 🔥 guardar total real global
                 document.getElementById('totalGastos').innerText = formatoMoneda(total)
+
+                renderGastos()
+                calcular()
             }
 
-            function calcular() {
-                const inicial = Number(document.getElementById('montoInicial').value) || 0
-                const dineroReal = Number(document.getElementById('dineroReal').value) || 0
+            async function calcular() {
+                try {
+                    //const inicial = Number(document.getElementById('montoInicial').value) || 0
+                    const dineroReal = Number(document.getElementById('dineroReal').value) || 0
 
-                document.getElementById('showInicial').innerText = formatoMoneda(inicial)
+                    const cajaRes = await fetch('/caja-chica')
 
-                const esperado = inicial + totalVentas - totalGastos
-                const diferencia = dineroReal - esperado
+                    if (!cajaRes.ok) {
+                        throw new Error('Error al obtener caja chica')
+                    }
 
-                document.getElementById('totalEsperado').innerText = formatoMoneda(esperado)
-                document.getElementById('diferencia').innerText = formatoMoneda(diferencia)
+                    const caja = await cajaRes.json()
+                    const cajaChica = Number(caja.cajaChica) || 0
 
-                const el = document.getElementById('diferencia')
-                el.classList.remove('positivo', 'negativo')
+                    //document.getElementById('showInicial').innerText = formatoMoneda(inicial)
 
-                if (diferencia < 0) {
-                    el.classList.add('negativo')
-                } else {
-                    el.classList.add('positivo')
+                    const esperado = cajaChica - totalGastos
+                    const diferencia = dineroReal - esperado
+
+                    document.getElementById('totalEsperado').innerText = formatoMoneda(esperado)
+                    document.getElementById('diferencia').innerText = formatoMoneda(diferencia)
+
+                    const el = document.getElementById('diferencia')
+                    el.classList.remove('positivo', 'negativo')
+
+                    if (diferencia < 0) {
+                        el.classList.add('negativo')
+                    } else {
+                        el.classList.add('positivo')
+                    }
+
+                } catch (error) {
+                    console.error('Error en calcular():', error)
+
+                    document.getElementById('totalEsperado').innerText = formatoMoneda(0)
+                    document.getElementById('diferencia').innerText = formatoMoneda(0)
                 }
             }
 
@@ -323,7 +343,7 @@
 
             function cerrarCorte() {
                 const data = {
-                    montoInicial: Number(document.getElementById('montoInicial').value),
+                    //montoInicial: Number(document.getElementById('montoInicial').value),
                     gastos,
                     cajaChica: Number(document.getElementById('cajaChica').value),
                     dineroReal: Number(document.getElementById('dineroReal').value),

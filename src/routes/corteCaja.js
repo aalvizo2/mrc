@@ -12,25 +12,20 @@ router.get('/corteCaja', (req, res) => {
 })
 
 
-//Endpoint para corte de caja 
 router.post('/corte-caja', (req, res) => {
     const { montoInicial, gastos, cajaChica, dineroReal, totalVentas } = req.body
 
-    // 🔥 Validaciones básicas
-    
-    // 🧮 Calcular gastos
     let totalGastos = 0
+
     gastos.forEach(g => {
         totalGastos += Number(g.monto)
     })
 
-    // 🧮 Calcular esperado y diferencia
     const totalEsperado = cajaChica + totalVentas - totalGastos
     const diferencia = dineroReal - totalEsperado
 
-    // 1️⃣ Insertar corte
     const sqlCorte = `
-        INSERT INTO corte_caja 
+        INSERT INTO corte_caja
         (monto_inicial, total_ventas, total_gastos, caja_chica, dinero_real, total_esperado, diferencia)
         VALUES (?, ?, ?, ?, ?, ?, ?)
     `
@@ -46,13 +41,13 @@ router.post('/corte-caja', (req, res) => {
     ], (err, result) => {
 
         if (err) {
-            console.error('Error al guardar corte:', err)
-            return res.status(500).send('Error en el servidor')
+            console.error(err)
+            return res.status(500).send('Error al guardar corte')
         }
 
         const corteId = result.insertId
 
-        // 2️⃣ Insertar gastos
+        // Insertar gastos
         if (gastos.length > 0) {
             const sqlGasto = `
                 INSERT INTO gastos_corte (corte_id, descripcion, monto)
@@ -64,19 +59,29 @@ router.post('/corte-caja', (req, res) => {
                     corteId,
                     g.desc,
                     g.monto
-                ], (err) => {
-                    if (err) {
-                        console.error('Error al insertar gasto:', err)
-                    }
-                })
+                ])
             })
         }
 
-        console.log('Corte guardado correctamente')
-        res.status(200).send({
-            message: 'Corte guardado',
-            totalEsperado,
-            diferencia
+        // 🔥 AQUÍ ESTABA LO QUE FALTABA
+        const sqlActualizarVentas = `
+            UPDATE ventas_mostrador
+            SET corte_id = ?
+            WHERE corte_id IS NULL
+        `
+
+        connection.query(sqlActualizarVentas, [corteId], (err2) => {
+            if (err2) {
+                console.error(err2)
+                return res.status(500).send('Error al actualizar ventas')
+            }
+
+            res.status(200).json({
+                message: 'Corte guardado correctamente',
+                corteId,
+                totalEsperado,
+                diferencia
+            })
         })
     })
 })
