@@ -56,14 +56,17 @@ router.post('/ventas-mostrador', (req, res) => {
         carrito.forEach(p => {
             const precioFinal = p.precio * (1 - (p.descuento || 0) / 100)
             const subtotal = precioFinal * p.cantidad
-            const esServicio = p.id.startsWith('serv-')
+            const esServicio = String(p.id).startsWith('serv-')
 
-            // Guardar detalle venta
+            // 👇 SOLO ESTA PARTE CAMBIA:
+            // si es servicio guardamos el id tal cual
+            const productoId = esServicio ? p.id : p.id
+
             connection.query(
                 sqlDetalle,
                 [
                     ventaId,
-                    esServicio ? null : p.id,
+                    productoId,
                     p.nombre,
                     precioFinal,
                     p.cantidad,
@@ -71,7 +74,7 @@ router.post('/ventas-mostrador', (req, res) => {
                 ],
                 (err) => {
                     if (err) {
-                        console.log(err)
+                        console.log('Error detalle:', err)
                     }
                 }
             )
@@ -91,7 +94,6 @@ router.post('/ventas-mostrador', (req, res) => {
 
             pendientes--
 
-            // Cuando termina todo el carrito actualizamos caja chica UNA sola vez
             if (pendientes === 0) {
                 const sqlCajaActual = `
                   SELECT id, caja_chica
@@ -112,10 +114,6 @@ router.post('/ventas-mostrador', (req, res) => {
 
                     const idCaja = cajaResult[0].id
                     const cajaActual = Number(cajaResult[0].caja_chica)
-
-                    // Si recibió 500 y total era 350:
-                    // se entregan 150 de cambio
-                    // la caja realmente gana 350
                     const nuevaCaja = cajaActual + Number(total)
 
                     const sqlActualizarCaja = `
@@ -132,12 +130,6 @@ router.post('/ventas-mostrador', (req, res) => {
                                 console.log(err)
                                 return res.status(500).send('Error al actualizar caja')
                             }
-
-                            console.log('Caja actualizada correctamente')
-                            console.log('Caja anterior:', cajaActual)
-                            console.log('Venta total:', total)
-                            console.log('Cambio entregado:', cambio)
-                            console.log('Caja nueva:', nuevaCaja)
 
                             return res.status(200).send('Venta registrada')
                         }
