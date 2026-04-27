@@ -58,9 +58,7 @@ router.post('/ventas-mostrador', (req, res) => {
             const subtotal = precioFinal * p.cantidad
             const esServicio = String(p.id).startsWith('serv-')
 
-            // 👇 SOLO ESTA PARTE CAMBIA:
-            // si es servicio guardamos el id tal cual
-            const productoId = esServicio ? p.id : p.id
+            const productoId = p.id
 
             connection.query(
                 sqlDetalle,
@@ -75,6 +73,52 @@ router.post('/ventas-mostrador', (req, res) => {
                 (err) => {
                     if (err) {
                         console.log('Error detalle:', err)
+                    }
+
+                    pendientes--
+
+                    if (pendientes === 0) {
+                        const sqlCajaActual = `
+                            SELECT id, caja_chica
+                            FROM corte_caja
+                            ORDER BY id DESC
+                            LIMIT 1
+                        `
+
+                        connection.query(sqlCajaActual, (err, cajaResult) => {
+                            if (err) {
+                                console.log(err)
+                                return res.status(500).send('Error al consultar caja')
+                            }
+
+                            if (cajaResult.length === 0) {
+                                return res.status(400).send('No existe corte de caja hoy')
+                            }
+
+                            const idCaja = cajaResult[0].id
+                            const cajaActual = Number(cajaResult[0].caja_chica)
+                            const nuevaCaja = cajaActual + Number(total)
+                            const resultadoFinal = nuevaCaja - Number(cambio)
+
+                            const sqlActualizarCaja = `
+                                UPDATE corte_caja
+                                SET caja_chica = ?
+                                WHERE id = ?
+                            `
+
+                            connection.query(
+                                sqlActualizarCaja,
+                                [resultadoFinal, idCaja],
+                                (err) => {
+                                    if (err) {
+                                        console.log(err)
+                                        return res.status(500).send('Error al actualizar caja')
+                                    }
+
+                                    return res.status(200).send('Venta registrada')
+                                }
+                            )
+                        })
                     }
                 }
             )
@@ -91,55 +135,9 @@ router.post('/ventas-mostrador', (req, res) => {
                     if (err) console.log(err)
                 })
             }
-
-            pendientes--
-
-            if (pendientes === 0) {
-                const sqlCajaActual = `
-                  SELECT id, caja_chica
-                  FROM corte_caja
-                  ORDER BY id DESC
-                  LIMIT 1
-                `
-
-                connection.query(sqlCajaActual, (err, cajaResult) => {
-                    if (err) {
-                        console.log(err)
-                        return res.status(500).send('Error al consultar caja')
-                    }
-
-                    if (cajaResult.length === 0) {
-                        return res.status(400).send('No existe corte de caja hoy')
-                    }
-
-                    const idCaja = cajaResult[0].id
-                    const cajaActual = Number(cajaResult[0].caja_chica)
-                    const nuevaCaja = cajaActual + Number(total)
-
-                    const sqlActualizarCaja = `
-                        UPDATE corte_caja
-                        SET caja_chica = ?
-                        WHERE id = ?
-                    `
-
-                    connection.query(
-                        sqlActualizarCaja,
-                        [nuevaCaja, idCaja],
-                        (err) => {
-                            if (err) {
-                                console.log(err)
-                                return res.status(500).send('Error al actualizar caja')
-                            }
-
-                            return res.status(200).send('Venta registrada')
-                        }
-                    )
-                })
-            }
         })
     })
 })
-
 
 router.get('/ventas-hoy', (req, res) => {
 
