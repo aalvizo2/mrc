@@ -77,31 +77,31 @@
 <body>
   <%- include('./components/header') %>
 
+    
 
-
-<div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+    <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
-          <div class="carousel-item active">
-              <img src="carousel/1.jpg" class="d-block w-100" alt="Primera imagen">
-          </div>
-          <div class="carousel-item">
-              <img src="carousel/2.jpg" class="d-block w-100" alt="Segunda imagen">
-          </div>
-          <div class="carousel-item">
-              <img src="carousel/3.jpg" class="d-block w-100" alt="Tercera imagen">
-          </div>
+        <div class="carousel-item active">
+          <img src="carousel/1.jpg" class="d-block w-100" alt="Primera imagen">
+        </div>
+        <div class="carousel-item">
+          <img src="carousel/2.jpg" class="d-block w-100" alt="Segunda imagen">
+        </div>
+        <div class="carousel-item">
+          <img src="carousel/3.jpg" class="d-block w-100" alt="Tercera imagen">
+        </div>
       </div>
-  
-      
+
+
       <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Anterior</span>
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Anterior</span>
       </button>
       <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Siguiente</span>
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Siguiente</span>
       </button>
-  </div>  
+    </div>
 
 
 
@@ -170,32 +170,31 @@
       <script src="script/responsive.js"></script>
       <!--<script src="script/nav.js"></script>-->
       <script>
-        let slideIndex = 1;
-        showSlides(slideIndex);
+        async function cargarCarousel() {
+          try {
 
-        function plusSlides(n) {
-          showSlides(slideIndex += n);
-        }
+            const response = await fetch('/carousel')
+            const data = await response.json()
 
-        function currentSlide(n) {
-          showSlides(slideIndex = n);
-        }
+            const contenedor = document.querySelector('.carousel-inner')
 
-        function showSlides(n) {
-          let i;
-          let slides = document.getElementsByClassName("mySlides");
-          let dots = document.getElementsByClassName("dot");
-          if (n > slides.length) { slideIndex = 1 }
-          if (n < 1) { slideIndex = slides.length }
-          for (i = 0; i < slides.length; i++) {
-            slides[i].style.display = "none";
+            contenedor.innerHTML = ''
+
+            data.forEach((item, index) => {
+
+              contenedor.innerHTML += `
+                <div class="carousel-item ${index === 0 ? 'active' : ''}">
+                    <img src="${item.imagen_url}" class="d-block w-100" alt="banner">
+                </div>
+            `
+            })
+
+          } catch (error) {
+            console.log(error)
           }
-          for (i = 0; i < dots.length; i++) {
-            dots[i].className = dots[i].className.replace(" active", "");
-          }
-          slides[slideIndex - 1].style.display = "block";
-          dots[slideIndex - 1].className += " active";
         }
+
+        cargarCarousel()
       </script>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N"

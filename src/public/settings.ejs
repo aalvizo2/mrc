@@ -182,143 +182,166 @@
                 <!-- botón upload tipo Antd -->
                 <div class="upload-box" onclick="seleccionarImagen()">
                     <i class="bi bi-plus-lg"></i>
-                    <span>Upload</span>
+                    <span>Subir Imagen</span>
                 </div>
 
             </div>
 
-            <input type="file" id="inputImagen" hidden accept="image/*">
+            <input type="file" id="inputImagen" accept="image/*" style="display:none">
 
         </div>
+<!-- TOASTIFY CSS (IMPORTANTE para que no se vea feo) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
-        <script>
-            async function obtenerImagenes() {
-                try {
-                    const response = await fetch('/carousel')
-                    const data = await response.json()
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
-                    const contenedor = document.getElementById('contenedorCarousel')
+<script>
+function notifySuccess(msg) {
+    Toastify({
+        text: msg,
+        duration: 3000,
+        gravity: 'top',
+        position: 'center',
+        close: true,
+        stopOnFocus: true,
+        style: {
+           background: "#28a745"
+        }
+    }).showToast()
+}
 
-                    contenedor.innerHTML = `
+function notifyError(msg) {
+    Toastify({
+        text: msg,
+        duration: 3500,
+        gravity: 'top',
+        position: 'center',
+        close: true,
+        stopOnFocus: true,
+        style: {
+            background: "#f00000e8"
+        }
+    }).showToast()
+}
+
+async function obtenerImagenes() {
+    try {
+        const response = await fetch('/carousel')
+        const data = await response.json()
+
+        const contenedor = document.getElementById('contenedorCarousel')
+
+        contenedor.innerHTML = `
             <div class="upload-box" onclick="seleccionarImagen()">
                 <i class="bi bi-plus-lg"></i>
                 <span>Upload</span>
             </div>
         `
 
-                    data.forEach(item => {
+        data.forEach(item => {
+            contenedor.innerHTML += `
+                <div class="card-img">
 
-                        contenedor.innerHTML += `
-            <div class="card-img">
+                    <img src="${item.imagen_url}" alt="banner">
 
-                <img src="${item.imagen_url}" alt="banner">
+                    <div class="overlay">
+                        <button class="btn-circle btn-edit"
+                            onclick="editarImagen(${item.id})">
+                            <i class="bi bi-pencil-fill"></i>
+                        </button>
 
-                <div class="overlay">
-                    <button class="btn-circle btn-edit"
-                        onclick="editarImagen(${item.id})">
-                        <i class="bi bi-pencil-fill"></i>
-                    </button>
+                        <button class="btn-circle btn-delete"
+                            onclick="eliminarImagen(${item.id})">
+                            <i class="bi bi-trash-fill"></i>
+                        </button>
+                    </div>
 
-                    <button class="btn-circle btn-delete"
-                        onclick="eliminarImagen(${item.id})">
-                        <i class="bi bi-trash-fill"></i>
-                    </button>
                 </div>
-
-               
-
-            </div>
             `
-                    })
+        })
 
-                } catch (error) {
-                    console.log(error)
-                }
-            }
+    } catch (error) {
+        notifyError('Error al cargar imágenes')
+    }
+}
 
-            function seleccionarImagen() {
-                document.getElementById('inputImagen').click()
-            }
+function seleccionarImagen() {
+    document.getElementById('inputImagen').click()
+}
 
-            document.getElementById('inputImagen').addEventListener('change', async function () {
+let idEditar = null
 
-                const archivo = this.files[0]
-                if (!archivo) return
+function editarImagen(id) {
+    idEditar = id
+    document.getElementById('inputImagen').click()
+}
 
-                const formData = new FormData()
-                formData.append('imagen', archivo)
+document.getElementById('inputImagen').addEventListener('change', async function () {
 
-                const response = await fetch('/carousel', {
-                    method: 'POST',
-                    body: formData
-                })
+    const archivo = this.files[0]
+    if (!archivo) return
 
-                const data = await response.json()
+    const formData = new FormData()
+    formData.append('imagen', archivo)
 
-                alert(data.msg || 'Imagen subida')
+    const url = idEditar ? `/carousel/${idEditar}` : '/carousel'
+    const method = idEditar ? 'PUT' : 'POST'
 
-                obtenerImagenes()
-            })
+    try {
+        const response = await fetch(url, {
+            method,
+            body: formData
+        })
 
-            let idEditar = null
+        const data = await response.json()
 
-            function editarImagen(id) {
-                idEditar = id
-                document.getElementById('inputImagen').click()
-            }
+        notifySuccess(data.msg || 'Proceso completado')
 
-            document.getElementById('inputImagen').addEventListener('change', async function () {
+        idEditar = null
+        this.value = ''
 
-                const archivo = this.files[0]
-                if (!archivo) return
+        obtenerImagenes()
 
-                const formData = new FormData()
-                formData.append('imagen', archivo)
+    } catch (error) {
+        notifyError('Error al procesar imagen')
+    }
+})
 
-                let url = '/carousel'
-                let method = 'POST'
+function eliminarImagen(id) {
 
-                // si viene idEditar = editar
-                if (idEditar) {
-                    url = '/carousel/' + idEditar
-                    method = 'PUT'
-                }
+    Swal.fire({
+        title: '¿Eliminar imagen?',
+        text: 'Esta acción no se puede deshacer',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#dc3545',
+        reverseButtons: true,
+        borderRadius: 18
+    }).then((result) => {
 
-                const response = await fetch(url, {
-                    method,
-                    body: formData
-                })
+        if (!result.isConfirmed) return
 
-                const data = await response.json()
-
-                alert(data.msg || 'Proceso completado')
-
-                // reset
-                idEditar = null
-                this.value = ''
-
-                obtenerImagenes()
-            })
-
-            function eliminarImagen(id) {
-
-                const confirmar = confirm('¿Eliminar imagen?')
-                if (!confirmar) return
-
-                fetch('/carousel/' + id, {
-                    method: 'DELETE'
-                })
-                    .then(res => res.json())
-                    .then(data => {
-                        alert(data.msg)
-                        obtenerImagenes()
-                    })
-            }
-
+        fetch('/carousel/' + id, {
+            method: 'DELETE'
+        })
+        .then(res => res.json())
+        .then(data => {
+            notifySuccess(data.msg)
             obtenerImagenes()
+        })
+        .catch(() => {
+            notifyError('Error al eliminar imagen')
+        })
+    })
+}
 
-        </script>
+obtenerImagenes()
+</script>
 
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 </html>

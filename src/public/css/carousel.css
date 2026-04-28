@@ -1,6 +1,6 @@
 .carousel-inner img {
-    height: 800px; /* Ajusta el tamaño de las imágenes */
-    object-fit: cover; /* Ajuste para que todas las imágenes mantengan el mismo tamaño */
+    height: 900px; /* Ajusta el tamaño de las imágenes */
+    object-fit: contain; /* Ajuste para que todas las imágenes mantengan el mismo tamaño */
 }
 
 .carousel-caption {

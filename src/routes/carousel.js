@@ -125,17 +125,22 @@ router.get('/settings', (req, res) =>{
 
 
 
-// Editar imagen del carousel
 router.put('/carousel/:id', async (req, res) => {
-    try {
-        const { id } = req.params
+    const { id } = req.params
 
-        if (!req.file) {
+    try {
+
+        if (!req.files || !req.files.imagen) {
             return res.status(400).json({
                 ok: false,
                 msg: 'Debes enviar una imagen'
             })
         }
+
+        const imagen = req.files.imagen
+
+        console.log('imagen recibida', imagen.name)
+        console.log('id recibido', id)
 
         // Buscar imagen actual
         const sqlBuscar = `
@@ -146,6 +151,7 @@ router.put('/carousel/:id', async (req, res) => {
         `
 
         connection.query(sqlBuscar, [id], async (err, result) => {
+
             if (err) {
                 console.log(err)
                 return res.status(500).json({
@@ -163,56 +169,128 @@ router.put('/carousel/:id', async (req, res) => {
 
             const imagenAnterior = result[0].imagen_url
 
-            // eliminar anterior del bucket (opcional)
+            // borrar imagen anterior
             try {
                 await minioClient.removeObject('carousel', imagenAnterior)
-            } catch (e) {
-                console.log('No se pudo borrar anterior')
+            } catch (error) {
+                console.log('No se pudo borrar la imagen anterior')
             }
 
-            // subir nueva imagen
-            const nombreArchivo = `carousel/${Date.now()}-${req.file.originalname}`
+            // nueva imagen
+            const nombreArchivo = `carousel/${Date.now()}-${imagen.name}`
 
-            await minioClient.putObject(
-                'carousel',
-                nombreArchivo,
-                req.file.buffer,
-                req.file.size,
-                {
-                    'Content-Type': req.file.mimetype
-                }
-            )
+            try {
 
-            // actualizar BD
-            const sqlUpdate = `
-                UPDATE carousel
-                SET imagen_url = ?
-                WHERE id = ?
-            `
+                await minioClient.putObject(
+                    'carousel',
+                    nombreArchivo,
+                    imagen.data
+                )
 
-            connection.query(sqlUpdate, [nombreArchivo, id], (err2) => {
-                if (err2) {
-                    console.log(err2)
-                    return res.status(500).json({
-                        ok: false,
-                        msg: 'Error al actualizar'
+                const sqlUpdate = `
+                    UPDATE carousel
+                    SET imagen_url = ?
+                    WHERE id = ?
+                `
+
+                connection.query(sqlUpdate, [nombreArchivo, id], (err2) => {
+
+                    if (err2) {
+                        console.log(err2)
+                        return res.status(500).json({
+                            ok: false,
+                            msg: 'Error al actualizar imagen'
+                        })
+                    }
+
+                    return res.json({
+                        ok: true,
+                        msg: 'Imagen actualizada correctamente',
+                        url: nombreArchivo
                     })
-                }
 
-                res.json({
-                    ok: true,
-                    msg: 'Imagen actualizada correctamente'
                 })
-            })
+
+            } catch (errorSubida) {
+                console.log(errorSubida)
+
+                return res.status(500).json({
+                    ok: false,
+                    msg: 'Error al subir imagen nueva'
+                })
+            }
+
         })
 
     } catch (error) {
         console.log(error)
-        res.status(500).json({
+
+        return res.status(500).json({
             ok: false,
             msg: 'Error del servidor'
         })
     }
+})
+
+
+
+router.delete('/carousel/:id', (req, res) => {
+    const { id } = req.params
+
+    const sqlBuscar = `
+        SELECT imagen_url
+        FROM carousel
+        WHERE id = ?
+        LIMIT 1
+    `
+
+    connection.query(sqlBuscar, [id], async (err, result) => {
+
+        if (err) {
+            console.log(err)
+            return res.status(500).json({
+                ok: false,
+                msg: 'Error al buscar imagen'
+            })
+        }
+
+        if (result.length === 0) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'Imagen no encontrada'
+            })
+        }
+
+        const imagen = result[0].imagen_url
+
+        try {
+            // eliminar de MinIO
+            await minioClient.removeObject('carousel', imagen)
+        } catch (error) {
+            console.log('No se pudo borrar imagen del bucket')
+        }
+
+        const sqlDelete = `
+            DELETE FROM carousel
+            WHERE id = ?
+        `
+
+        connection.query(sqlDelete, [id], (err2) => {
+
+            if (err2) {
+                console.log(err2)
+                return res.status(500).json({
+                    ok: false,
+                    msg: 'Error al eliminar registro'
+                })
+            }
+
+            return res.json({
+                ok: true,
+                msg: 'Imagen eliminada correctamente'
+            })
+        })
+    })
 })
 
 

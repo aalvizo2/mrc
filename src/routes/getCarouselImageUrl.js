@@ -24,7 +24,7 @@ function getCarouselUrl(imagen) {
 
                 urlCache[imagen] = {
                     url,
-                    expiresAt: now + 60 * 1000
+                    expiresAt: now + (1000 * 60 * 60 * 24)
                 }
 
                 resolve(url)

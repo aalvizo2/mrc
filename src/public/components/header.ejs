@@ -14,6 +14,9 @@
     
     <!-- Íconos del lado derecho -->
     <div class="icons">
+      <% if (usuario) { %>
+        <a href="/chat-test" class="bi bi-chat-text"></a>
+      <% } %>
         <a href="search" class="bi bi-search"></a>
         <a href="cart" class="bi bi-cart"> <%= objeto %></a>
 
