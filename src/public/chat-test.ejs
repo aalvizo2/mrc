@@ -264,9 +264,11 @@
                                 // ocultar sidebar si es usuario
                                 if (!ES_ADMIN) {
                                     sidebar.style.display = 'none';
-                                    document.getElementById('chat-container').style.width = '100%';
-                                }
 
+                                    const chat = document.getElementById('chat-container');
+                                    chat.style.display = 'flex';
+                                    chat.classList.add('active'); // 🔥 importante para mobile
+                                }
                                 // CONEXIÓN
                                 socket.on('connect', () => {
                                     console.log('Conectado:', socket.id);
